@@ -1,5 +1,6 @@
 <template>
-	<div style="height: 100%;position: relative;background: red;">
+	<div style="height: 100%;position: relative;">
+		
 			<chart-bg style="height: 100%;width: 100%;"></chart-bg>
 		<div style="height: 200px;position: absolute;top:20px;left:10px;width: 30%;">
 			<!-- eewwww -->
@@ -19,6 +20,7 @@
 <script>
 	// import InforCard from '_c/info-card'
 	// import CountTo from '_c/count-to'
+	//import mapBg from '@/assets/images/mapBg.jpg'
 	import {
 		ChartBg,ChartLeft,ChartRight
 	} from '_c/charts'
