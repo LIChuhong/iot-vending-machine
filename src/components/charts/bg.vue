@@ -1,5 +1,5 @@
 <template>
-	<div id="dom" ref="dom" class="BMap_cpyCtrl anchorBL"></div>
+	<div id="dom" ref="dom"></div>
 	<!-- <div id="chinaMap" :style="{height:'700px',width:'100%'}" ref="myEchart"></div> -->
 </template>
 
@@ -92,31 +92,32 @@
 						}
 					},
 
-					toolbox: {
-						show: true,
-						orient: 'vertical',
-						x: 'right',
-						y: 'center',
-						showTitle: false,
-						feature: {
-							mark: {
-								show: true
-							},
-							dataView: {
-								show: true,
-								readOnly: false
-							},
-							restore: {
-								show: true
-							},
-							saveAsImage: {
-								show: true
-							}
-						}
-					},
+					// toolbox: {
+					// 	show: true,
+					// 	orient: 'vertical',
+					// 	x: 'right',
+					// 	y: 'center',
+					// 	showTitle: false,
+					// 	feature: {
+					// 		mark: {
+					// 			show: true
+					// 		},
+					// 		dataView: {
+					// 			show: true,
+					// 			readOnly: false
+					// 		},
+					// 		restore: {
+					// 			show: true
+					// 		},
+					// 		saveAsImage: {
+					// 			show: true
+					// 		}
+					// 	}
+					// },
+					// 
 					visualMap: {
 						min: 0,
-						max: 200,
+						max: 500,
 						calculable: true,
 						inRange: {
 							color: ['#50a3ba', '#eac736', '#d94e5d']
@@ -131,12 +132,20 @@
 						coordinateSystem: 'bmap',
 						data: [{
 							name: "三水区",
-							value: [112.87, 23.17, 44]
-						}, ],
+							value: [112.87, 23.17, 100]
+						},
+						 {
+						 	name: "高明区",
+						 	value: [112.89262, 22.90026, 250]
+						 },
+						 {
+						 	name: "顺德区",
+						 	value: [113.29321, 22.80536, 450]
+						 },],
 						symbolSize: 12,
 						label: {
 							normal: {
-								show: true
+								show: false
 							},
 							emphasis: {
 								show: false
