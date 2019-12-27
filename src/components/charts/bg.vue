@@ -132,29 +132,36 @@
 						coordinateSystem: 'bmap',
 						data: [{
 							name: "三水区",
-							value: [112.87, 23.17, 100]
+							value: [112.87, 23.17, 100],
+							//symbol:'image://https://b-gold-cdn.xitu.io/v3/static/img/45.b99ea03.svg',
 						},
 						 {
 						 	name: "高明区",
-						 	value: [112.89262, 22.90026, 250]
+						 	value: [112.89262, 22.90026, 250],
+							//symbol:'image://https://b-gold-cdn.xitu.io/v3/static/img/45.b99ea03.svg',
 						 },
 						 {
 						 	name: "顺德区",
-						 	value: [113.29321, 22.80536, 450]
+						 	value: [113.29321, 22.80536, 450],
+							//symbol:'image://https://b-gold-cdn.xitu.io/v3/static/img/45.b99ea03.svg',
 						 },],
-						symbolSize: 12,
+						symbol:'image://https://b-gold-cdn.xitu.io/v3/static/img/45.b99ea03.svg',
+						//symbol:(value: Array|number, params: Object) => string
+						symbolSize: 30,
 						label: {
 							normal: {
 								show: false
 							},
 							emphasis: {
-								show: false
+								show: false,
+								
 							}
 						},
 						itemStyle: {
 							emphasis: {
 								borderColor: '#fff',
-								borderWidth: 1
+								borderWidth: 1,
+								//symbolSize: 30,
 							}
 						}
 
