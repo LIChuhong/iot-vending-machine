@@ -234,7 +234,7 @@
         "label": {
             "normal": {
                 "textStyle": {
-                    "color": "#000"
+                    "color": "#fff"
                 }
             },
             "emphasis": {

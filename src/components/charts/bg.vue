@@ -5,7 +5,7 @@
 
 <script>
 	import echarts from 'echarts'
-	//import 'echarts/map/js/china.js'
+	import 'echarts/map/js/china.js'
 	import 'echarts/extension/bmap/bmap'
 	import tdTheme from './theme.json'
 	import mapConfig from './custom_map_config.json'
@@ -38,7 +38,7 @@
 				map.setMinZoom(7);
 				map.setMaxZoom(18);
 
-				var cityName = '佛山市';
+				var cityName = '北京市';
 				//map.addControl(new BMap.OverviewMapControl()); //添加缩略地图控件
 				//map.enableScrollWheelZoom();
 				// map.addControl(new BMap.NavigationControl({
@@ -76,13 +76,37 @@
 						}
 					},
 
-					bmap: {
-						center: [113.13402563539, 23.035094840514],
-						zoom: 10,
+					// bmap: {
+					// 	center: [116.397128,39.916527],
+					// 	zoom: 10,
+					// 	roam: true,
+					// 	mapStyle: {
+					// 		styleJson: mapConfig
+					// 	},
+					// },
+					geo: {
+						map: 'china',
 						roam: true,
-						mapStyle: {
-							styleJson: mapConfig
+						label: {
+							normal: {
+								show: true,
+								color:'#1e67b2'
+							},
+							emphasis: {
+								show: true,
+								color:'#fff'
+							}
 						},
+						itemStyle: {
+							normal: {
+								areaColor: "#081734",
+								borderColor: "#8b8787"
+							},
+							emphasis: {
+								areaColor: "#1e67b2"
+							}
+					
+						}
 					},
 
 					tooltip: {
@@ -129,8 +153,9 @@
 					series: [{
 						name: '智能园林大数据',
 						type: 'scatter',
-						coordinateSystem: 'bmap',
-						data: [{
+						coordinateSystem: 'geo',
+						data: [
+							{
 							name: "三水区",
 							value: [112.87, 23.17, 100],
 							//symbol:'image://https://b-gold-cdn.xitu.io/v3/static/img/45.b99ea03.svg',
@@ -144,7 +169,8 @@
 						 	name: "顺德区",
 						 	value: [113.29321, 22.80536, 450],
 							//symbol:'image://https://b-gold-cdn.xitu.io/v3/static/img/45.b99ea03.svg',
-						 },],
+						 },
+						 ],
 						symbol:'image://https://b-gold-cdn.xitu.io/v3/static/img/45.b99ea03.svg',
 						//symbol:(value: Array|number, params: Object) => string
 						symbolSize: 30,
@@ -170,7 +196,7 @@
 				this.$nextTick(() => {
 					this.dom = echarts.init(this.$refs.dom, 'tdTheme')
 					this.dom.setOption(option)
-					this.createMap()
+					//this.createMap()
 					on(window, 'resize', this.resize)
 
 				})
