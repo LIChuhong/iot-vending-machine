@@ -38,7 +38,7 @@
 				map.setMinZoom(7);
 				map.setMaxZoom(18);
 
-				var cityName = '北京市';
+				var cityName = '佛山市';
 				//map.addControl(new BMap.OverviewMapControl()); //添加缩略地图控件
 				//map.enableScrollWheelZoom();
 				// map.addControl(new BMap.NavigationControl({
@@ -76,39 +76,39 @@
 						}
 					},
 
-					// bmap: {
-					// 	center: [116.397128,39.916527],
-					// 	zoom: 10,
-					// 	roam: true,
-					// 	mapStyle: {
-					// 		styleJson: mapConfig
-					// 	},
-					// },
-					geo: {
-						map: 'china',
+					bmap: {
+						center: [113.11,23.05],
+						zoom: 10,
 						roam: true,
-						label: {
-							normal: {
-								show: true,
-								color:'#1e67b2'
-							},
-							emphasis: {
-								show: true,
-								color:'#fff'
-							}
+						mapStyle: {
+							styleJson: mapConfig
 						},
-						itemStyle: {
-							normal: {
-								areaColor: "#081734",
-								borderColor: "#8b8787"
-							},
-							emphasis: {
-								areaColor: "#1e67b2"
-							}
-					
-						}
 					},
-
+// 					geo: {
+// 						map: 'china',
+// 						roam: true,
+// 						label: {
+// 							normal: {
+// 								show: true,
+// 								color:'#1e67b2'
+// 							},
+// 							emphasis: {
+// 								show: true,
+// 								color:'#fff'
+// 							}
+// 						},
+// 						itemStyle: {
+// 							normal: {
+// 								areaColor: "#081734",
+// 								borderColor: "#8b8787"
+// 							},
+// 							emphasis: {
+// 								areaColor: "#1e67b2"
+// 							}
+// 					
+// 						}
+// 					},
+// 
 					tooltip: {
 						trigger: 'item',
 						formatter: function(params) {
@@ -153,7 +153,7 @@
 					series: [{
 						name: '智能园林大数据',
 						type: 'scatter',
-						coordinateSystem: 'geo',
+						coordinateSystem: 'bmap',
 						data: [
 							{
 							name: "三水区",
@@ -196,7 +196,7 @@
 				this.$nextTick(() => {
 					this.dom = echarts.init(this.$refs.dom, 'tdTheme')
 					this.dom.setOption(option)
-					//this.createMap()
+					this.createMap()
 					on(window, 'resize', this.resize)
 
 				})
