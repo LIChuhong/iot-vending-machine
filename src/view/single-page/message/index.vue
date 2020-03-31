@@ -1,194 +1,139 @@
 <template>
-  <Card shadow>
-    <div>
-      <div class="message-page-con message-category-con">
-        <Menu width="auto" active-name="unread" @on-select="handleSelect">
-          <MenuItem name="unread">
-            <span class="category-title">未读消息</span><Badge style="margin-left: 10px" :count="messageUnreadCount"></Badge>
-          </MenuItem>
-          <MenuItem name="readed">
-            <span class="category-title">已读消息</span><Badge style="margin-left: 10px" class-name="gray-dadge" :count="messageReadedCount"></Badge>
-          </MenuItem>
-          <MenuItem name="trash">
-            <span class="category-title">回收站</span><Badge style="margin-left: 10px" class-name="gray-dadge" :count="messageTrashCount"></Badge>
-          </MenuItem>
-        </Menu>
-      </div>
-      <div class="message-page-con message-list-con">
-        <Spin fix v-if="listLoading" size="large"></Spin>
-        <Menu
-          width="auto"
-          active-name=""
-          :class="titleClass"
-          @on-select="handleView"
-        >
-          <MenuItem v-for="item in messageList" :name="item.msg_id" :key="`msg_${item.msg_id}`">
-            <div>
-              <p class="msg-title">{{ item.title }}</p>
-              <Badge status="default" :text="item.create_time" />
-              <Button
-                style="float: right;margin-right: 20px;"
-                :style="{ display: item.loading ? 'inline-block !important' : '' }"
-                :loading="item.loading"
-                size="small"
-                :icon="currentMessageType === 'readed' ? 'md-trash' : 'md-redo'"
-                :title="currentMessageType === 'readed' ? '删除' : '还原'"
-                type="text"
-                v-show="currentMessageType !== 'unread'"
-                @click.native.stop="removeMsg(item)"></Button>
-            </div>
-          </MenuItem>
-        </Menu>
-      </div>
-      <div class="message-page-con message-view-con">
-        <Spin fix v-if="contentLoading" size="large"></Spin>
-        <div class="message-view-header">
-          <h2 class="message-view-title">{{ showingMsgItem.title }}</h2>
-          <time class="message-view-time">{{ showingMsgItem.create_time }}</time>
-        </div>
-        <div v-html="messageContent"></div>
-      </div>
-    </div>
-  </Card>
+	<Card shadow>
+		<List>
+			<ListItem v-for="item in messageList" :key="item.id">
+				<ListItemMeta>
+					<template slot="description">
+						<!-- <Badge :status="!!item.readed?'error':'' "> -->
+						<div>
+							<span>ID:{{item.id}}</span><span style="margin-left:1.25rem;">时间:{{item.time}}</span>
+						</div>
+						<div>
+							<span>消息:{{item.content}}</span>
+						</div>
+						<div>
+							<span style="color: #FF0000;">帮助:{{item.help}}</span>
+						</div>
+
+					</template>
+				</ListItemMeta>
+				<template slot="action">
+					<li style="text-align: left;">
+						<Poptip width="150" confirm title="您是否确认删除该消息?" placement="bottom-end" @on-ok="delMsg(item)">
+							<Button type="text" ghost style="color: red;" size="small">删除</Button>
+						</Poptip>
+					</li>
+					<li>
+
+						<Button @click="hasReadmsg(item)" :disabled="item.readed" type="text" ghost :style="{color:item.readed?'#c5c8ce':'#2d8cf0'}"
+						 size="small">{{item.readed?'已阅读':'阅读'}}</Button>
+					</li>
+				</template>
+			</ListItem>
+		</List>
+		<div style="overflow: hidden;padding:0.625rem 0.625rem;">
+			<Button type="primary" ghost style="float: right;" @click="nextPage">下一页</Button>
+			<Button type="primary" ghost style="float: right;margin-right: 0.625rem;" @click="prevPage">上一页</Button>
+		
+		</div>
+	</Card>
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
-const listDic = {
-  unread: 'messageUnreadList',
-  readed: 'messageReadedList',
-  trash: 'messageTrashList'
-}
-export default {
-  name: 'message_page',
-  data () {
-    return {
-      listLoading: true,
-      contentLoading: false,
-      currentMessageType: 'unread',
-      messageContent: '',
-      showingMsgItem: {}
-    }
-  },
-  computed: {
-    ...mapState({
-      messageUnreadList: state => state.user.messageUnreadList,
-      messageReadedList: state => state.user.messageReadedList,
-      messageTrashList: state => state.user.messageTrashList,
-      messageList () {
-        return this[listDic[this.currentMessageType]]
-      },
-      titleClass () {
-        return {
-          'not-unread-list': this.currentMessageType !== 'unread'
-        }
-      }
-    }),
-    ...mapGetters([
-      'messageUnreadCount',
-      'messageReadedCount',
-      'messageTrashCount'
-    ])
-  },
-  methods: {
-    ...mapMutations([
-      //
-    ]),
-    ...mapActions([
-      'getContentByMsgId',
-      'getMessageList',
-      'hasRead',
-      'removeReaded',
-      'restoreTrash'
-    ]),
-    stopLoading (name) {
-      this[name] = false
-    },
-    handleSelect (name) {
-      this.currentMessageType = name
-    },
-    handleView (msg_id) {
-      this.contentLoading = true
-      this.getContentByMsgId({ msg_id }).then(content => {
-        this.messageContent = content
-        const item = this.messageList.find(item => item.msg_id === msg_id)
-        if (item) this.showingMsgItem = item
-        if (this.currentMessageType === 'unread') this.hasRead({ msg_id })
-        this.stopLoading('contentLoading')
-      }).catch(() => {
-        this.stopLoading('contentLoading')
-      })
-    },
-    removeMsg (item) {
-      item.loading = true
-      const msg_id = item.msg_id
-      if (this.currentMessageType === 'readed') this.removeReaded({ msg_id })
-      else this.restoreTrash({ msg_id })
-    }
-  },
-  mounted () {
-    this.listLoading = true
-    // 请求获取消息列表
-    this.getMessageList().then(() => this.stopLoading('listLoading')).catch(() => this.stopLoading('listLoading'))
-  }
-}
+	import {
+		timestampToTime
+	} from '@/libs/tools'
+	import {
+		getMessageList,
+		hasRead,
+		removeReaded
+	} from '@/api/user'
+	export default {
+		name: 'message_page',
+		data() {
+			return {
+				pageNo: 0,
+				pageSize: 10,
+				messageList: [],
+				oldMsgList:[]
+			}
+		},
+		computed: {
+
+		},
+		methods: {
+			nextPage() {
+				if (this.oldMsgList.length < this.pageSize) {
+					this.$Message.warning('这是最后一页');
+				} else {
+					this.pageNo++
+					this.getMessageListData()
+				 }
+			
+			},
+			prevPage() {
+				if (this.pageNo > 0) {
+					this.pageNo--
+					this.getMessageListData()
+				} else {
+					this.$Message.warning('这是第一页');
+				}
+			},
+			delMsg(item) {
+				removeReaded(item.id).then(res => {
+					const data = res.data
+					if (data.success == 1) {
+						item = ''
+					} else {
+						this.$Message.error(errorMessage)
+					}
+				}).catch(error => {
+					alert(error)
+				})
+
+			},
+			hasReadmsg(item) {
+				hasRead(item.id).then(res => {
+					const data = res.data
+					if (data.success == 1) {
+						item.readed = true
+					} else {
+						this.$Message.error(errorMessage)
+					}
+				}).catch(error => {
+					alert(error)
+				})
+			},
+			getMessageListData() {
+				getMessageList(this.pageNo, this.pageSize).then(res => {
+					const {
+						data
+					} = res
+					if (data.success == 1) {
+						this.messageList = data.messageList.map(item => {
+							item.time = timestampToTime(item.time)
+							return item
+						})
+						this.oldMsgList = this.messageList
+					} else {
+						this.$Message.error(errorMessage)
+					}
+				}).catch(error => {
+					alert(error)
+				})
+			}
+
+		},
+		mounted() {
+
+		},
+		created() {
+			this.getMessageListData()
+
+		}
+
+	}
 </script>
 
 <style lang="less">
-.message-page{
-  &-con{
-    height: ~"calc(100vh - 176px)";
-    display: inline-block;
-    vertical-align: top;
-    position: relative;
-    &.message-category-con{
-      border-right: 1px solid #e6e6e6;
-      width: 200px;
-    }
-    &.message-list-con{
-      border-right: 1px solid #e6e6e6;
-      width: 230px;
-    }
-    &.message-view-con{
-      position: absolute;
-      left: 446px;
-      top: 16px;
-      right: 16px;
-      bottom: 16px;
-      overflow: auto;
-      padding: 12px 20px 0;
-      .message-view-header{
-        margin-bottom: 20px;
-        .message-view-title{
-          display: inline-block;
-        }
-        .message-view-time{
-          margin-left: 20px;
-        }
-      }
-    }
-    .category-title{
-      display: inline-block;
-      width: 65px;
-    }
-    .gray-dadge{
-      background: gainsboro;
-    }
-    .not-unread-list{
-      .msg-title{
-        color: rgb(170, 169, 169);
-      }
-      .ivu-menu-item{
-        .ivu-btn.ivu-btn-text.ivu-btn-small.ivu-btn-icon-only{
-          display: none;
-        }
-        &:hover{
-          .ivu-btn.ivu-btn-text.ivu-btn-small.ivu-btn-icon-only{
-            display: inline-block;
-          }
-        }
-      }
-    }
-  }
-}
 </style>

@@ -1,50 +1,75 @@
 <template>
-	<Form ref="rtuCopyModel" :model="rtuCopyModel" :rules="rtuCopyRule" :label-width="80" style="width: 50%;margin: 0 auto;">
-		<FormItem label="机器编号" prop="rtuNum">
-			<Input type="text" v-model="rtuCopyModel.rtuNum" placeholder="请输入机器编号">
-			
-			</Input>
-		</FormItem>
-		<FormItem label="复制数量" prop="copyNum">
-			<Input type="text" v-model="rtuCopyModel.copyNum" placeholder="请输入复制数量">
+	<div>
+	<Form ref="rtuCopyModel" :model="rtuCopyModel" :rules="rtuCopyRule" :label-width="80">
+		<FormItem label="复制数量" prop="copyCount">
+			<Input type="number" v-model="rtuCopyModel.copyCount" placeholder="请输入复制数量">
 			</Input>
 		</FormItem>
 		<FormItem style="text-align: center;">
-			 <Button @click="handleReset('rtuCopyModel')" style="margin-right: 8px">重置</Button>
 			<Button type="primary" @click="handleSubmit('rtuCopyModel')">复制</Button>
 		</FormItem>
 	</Form>
+	<Spin fix v-show="showSpin" class="show-spin-style">
+		<Icon type="ios-loading" size="18" class="demo-spin-icon-load"></Icon>
+		<div>复制中...</div>
+	</Spin>
+	</div>
 </template>
 
 <script>
-	import { rtuCopy } from '@/api/v-rtu-manage'
+	import {
+		copyVMRtu
+	} from '@/api/rtu'
 	export default {
 		name: 'copy_rtu',
+		props: ['rtuNumber'],
 		data() {
 			return {
-				rtuCopyModel:{
-					rtuNum:'',
-					copyNum:''
+				showSpin:false,
+				rtuCopyModel: {
+					copyCount: ''
 				},
-				rtuCopyRule:[]
+				rtuCopyRule: {
+					copyCount: [{
+						required: true,
+						//type: 'number',
+						message: '请输入复制数量',
+						trigger: 'blur'
+					}]
+				}
 
 			}
 		},
+
 		methods: {
-			handleSubmit (name) {
-                this.$refs[name].validate((valid) => {
-                    if (valid) {
-                        this.$Message.success('Success!');
-                    } else {
-                        this.$Message.error('Fail!');
-                    }
-                })
-            },
-            handleReset (name) {
-                this.$refs[name].resetFields();
-            },
+			handleSubmit(name) {
+				
+				this.$refs[name].validate((valid) => {
+					if (valid) {
+						if (this.rtuNumber) {
+							this.showSpin = true
+							copyVMRtu(this.rtuNumber, this.rtuCopyModel.copyCount).then(res => {
+								const data = res.data
+								this.showSpin = false
+								if (data.success == 1) {
+									this.$Message.success('复制成功')
+								} else {
+									this.$Message.error(data.errorMessage)
+								}
+							}).catch(error=>{
+								this.showSpin = false
+								alert(error)
+							})
+						}
+
+					} else {
+						this.$Message.error('Fail!');
+					}
+				})
+			},
+
 		},
-		
+
 	}
 </script>
 

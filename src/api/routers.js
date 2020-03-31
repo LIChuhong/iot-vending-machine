@@ -9,3 +9,11 @@ export const getRouterReq = (access) => {
     method: 'get'
   })
 }
+
+export const getMenuList = () => {
+  return axios.request({
+    url: '/api2.0/getMenuList',
+    method: 'get'
+  })
+}
+

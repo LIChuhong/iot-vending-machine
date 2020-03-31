@@ -38,7 +38,7 @@
 					dateTime: '',
 
 				},
-				shippingRule: [],
+				shippingRule:{},
 				shippingColumns: shippingColumns,
 				shippingList: [{}],
 

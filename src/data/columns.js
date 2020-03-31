@@ -78,41 +78,52 @@ export const collectionUserColumns = [{
 //我的设备列表Columns
 export const rtuColumns = [{
 		title: 'ID',
-		key: 'rtuId',
+		key: 'id',
 		align: 'center',
 		ellipsis: true,
+		width: 80
 
 	},
 	{
-		title: '名称/类型/序列号',
+		title: '机器编号',
+		key: 'rtuNumber',
+		align: 'center',
+		ellipsis: true,
+		width: 100
+
+	},
+	{
+		title: '名称/序列号',
 		slot: 'name-type-serialNumber',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 	},
 	{
-		title: '收款账号/打款方式',
-		slot: 'payAccount-mannerPlay',
+		title: '收款人/收款账号',
+		slot: 'payeeName-payId',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
+		width: 100
 	},
 	{
-		title: '所属客户',
-		key: 'belongCustomer',
+		title: '所属商家/电话',
+		slot: 'orgName-tel',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 	},
 	{
 		title: '二维码',
-		key: 'qrCode',
+		slot: 'qrCode',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
+		width: 80
 	},
 
 	{
 		title: '操作',
 		slot: 'action',
 		align: 'center',
-		width: 300
+		width: 280
 	}
 
 ]
@@ -120,52 +131,52 @@ export const rtuColumns = [{
 //补货列表Columns
 export const replenishmentColumns = [{
 		title: '日期',
-		key: 'date',
+		key: 'addTime',
 		align: 'center',
-		ellipsis: true,
+		//tooltip: true,
 
 	},
 	{
 		title: '机器编号',
-		key: 'rtuNum',
+		key: 'rtuNumber',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 	},
 	{
-		title: '货道编号',
-		key: 'aisleNum',
+		title: '货道',
+		key: 'cargoNo',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 	},
 	{
-		title: '补货前',
-		key: 'beforeRep',
+		title: '补货前/后',
+		slot: 'stock',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 	},
-	{
-		title: '补货后',
-		key: 'afterRep',
-		align: 'center',
-		ellipsis: true,
-	},
+	// {
+	// 	title: '补货后',
+	// 	key: 'afterRep',
+	// 	align: 'center',
+	// 	ellipsis: true,
+	// },
 	{
 		title: '变量',
-		key: 'few',
+		slot: 'few',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 	},
 	{
 		title: '用户名',
 		key: 'userName',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 	},
 	{
 		title: '姓名',
 		key: 'realName',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 	},
 ]
 
@@ -220,35 +231,62 @@ export const shippingColumns = [{
 //商品列表Columns
 export const goodsColumns = [{
 		title: 'ID',
-		key: 'goodsId',
+		key: 'id',
 		align: 'center',
 		ellipsis: true,
 
 	},
 	{
 		title: '商品名',
-		key: 'goodsName',
+		key: 'commodityName',
 		align: 'center',
 		ellipsis: true,
 	},
 	{
 		title: '类型',
-		key: 'goodsType',
+		key: 'commodityTypeName',
 		align: 'center',
 		ellipsis: true,
 	},
 	{
 		title: '商品图',
-		slot: 'goodsImg',
+		slot: 'commodityImgUrl',
 		align: 'center',
 		ellipsis: true,
-		width: 120
 	},
 	{
 		title: '操作',
 		slot: 'action',
 		align: 'center',
-		width: 100
+	}
+
+]
+//商品子列表Columns
+export const goodsChildColumns = [{
+		title: 'ID',
+		key: 'id',
+		align: 'center',
+		ellipsis: true,
+		width: 50
+
+	},
+	{
+		title: '商品名',
+		key: 'commodityName',
+		align: 'center',
+		tooltip: true,
+	},
+
+	{
+		title: '商品图',
+		slot: 'commodityImgUrl',
+		align: 'center',
+		ellipsis: true,
+	},
+	{
+		title: '操作',
+		slot: 'action',
+		align: 'center',
 	}
 
 ]
@@ -263,7 +301,7 @@ export const orderColumns = [{
 	},
 	{
 		title: '消费金额',
-		key: 'amount',
+		key: 'payTotalAmount',
 		align: 'center',
 		ellipsis: true,
 		width: 100,
@@ -271,7 +309,7 @@ export const orderColumns = [{
 	},
 	{
 		title: '收款账号',
-		key: 'paymentAccount',
+		key: 'collAccount',
 		align: 'center',
 		ellipsis: true,
 		width: 100,
@@ -279,7 +317,7 @@ export const orderColumns = [{
 	},
 	{
 		title: '订单状态',
-		key: 'orderType',
+		key: 'orderStateName',
 		align: 'center',
 		ellipsis: true,
 		width: 100,
@@ -288,7 +326,7 @@ export const orderColumns = [{
 	},
 	{
 		title: '机器编号',
-		key: 'rtuNum',
+		key: 'rtuNumber',
 		align: 'center',
 		ellipsis: true,
 		width: 100,
@@ -313,7 +351,7 @@ export const orderColumns = [{
 //订单购物车列表Columns
 export const shoppingColumns = [{
 		title: '商品名称',
-		slot: 'goodsName',
+		key: 'commodityName',
 		align: 'center',
 	},
 	{
@@ -326,7 +364,7 @@ export const shoppingColumns = [{
 	},
 	{
 		title: '成本价',
-		key: 'cost',
+		key: 'costPrice',
 		align: 'center',
 		ellipsis: true,
 		width: 100,
@@ -334,7 +372,7 @@ export const shoppingColumns = [{
 	},
 	{
 		title: '购买数量',
-		key: 'buyNum',
+		key: 'buyCount',
 		align: 'center',
 		ellipsis: true,
 		width: 100,
@@ -343,7 +381,7 @@ export const shoppingColumns = [{
 	},
 	{
 		title: '已出货',
-		key: 'shipment',
+		key: 'finishCount',
 		align: 'center',
 		ellipsis: true,
 		width: 100,
@@ -351,7 +389,7 @@ export const shoppingColumns = [{
 	},
 	{
 		title: '未完成',
-		key: 'failure',
+		slot: 'failureCount',
 		align: 'center',
 		width: 100,
 		resizable: true
@@ -359,7 +397,7 @@ export const shoppingColumns = [{
 	},
 	{
 		title: '总价',
-		key: 'totalPrice',
+		slot: 'totalPrice',
 		align: 'center',
 		width: 100,
 		resizable: true
@@ -367,23 +405,23 @@ export const shoppingColumns = [{
 	},
 	{
 		title: '总成本',
-		key: 'totalCost',
+		slot: 'totalCostPrice',
 		align: 'center',
 		width: 100,
 		resizable: true
 
 	},
-	{
-		title: '应退金额',
-		key: 'refund',
-		align: 'center',
-		width: 100,
-		resizable: true
-
-	},
+// 	{
+// 		title: '应退金额',
+// 		slot: 'refund',
+// 		align: 'center',
+// 		width: 100,
+// 		resizable: true
+// 
+// 	},
 	{
 		title: '货道',
-		key: 'aisle',
+		key: 'cargoNo',
 		align: 'center',
 		width: 100,
 		resizable: true
@@ -395,26 +433,26 @@ export const shoppingColumns = [{
 //利益列表Columns
 export const earningsColumns = [{
 		title: '日期',
-		slot: 'date',
+		key: 'day',
 		align: 'center',
 	},
 	{
 		title: '订单数',
-		key: 'orders',
+		key: 'totalCount',
 		align: 'center',
 		ellipsis: true,
 
 	},
 	{
 		title: '收入',
-		key: 'income',
+		key: 'totalAmount',
 		align: 'center',
 		ellipsis: true,
 
 	},
 	{
 		title: '成本',
-		key: 'cost',
+		key: 'totalCostAmount',
 		align: 'center',
 		ellipsis: true,
 
@@ -464,97 +502,88 @@ export const salesColumns = [{
 		align: 'center',
 
 	},
-	{
-		title: '购买收入',
-		key: 'buyRevenue',
-		align: 'center',
-
-	},
-	{
-		title: '购买成本',
-		key: 'buyCost',
-		align: 'center',
-
-	},
-	{
-		title: '购买利润',
-		key: 'buyProfits',
-		align: 'center',
-
-	},
-	{
-		title: '免单收入',
-		key: 'luckyRevenue',
-		align: 'center',
-
-	},
-	{
-		title: '免单成本',
-		key: 'luckyCost',
-		align: 'center',
-
-	},
-	{
-		title: '免单利润',
-		key: 'luckyProfits',
-		align: 'center',
-
-	},
-	{
-		title: '免单次数',
-		key: 'luckyNum',
-		align: 'center',
-
-	},
-
 ]
 
 //用户列表Columns
 export const userColumns = [{
-		title: '用户ID',
-		key: 'userId',
+		title: 'ID',
+		key: 'id',
 		align: 'center',
-		ellipsis: true,
-		width: 100
+		tooltip: true,
+		width: 80
 
 	},
 	{
 		title: '用户名',
 		key: 'userName',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 	},
-	{
-		title: '用户头像',
-		slot: 'userLogo',
-		align: 'center',
-		ellipsis: true,
-		width: 100
-	},
+	
 	{
 		title: '真实姓名',
 		key: 'realName',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 	},
 	{
 		title: '用户级别',
-		key: 'userType',
+		key: 'userRolesName',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
+	},
+	{
+		title: '用户头像',
+		slot: 'userHeadImgUrl',
+		align: 'center',
+		//tooltip: true,
+		width: 100
 	},
 	{
 		title: '创建时间',
 		key: 'createTime',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 	},
 
 	{
 		title: '操作',
 		slot: 'action',
 		align: 'center',
-		width: 200
+		width: 230
+	}
+
+]
+
+//手机端用户列表Columns
+export const mUserColumns = [{
+		title: 'ID',
+		key: 'id',
+		align: 'center',
+		tooltip: true,
+		//width: 100
+		width: 50
+
+	},
+	{
+		title: '用户名',
+		key: 'userName',
+		align: 'center',
+		tooltip: true,
+	},
+
+	{
+		title: '真实姓名',
+		key: 'realName',
+		align: 'center',
+		tooltip: true,
+	},
+
+	{
+		title: '操作',
+		slot: 'action',
+		align: 'center',
+		//width: 150
 	}
 
 ]
@@ -562,45 +591,73 @@ export const userColumns = [{
 //支付列表Columns
 export const payColumns = [{
 		title: 'ID',
-		key: 'payId',
+		key: 'id',
 		align: 'center',
-		ellipsis: true,
-		width: 100
+		tooltip: true,
+		width: 80
 
 	},
 	{
 		title: '商户号',
-		key: 'merchantsNum',
+		key: 'merchantNo',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 	},
-	
+
 	{
 		title: 'SystemId',
 		key: 'systemId',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 	},
 	{
-		title: '所属用户',
-		key: 'belongUser',
+		title: '收款人',
+		key: 'payeeName',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 	},
 	{
 		title: '登录邮箱',
-		key: 'email',
+		key: 'eMail',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 	},
 
 	{
 		title: '操作',
 		slot: 'action',
 		align: 'center',
-		width: 200
+		width: 100
 	}
+]
 
+//支付查询列表Columns
+export const payChildColumns = [{
+		title: 'ID',
+		key: 'id',
+		align: 'center',
+		tooltip: true,
+		//width: 80
+
+	},
+	{
+		title: '商户号',
+		key: 'merchantNo',
+		align: 'center',
+		tooltip: true,
+	},
+	{
+		title: '收款人',
+		key: 'payeeName',
+		align: 'center',
+		tooltip: true,
+	},
+	{
+		title: '操作',
+		slot: 'action',
+		align: 'center',
+		//width: 100
+	}
 ]
 
 //公司列表Columns
@@ -647,3 +704,213 @@ export const companyColumns = [{
 
 ]
 
+//手机端订单处理列表
+export const mOrderDealColumns = [{
+		title: '订单ID',
+		key: 'orderId',
+		align: 'center',
+		tooltip: true,
+	}, {
+		title: '消费金额',
+		key: 'payTotalAmount',
+		align: 'center',
+		//ellipsis: true,
+	},
+	{
+		title: '订单状态',
+		key: 'orderStateLabel',
+		align: 'center',
+		//ellipsis: true,
+	},
+	{
+		title: '机器编号',
+		key: 'rtuNumber',
+		align: 'center',
+		//ellipsis: true,
+	},
+	{
+		title: '详情',
+		slot: 'action',
+		align: 'center',
+		width: 50
+	}
+]
+
+//手机端收益明细列表
+export const mEdetailColumns = [{
+		title: '编号',
+		key: 'rtuNumber',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '分账',
+		slot: 'totalBillSplitAmount',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '笔数',
+		slot: 'totalCount',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '收入',
+		slot: 'totalAmount',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '成本',
+		slot: 'totalCostAmount',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '利润',
+		slot: 'profits',
+		align: 'center',
+		//tooltip: true,
+	},
+]
+
+//手机端订单处理详情列表
+export const mOcontentColumns = [{
+		title: '商品名称',
+		key: 'commodityName',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '货道',
+		key: 'cargoNo',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '单价',
+		key: 'price',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '购买数量',
+		key: 'buyCount',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '完成数量',
+		key: 'finishCount',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '总价',
+		slot: 'totalPrice',
+		align: 'center',
+		//tooltip: true,
+	},
+]
+
+//手机端补货记录列表
+export const mRrecordColumns = [{
+		title: '时间',
+		key: 'time',
+		align: 'center',
+		tooltip: true,
+	},
+	{
+		title: '货道',
+		key: 'aisle',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '补货前',
+		key: 'rmBefore',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '补货后',
+		key: 'rmAfter',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '姓名',
+		key: 'name',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '出货明细',
+		slot: 'action',
+		align: 'center',
+
+	}
+]
+
+//手机端出货明细列表
+export const mSdetailColumns = [{
+		title: '货道',
+		key: 'aisle',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '商品名',
+		key: 'shopName',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '总出货',
+		key: 'totalShipment',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '现库存',
+		key: 'inventory',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '操作',
+		slot: 'action',
+		align: 'center',
+
+	}
+]
+
+//合作列表
+export const coopListColumns = [{
+		title: 'ID',
+		key: 'id',
+		align: 'center',
+		width: 80
+		//tooltip: true,
+	},
+	{
+		title: '组织名称',
+		key: 'orgName',
+		align: 'center',
+		//tooltip: true,
+	},
+	{
+		title: '类型',
+		key: 'orgTypeName',
+		align: 'center',
+		//tooltip: true,
+	},
+
+	{
+		title: '操作',
+		slot: 'action',
+		align: 'center',
+
+	}
+]

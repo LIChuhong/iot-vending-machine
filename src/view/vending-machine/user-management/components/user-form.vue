@@ -1,71 +1,295 @@
 <template>
-	<Form ref="userModel" :model="userModel" :rules="userRule" :label-width="80">
-        <FormItem label="用户名" prop="userName">
-            <Input type="text" v-model="userModel.userName" placeholder="Username">
-            </Input>
-        </FormItem>
-        <FormItem label="密码" prop="password">
-            <Input type="password" v-model="userModel.password" placeholder="Password">
-            </Input>
-        </FormItem>
-		<FormItem label="确认密码" prop="againPassword">
-		    <Input type="password" v-model="userModel.againPassword" placeholder="Password">
-		    </Input>
+	<div>
+		<!-- {{userId}} -->
+	<Form ref="vmUser" :model="vmUser" :rules="userRule" :label-width="90" :label-colon="true" > 
+		<FormItem label="用户名" prop="userName">
+			<Input type="text" v-model="vmUser.userName" placeholder="请输入用户名">
+			</Input>
 		</FormItem>
-		<FormItem label="用户级别" prop="userType">
-            <RadioGroup v-model="userModel.userType">
-                <Radio label="male">用户</Radio>
-                <Radio label="female">客户管理员</Radio>
-				<Radio label="female1">系统管理员</Radio>
-            </RadioGroup>
-        </FormItem>
-		<FormItem label="头像" prop="userLogo" style="height: 100px;">
-			<img style="float: left;margin-right: 16px;" src="../../../../assets/images/雪碧.png" width="50" />
-			<Upload multiple style="float: left;" action="//jsonplaceholder.typicode.com/posts/">
-				<Button icon="ios-cloud-upload-outline">上传</Button>
+		
+		<FormItem label="用户角色" prop="userRolesId">
+			<RadioGroup v-model="vmUser.userRolesId">
+				<Radio v-for="item in userRolesList" :key="item.id" :label="item.id">{{item.userRolesName}}</Radio>
+			</RadioGroup>
+		</FormItem>
+		
+		<FormItem label="用户头像" prop="userHeadImgUrl">
+			<Upload type="drag" ref="upload" :show-upload-list="false" :on-success="handleSuccess" :format="['jpg','jpeg','png']"
+			 :max-size="50" :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :action="uploadAction" style="display: inline-block;width:100px;float: left;"
+			 :headers="uploadHeaders" :on-error="handleError">
+				<div style="width: 100px;height:100px;line-height: 100px;">
+					<Icon type="ios-camera" size="20"></Icon>
+					<img :src="vmUser.userHeadImgUrl" style="height: 100%;width: 100%;position: absolute;top:0;left: 0;" />
+				</div>
 			</Upload>
-			<!-- <Input type="text" v-model="goodsModel.goodsImg" number></Input> -->
+			<p style="text-align: center;color: red;font-size: 12px;">建议上传图片大小为100px*100px，图片大小不超过50k的图片</p>
+		
 		</FormItem>
+
 		<FormItem label="真实姓名" prop="realName">
-		    <Input type="text" v-model="userModel.realName" placeholder="Username">
-		    </Input>
+			<Input type="text" v-model="vmUser.realName" placeholder="请输入真实姓名">
+			</Input>
 		</FormItem>
-		<FormItem label="联系电话" prop="tel">
-		    <Input type="text" v-model="userModel.tel" placeholder="Username">
-		    </Input>
+
+		<FormItem label="所属组织" prop="belongOrgId">
+			<!-- {{belongOrgName}}
+			<Button style="float: right;" type="primary" @click="getBelongOrgInfo" shape="circle">选择</Button> -->
+			<Input :disabled="belongOrgBtn" readonly v-model="belongOrgName" search enter-button="选择" placeholder="请选择所属组织" @on-search="getBelongOrgInfo"></Input>
 		</FormItem>
-		<FormItem label="所属公司" prop="belongCompany">
-		    <Select v-model="userModel.belongCompany">
-                <Option value="beijing">xxx</Option>
-            </Select>
+		<FormItem style="text-align: left;">
+			<Button @click="handleReset('vmUser')" style="margin-right:0.625rem">重置</Button>
+			<Button type="primary" @click="handleSubmit('vmUser')">
+				<slot></slot>
+			</Button>
 		</FormItem>
-        <FormItem style="text-align: center;">
-            <Button type="primary" @click="handleSubmit('userModel')"><slot></slot></Button>
-        </FormItem>
-    </Form>
+	</Form>
+	<Modal :title="'当前选择:'+ belongOrgTitle" v-model="showBelongOrg">
+		<div slot="close" style="float: left;">
+			<Icon size="30" type="ios-arrow-forward" color="rgb(81,90,110)"></Icon>
+			<!-- //<span>Delete confirmation</span> -->
+		</div>
+		<div class="tree-style">
+			<org-tree v-if="showBelongOrg" @getBelongOrgInfo = "showBelongOrgInfo"></org-tree>
+		</div>
+		<div slot="footer">
+			
+			<Button type="primary" size="large" @click="belongOrgOk">确定</Button>
+		</div>
+		
+	</Modal>
+	<Spin fix v-show="showSpin" class="show-spin-style">
+		<Icon type="ios-loading" size="18" class="demo-spin-icon-load"></Icon>
+		<div>修改中...</div>
+	</Spin>
+	</div>
 </template>
 
 <script>
-	export default{
-		name:'user_form',
-		data(){
-			return{
-				userModel:{
-					userName:'',
-					password:'',
-					againPassword:'',
-					userType:'',
-					userLogo:'',
-					realName:'',
-					tel:'',
-					belongCompany:''
+	import {
+		getUserRolesList,
+		getVMUser,
+		updateVMUser
+	} from '@/api/user'
+	import OrgTree from '@/view/mVending-machine/components/org-tree.vue'
+	export default {
+		name: 'user_form',
+		props:['userId'],
+		components:{
+			OrgTree
+		},
+		data() {
+			const validateUserName = (rule, value, callback) => {
+				if (!value || value.replace(/\s*/g,"") == "") {
+					return callback(new Error('用户名称不能为空'));
+				} else if(value.length>=100){
+					return callback(new Error('输入字符过长'));
+					
+				}else{
+					callback();
+				}
+			};
+			const validateRealName = (rule, value, callback) => {
+				if (!value || value.replace(/\s*/g,"") == "") {
+					return callback(new Error('请填写真实姓名'));
+				} else if(value.length>=20){
+					return callback(new Error('输入字符过长'));
+				}
+				else {
+					callback();
+				}
+			};
+			
+			return {
+				showSpin:false,
+				belongOrgBtn:false,
+				vmUser: {
+					id:null,
+					userName: '',
+					userRolesId: null,
+					realName: '',
+					belongOrgId: null,
+					userHeadImgUrl:'/uploadFile/defaultImages/userHead.png'
 				},
-				userRule:[]
-				
+				userRule: {
+					userName: [{
+						required: true,
+						//message: '用户名不能为空',
+						validator: validateUserName,
+						trigger: 'blur'
+					}],
+					realName: [{
+						required: true,
+						validator: validateRealName,
+						//message: '请填写真实姓名',
+						trigger: 'blur'
+					}],
+					
+					userRolesId: [{
+						required: true,
+						type: 'number',
+						message: '请选择用户角色',
+						trigger: 'change'
+					}],
+					belongOrgId: [{
+						required: true,
+						type: 'number',
+						message: '请选择用户所属组织',
+						trigger: 'change'
+					}],
+				},
+				userRolesList: [],
+				belongOrgTitle:'',
+				showBelongOrg:false,
+				belongOrgName:'',
+				belongOrgList:[],
+				belongOrgInfo:''
+
 			}
+		},
+		methods:{
+			handleSuccess(response) {
+				console.log(response)
+				if (response.success == 1) {
+					this.vmUser.userHeadImgUrl = response.srcList.toString()
+				} else {
+					this.$Message.error(response.errorMessage);
+				}
+			},
+			handleError(error){
+				this.$Message.error(error);
+			},
+			handleFormatError(file) {
+				this.$Message.warning('上传格式错误，请选择jpg/jpeg/png图片');
+			},
+			handleMaxSize(file) {
+				this.$Message.warning('上传图片过大，请选择少于50kb的图片上传');
+			},
+			
+			getUserInfo(){
+				//console.log(1)
+				if(this.userId != null && this.userId != ''){
+					//const id = parseInt(this.userId)
+					this.belongOrgBtn = true
+					getVMUser(this.userId).then(res=>{
+						const data = res.data
+						if(data.success == 1){
+							//console.log(data)
+							this.vmUser.id = data.vmUser.id
+							this.vmUser.userName = data.vmUser.userName
+							this.vmUser.userRolesId = data.vmUser.userRolesId
+							this.vmUser.realName = data.vmUser.realName
+							this.vmUser.belongOrgId = data.vmUser.belongOrgId
+							this.belongOrgName =data.vmUser.orgName
+							this.vmUser.userHeadImgUrl = data.vmUser.userHeadImgUrl
+						}else{
+							this.$Message.error(data.Message)
+						}
+					}).catch(error=>{
+						alert(error)
+					})
+				}
+			},
+			getBelongOrgInfo(){
+				//alert(1)
+				this.belongOrgTitle = this.belongOrgName
+				this.showBelongOrg = true
+				
+			},
+			showBelongOrgInfo(data) {
+				//console.log(JSON.stringify(data))
+				this.belongOrgInfo = data
+				this.belongOrgTitle = data[0].orgName
+				//this.belongOrgTitle = '当前选择: ' + val[0].orgName
+			},
+			belongOrgOk(){
+				//const selectedNodes = this.$refs.belongOrgTree.getSelectedNodes();
+				this.vmUser.belongOrgId = this.belongOrgInfo[0].id
+				this.belongOrgName = this.belongOrgInfo[0].orgName
+				this.showBelongOrg = false
+			},
+			handleReset (name) {
+				this.belongOrgName = ''
+                this.$refs[name].resetFields();
+            },
+			 handleSubmit (name) {
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+						this.showSpin = true
+						updateVMUser(this.vmUser).then(res=>{
+							const data = res.data
+							this.showSpin = false
+							if(data.success == 1){
+								this.$Message.success('修改成功');
+								//alert(JSON.stringify(data))
+								//this.userRolesList = data.userRolesList
+							}else{
+								this.$Message.error(data.Message);
+							}
+						}).catch(error=>{
+							alert(error)
+						})
+						
+						//console.log(this.vmUser)
+                    } else {
+                        this.$Message.error('Fail!');
+                    }
+                })
+            },
+			
+		},
+		created() {
+			getUserRolesList().then(res => {
+				const data = res.data
+				if(data.success == 1){
+					//alert(JSON.stringify(data))
+					this.userRolesList = data.userRolesList
+				}else{
+					this.$Message.error(data.Message);
+				}
+
+			}).catch(error => {
+				alert(error)
+			})
+			
+		},
+		mounted() {
+			//console.log(this.userId)
+			this.getUserInfo()
+			
+		},
+		watch:{
+			// userId(val){
+			// 	//console.log(val)
+			// 	this.getUserInfo()
+			// }
 		}
+		
+
 	}
 </script>
 
 <style>
+	@media screen and (min-width:300px) and (max-width:900px) {
+		/* .tree-style{
+			padding:0.875rem 1rem 
+		}
+		
+		.tree-style .ivu-tree ul li {
+			font-size: 1rem;
+			padding-left: 1rem;
+			
+		}
+		
+		.tree-style .ivu-tree-arrow .ivu-icon {
+			font-size: 1.875rem;
+			padding-right: 0.625rem;
+			
+		}
+		
+		.tree-style .ivu-tree-title {
+			margin-left:1rem;
+			margin-top: 0.3rem;
+			
+		} */
+	}
 </style>

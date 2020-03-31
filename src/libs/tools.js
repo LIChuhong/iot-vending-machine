@@ -1,11 +1,11 @@
 export const forEach = (arr, fn) => {
-  if (!arr.length || !fn) return
-  let i = -1
-  let len = arr.length
-  while (++i < len) {
-    let item = arr[i]
-    fn(item, i, arr)
-  }
+	if (!arr.length || !fn) return
+	let i = -1
+	let len = arr.length
+	while (++i < len) {
+		let item = arr[i]
+		fn(item, i, arr)
+	}
 }
 
 /**
@@ -14,14 +14,14 @@ export const forEach = (arr, fn) => {
  * @description 得到两个数组的交集, 两个数组的元素为数值或字符串
  */
 export const getIntersection = (arr1, arr2) => {
-  let len = Math.min(arr1.length, arr2.length)
-  let i = -1
-  let res = []
-  while (++i < len) {
-    const item = arr2[i]
-    if (arr1.indexOf(item) > -1) res.push(item)
-  }
-  return res
+	let len = Math.min(arr1.length, arr2.length)
+	let i = -1
+	let res = []
+	while (++i < len) {
+		const item = arr2[i]
+		if (arr1.indexOf(item) > -1) res.push(item)
+	}
+	return res
 }
 
 /**
@@ -30,7 +30,7 @@ export const getIntersection = (arr1, arr2) => {
  * @description 得到两个数组的并集, 两个数组的元素为数值或字符串
  */
 export const getUnion = (arr1, arr2) => {
-  return Array.from(new Set([...arr1, ...arr2]))
+	return Array.from(new Set([...arr1, ...arr2]))
 }
 
 /**
@@ -39,20 +39,20 @@ export const getUnion = (arr1, arr2) => {
  * @description 判断要查询的数组是否至少有一个元素包含在目标数组中
  */
 export const hasOneOf = (targetarr, arr) => {
-  return targetarr.some(_ => arr.indexOf(_) > -1)
+	return targetarr.some(_ => arr.indexOf(_) > -1)
 }
 
 /**
  * @param {String|Number} value 要验证的字符串或数值
  * @param {*} validList 用来验证的列表
  */
-export function oneOf (value, validList) {
-  for (let i = 0; i < validList.length; i++) {
-    if (value === validList[i]) {
-      return true
-    }
-  }
-  return false
+export function oneOf(value, validList) {
+	for (let i = 0; i < validList.length; i++) {
+		if (value === validList[i]) {
+			return true
+		}
+	}
+	return false
 }
 
 /**
@@ -60,8 +60,8 @@ export function oneOf (value, validList) {
  * @returns {Boolean}
  */
 const isMillisecond = timeStamp => {
-  const timeStr = String(timeStamp)
-  return timeStr.length > 10
+	const timeStr = String(timeStamp)
+	return timeStr.length > 10
 }
 
 /**
@@ -70,7 +70,7 @@ const isMillisecond = timeStamp => {
  * @returns {Boolean} 传入的时间戳是否早于当前时间戳
  */
 const isEarly = (timeStamp, currentTime) => {
-  return timeStamp < currentTime
+	return timeStamp < currentTime
 }
 
 /**
@@ -79,7 +79,7 @@ const isEarly = (timeStamp, currentTime) => {
  * @description 如果传入的数值小于10，即位数只有1位，则在前面补充0
  */
 const getHandledValue = num => {
-  return num < 10 ? '0' + num : num
+	return num < 10 ? '0' + num : num
 }
 
 /**
@@ -87,17 +87,72 @@ const getHandledValue = num => {
  * @param {Number} startType 要返回的时间字符串的格式类型，传入'year'则返回年开头的完整时间
  */
 const getDate = (timeStamp, startType) => {
-  const d = new Date(timeStamp * 1000)
-  const year = d.getFullYear()
-  const month = getHandledValue(d.getMonth() + 1)
-  const date = getHandledValue(d.getDate())
-  const hours = getHandledValue(d.getHours())
-  const minutes = getHandledValue(d.getMinutes())
-  const second = getHandledValue(d.getSeconds())
-  let resStr = ''
-  if (startType === 'year') resStr = year + '-' + month + '-' + date + ' ' + hours + ':' + minutes + ':' + second
-  else resStr = month + '-' + date + ' ' + hours + ':' + minutes
-  return resStr
+	const d = new Date(timeStamp * 1000)
+	const year = d.getFullYear()
+	const month = getHandledValue(d.getMonth() + 1)
+	const date = getHandledValue(d.getDate())
+	const hours = getHandledValue(d.getHours())
+	const minutes = getHandledValue(d.getMinutes())
+	const second = getHandledValue(d.getSeconds())
+	let resStr = ''
+	if (startType === 'year') resStr = year + '-' + month + '-' + date + ' ' + hours + ':' + minutes + ':' + second
+	else resStr = month + '-' + date + ' ' + hours + ':' + minutes
+	return resStr
+}
+/**
+ * @param {String} date 传入的日期
+ * @param {String} seperator1 要返回的时间字符串的间隔字符
+ */
+export const getNowFormatDate = (date, seperator1) => { //日期格式化
+
+	var year = date.getFullYear();
+	var month = date.getMonth() + 1;
+	var strDate = date.getDate();
+	if (month >= 1 && month <= 9) {
+		month = "0" + month;
+	}
+	if (strDate >= 0 && strDate <= 9) {
+		strDate = "0" + strDate;
+	}
+	var currentdate = year + seperator1 + month + seperator1 + strDate;
+
+	return currentdate;
+}
+//日期时间格式化
+export const getNowFormatDateTime = (date, seperator1) => { //日期格式化
+
+	var year = date.getFullYear();
+	var month = date.getMonth() + 1;
+	var strDate = date.getDate();
+	if (month >= 1 && month <= 9) {
+		month = "0" + month;
+	}
+	if (strDate >= 0 && strDate <= 9) {
+		strDate = "0" + strDate;
+	}
+	var h = date.getHours()<10?'0'+date.getHours():date.getHours();
+	var m = date.getMinutes()<10?'0'+date.getMinutes():date.getMinutes();
+	var s = date.getSeconds()<10?'0'+date.getSeconds():date.getSeconds();
+	var currentdate = year + seperator1 + month + seperator1 + strDate + ' ' +h +':'+m+':'+s;
+	
+	return currentdate;
+}
+
+export const timestampToTime = timestamp => {
+	var date = null
+	if (timestamp.toString().length > 10) {
+		date = new Date(timestamp)
+	} else {
+		date = new Date(timestamp * 1000);
+	}
+	//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+	var Y = date.getFullYear() + '-';
+	var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+	var D = date.getDate() + ' ';
+	var h = date.getHours() + ':';
+	var m = date.getMinutes() + ':';
+	var s = date.getSeconds();
+	return Y + M + D + h + m + s;
 }
 
 /**
@@ -105,87 +160,87 @@ const getDate = (timeStamp, startType) => {
  * @returns {String} 相对时间字符串
  */
 export const getRelativeTime = timeStamp => {
-  // 判断当前传入的时间戳是秒格式还是毫秒
-  const IS_MILLISECOND = isMillisecond(timeStamp)
-  // 如果是毫秒格式则转为秒格式
-  if (IS_MILLISECOND) Math.floor(timeStamp /= 1000)
-  // 传入的时间戳可以是数值或字符串类型，这里统一转为数值类型
-  timeStamp = Number(timeStamp)
-  // 获取当前时间时间戳
-  const currentTime = Math.floor(Date.parse(new Date()) / 1000)
-  // 判断传入时间戳是否早于当前时间戳
-  const IS_EARLY = isEarly(timeStamp, currentTime)
-  // 获取两个时间戳差值
-  let diff = currentTime - timeStamp
-  // 如果IS_EARLY为false则差值取反
-  if (!IS_EARLY) diff = -diff
-  let resStr = ''
-  const dirStr = IS_EARLY ? '前' : '后'
-  // 少于等于59秒
-  if (diff <= 59) resStr = diff + '秒' + dirStr
-  // 多于59秒，少于等于59分钟59秒
-  else if (diff > 59 && diff <= 3599) resStr = Math.floor(diff / 60) + '分钟' + dirStr
-  // 多于59分钟59秒，少于等于23小时59分钟59秒
-  else if (diff > 3599 && diff <= 86399) resStr = Math.floor(diff / 3600) + '小时' + dirStr
-  // 多于23小时59分钟59秒，少于等于29天59分钟59秒
-  else if (diff > 86399 && diff <= 2623859) resStr = Math.floor(diff / 86400) + '天' + dirStr
-  // 多于29天59分钟59秒，少于364天23小时59分钟59秒，且传入的时间戳早于当前
-  else if (diff > 2623859 && diff <= 31567859 && IS_EARLY) resStr = getDate(timeStamp)
-  else resStr = getDate(timeStamp, 'year')
-  return resStr
+	// 判断当前传入的时间戳是秒格式还是毫秒
+	const IS_MILLISECOND = isMillisecond(timeStamp)
+	// 如果是毫秒格式则转为秒格式
+	if (IS_MILLISECOND) Math.floor(timeStamp /= 1000)
+	// 传入的时间戳可以是数值或字符串类型，这里统一转为数值类型
+	timeStamp = Number(timeStamp)
+	// 获取当前时间时间戳
+	const currentTime = Math.floor(Date.parse(new Date()) / 1000)
+	// 判断传入时间戳是否早于当前时间戳
+	const IS_EARLY = isEarly(timeStamp, currentTime)
+	// 获取两个时间戳差值
+	let diff = currentTime - timeStamp
+	// 如果IS_EARLY为false则差值取反
+	if (!IS_EARLY) diff = -diff
+	let resStr = ''
+	const dirStr = IS_EARLY ? '前' : '后'
+	// 少于等于59秒
+	if (diff <= 59) resStr = diff + '秒' + dirStr
+	// 多于59秒，少于等于59分钟59秒
+	else if (diff > 59 && diff <= 3599) resStr = Math.floor(diff / 60) + '分钟' + dirStr
+	// 多于59分钟59秒，少于等于23小时59分钟59秒
+	else if (diff > 3599 && diff <= 86399) resStr = Math.floor(diff / 3600) + '小时' + dirStr
+	// 多于23小时59分钟59秒，少于等于29天59分钟59秒
+	else if (diff > 86399 && diff <= 2623859) resStr = Math.floor(diff / 86400) + '天' + dirStr
+	// 多于29天59分钟59秒，少于364天23小时59分钟59秒，且传入的时间戳早于当前
+	else if (diff > 2623859 && diff <= 31567859 && IS_EARLY) resStr = getDate(timeStamp)
+	else resStr = getDate(timeStamp, 'year')
+	return resStr
 }
 
 /**
  * @returns {String} 当前浏览器名称
  */
 export const getExplorer = () => {
-  const ua = window.navigator.userAgent
-  const isExplorer = (exp) => {
-    return ua.indexOf(exp) > -1
-  }
-  if (isExplorer('MSIE')) return 'IE'
-  else if (isExplorer('Firefox')) return 'Firefox'
-  else if (isExplorer('Chrome')) return 'Chrome'
-  else if (isExplorer('Opera')) return 'Opera'
-  else if (isExplorer('Safari')) return 'Safari'
+	const ua = window.navigator.userAgent
+	const isExplorer = (exp) => {
+		return ua.indexOf(exp) > -1
+	}
+	if (isExplorer('MSIE')) return 'IE'
+	else if (isExplorer('Firefox')) return 'Firefox'
+	else if (isExplorer('Chrome')) return 'Chrome'
+	else if (isExplorer('Opera')) return 'Opera'
+	else if (isExplorer('Safari')) return 'Safari'
 }
 
 /**
  * @description 绑定事件 on(element, event, handler)
  */
-export const on = (function () {
-  if (document.addEventListener) {
-    return function (element, event, handler) {
-      if (element && event && handler) {
-        element.addEventListener(event, handler, false)
-      }
-    }
-  } else {
-    return function (element, event, handler) {
-      if (element && event && handler) {
-        element.attachEvent('on' + event, handler)
-      }
-    }
-  }
+export const on = (function() {
+	if (document.addEventListener) {
+		return function(element, event, handler) {
+			if (element && event && handler) {
+				element.addEventListener(event, handler, false)
+			}
+		}
+	} else {
+		return function(element, event, handler) {
+			if (element && event && handler) {
+				element.attachEvent('on' + event, handler)
+			}
+		}
+	}
 })()
 
 /**
  * @description 解绑事件 off(element, event, handler)
  */
-export const off = (function () {
-  if (document.removeEventListener) {
-    return function (element, event, handler) {
-      if (element && event) {
-        element.removeEventListener(event, handler, false)
-      }
-    }
-  } else {
-    return function (element, event, handler) {
-      if (element && event) {
-        element.detachEvent('on' + event, handler)
-      }
-    }
-  }
+export const off = (function() {
+	if (document.removeEventListener) {
+		return function(element, event, handler) {
+			if (element && event) {
+				element.removeEventListener(event, handler, false)
+			}
+		}
+	} else {
+		return function(element, event, handler) {
+			if (element && event) {
+				element.detachEvent('on' + event, handler)
+			}
+		}
+	}
 })()
 
 /**
@@ -193,11 +248,11 @@ export const off = (function () {
  * 如果没有传入key这个参数，则判断obj对象是否有键值对
  */
 export const hasKey = (obj, key) => {
-  if (key) return key in obj
-  else {
-    let keysArr = Object.keys(obj)
-    return keysArr.length
-  }
+	if (key) return key in obj
+	else {
+		let keysArr = Object.keys(obj)
+		return keysArr.length
+	}
 }
 
 /**
@@ -206,10 +261,50 @@ export const hasKey = (obj, key) => {
  * @description 判断两个对象是否相等，这两个对象的值只能是数字或字符串
  */
 export const objEqual = (obj1, obj2) => {
-  const keysArr1 = Object.keys(obj1)
-  const keysArr2 = Object.keys(obj2)
-  if (keysArr1.length !== keysArr2.length) return false
-  else if (keysArr1.length === 0 && keysArr2.length === 0) return true
-  /* eslint-disable-next-line */
-  else return !keysArr1.some(key => obj1[key] != obj2[key])
+	const keysArr1 = Object.keys(obj1)
+	const keysArr2 = Object.keys(obj2)
+	if (keysArr1.length !== keysArr2.length) return false
+	else if (keysArr1.length === 0 && keysArr2.length === 0) return true
+	/* eslint-disable-next-line */
+	else return !keysArr1.some(key => obj1[key] != obj2[key])
+}
+//获取上个月的日期
+export const getLastMonthday = (date, seperator1) => {
+	var daysInMonth = new Array([0], [31], [28], [31], [30], [31], [30], [31], [31], [30], [31], [30], [31]);
+	var strYear = date.getFullYear();
+	var strDay = date.getDate();
+	var strMonth = date.getMonth() + 1;
+	if (strYear % 4 == 0 && strYear % 100 != 0) {
+		daysInMonth[2] = 29;
+	}
+	if (strMonth - 1 == 0) {
+		strYear -= 1;
+		strMonth = 12;
+	} else {
+		strMonth -= 1;
+	}
+	strDay = daysInMonth[strMonth] >= strDay ? strDay : daysInMonth[strMonth];
+	if (strMonth < 10) {
+		strMonth = "0" + strMonth;
+	}
+	if (strDay < 10) {
+		strDay = "0" + strDay;
+	}
+	var datastr = strYear + seperator1 + strMonth + seperator1 + strDay;
+	return datastr;
+}
+
+//计算天数差的函数，通用 
+export const DateDiffDay = (sDate1, sDate2) => { //sDate1和sDate2是2017-9-25格式 
+	var aDate, oDate1, oDate2, iDays
+	aDate = sDate1.split("-")
+	oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]) //转换为9-25-2017格式 
+	aDate = sDate2.split("-")
+	oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])
+	iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24) //把相差的毫秒数转换为天数 
+	return iDays
+}
+//比较日期的大小
+export const CompareDate = (d1, d2) => {
+	return ((new Date(d1.replace(/-/g, "\/"))) > (new Date(d2.replace(/-/g, "\/"))));
 }

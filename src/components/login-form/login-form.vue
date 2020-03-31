@@ -14,6 +14,13 @@
         </span>
       </Input>
     </FormItem>
+		<!-- <FormItem prop="verCode">
+		  <Input v-model="form.verCode" placeholder="请输入验证码">
+		    <div slot="append" @click="changeCode">
+					 <img ref="verCodeRef" :src="verCodeSrc" alt="" width="60px" height="20px">
+		    </div>
+		  </Input>
+		</FormItem> -->
     <FormItem>
       <Button @click="handleSubmit" type="primary" long>登录</Button>
     </FormItem>
@@ -38,13 +45,23 @@ export default {
           { required: true, message: '密码不能为空', trigger: 'blur' }
         ]
       }
-    }
+    },
+		// verCodeRules:{
+		// 	type:Number,
+		// 	default: () => {
+		// 	  return [
+		// 	    { required: true, message: '验证码不能为空', trigger: 'blur' }
+		// 	  ]
+		// 	}
+		// }
   },
   data () {
     return {
+			//verCodeSrc:this.$config.baseUrl.dev+'/verifycode?from=3',
       form: {
-        userName: 'super_admin',
-        password: ''
+        userName: 'zrwladmin',
+        password: '123',
+				//verCode:''
       }
     }
   },
@@ -52,17 +69,24 @@ export default {
     rules () {
       return {
         userName: this.userNameRules,
-        password: this.passwordRules
+        password: this.passwordRules,
+				//verCode: this.verCodeRules
       }
     }
   },
   methods: {
+		changeCode(){
+		//alert(this.$config. baseUrl.dev)
+			this.verCodeSrc = this.$config.baseUrl.dev+'/verifycode?from=3&rend='+Math.random()
+			
+		},
     handleSubmit () {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.$emit('on-success-valid', {
             userName: this.form.userName,
-            password: this.form.password
+            password: this.form.password,
+						//verCode:this.form.verCode
           })
         }
       })
