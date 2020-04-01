@@ -86,7 +86,7 @@ export const debugVMRtu = (rtuNumber) => {
   })
 }
 
-//清楚机器调试信息
+//清除机器调试信息
 export const clearVMRtuLogs = (rtuNumber) => {
 	const data = new URLSearchParams()
 	data.append('rtuNumber', rtuNumber)

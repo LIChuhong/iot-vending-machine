@@ -3,12 +3,9 @@
 		<div style="padding:0.625rem;">
 			<Row style="padding:0 0 0.625rem ;">
 				<Col span="12" style="padding-right: 0.3125rem">
-				<!-- <span>起始:</span> -->
 				<DatePicker v-model="startTimeStr" type="datetime" placeholder="请选择起始时间"></DatePicker>
 				</Col>
-
 				<Col span="12" style="padding-left: 0.3125rem">
-				<!-- <span>截止:</span> -->
 				<DatePicker v-model="endTimeStr" type="datetime" placeholder="请选择截止时间"></DatePicker>
 				</Col>
 			</Row>

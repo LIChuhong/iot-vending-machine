@@ -94,4 +94,19 @@ export const getCargoSellDatasList = (rtuNumber,startTimeStr,endTimeStr) => {
   })
 }
 
+//机器出货明细
+export const getVMRtuDayOutCommodityRecordList = (rtuNumber,cargoNo,startTimeStr,endTimeStr) => {
+  return axios.request({
+    url: '/api2.0/getVMRtuDayOutCommodityRecordList',
+  	params:{
+  		'rtuNumber': rtuNumber,
+			'cargoNo': cargoNo,
+			'startTimeStr': startTimeStr,
+			'endTimeStr': endTimeStr,
+  	},
+  	method: 'get'
+  })
+}
+
+
 
