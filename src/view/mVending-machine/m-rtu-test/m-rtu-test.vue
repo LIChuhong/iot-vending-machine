@@ -115,13 +115,13 @@
 						this.index = this.allCheck.length
 						var i = 15;
 						var timer = null;
-						timer = setInterval( () => {
+						timer = setInterval(() => {
 							if (i > 0) {
-								this.shipmentText = i +'s可重新出货'
+								this.shipmentText = i + 's可重新出货'
 								i--;
 							} else {
 								this.shipmentText = '出货'
-								this.disShipment  = false
+								this.disShipment = false
 								clearInterval(timer);
 							}
 						}, 1000)
@@ -161,18 +161,25 @@
 							} else {
 								this.rowsList[rIndex].rowContentList[cIndex].color = 'red'
 							}
+							
 						} else {
 							this.rowsList[rIndex].rowContentList[cIndex].color = 'white'
+							if (data.errorCode == "F30000003") {
+								this.index = this.allCheck.length
+								this.shipmentText = '出货'
+								this.$Message.error(data.errorMessage)
+							}
 						}
 						if (this.index < this.allCheck.length) {
 							this.index++
 							this.getShipment()
 						}
+
 					}).catch(error => {
 
 						alert(error)
 					})
-				}else{
+				} else {
 					this.shipmentText = '出货'
 				}
 			},

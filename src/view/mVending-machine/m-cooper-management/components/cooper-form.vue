@@ -13,7 +13,8 @@
 			</FormItem>
 			<FormItem prop="parentOrgId" label="所属组织">
 				<!-- {{belongOrgName}} -->
-				<Input :disabled="disParentOrgId" readonly v-model="belongOrgName" search enter-button="选择" placeholder="请选择所属组织" @on-search="showBelongOrgList"></Input>
+				<Input :disabled="disParentOrgId" readonly v-model="belongOrgName" search enter-button="选择" placeholder="请选择所属组织"
+				 @on-search="showBelongOrgList"></Input>
 				<!-- <Button :disabled="disParentOrgId" style="float: right;" type="primary" @click="showBelongOrgList" shape="circle">选择</Button> -->
 			</FormItem>
 			<FormItem prop="seviceTelephone" label="售后电话">
@@ -109,27 +110,27 @@
 			const validateParentOrgId = (rule, value, callback) => {
 				if (value == null) {
 					return callback(new Error('该列不能为空'));
-				}else {
+				} else {
 					callback();
 				}
 			};
 			return {
-				disParentOrgId:false,//禁用组织选项，默认false
-				showSpin:false,
-				belongOrgTitle: '',//modal标题
+				disParentOrgId: false, //禁用组织选项，默认false
+				showSpin: false,
+				belongOrgTitle: '', //modal标题
 				showBelongOrg: false,
-				belongOrgName: '',//所属组织名称
-				belongOrgInfo: '',//所属组织信息
-				orgTypeList: [],//组织类型列表
+				belongOrgName: '', //所属组织名称
+				belongOrgInfo: '', //所属组织信息
+				orgTypeList: [], //组织类型列表
 				vmOrg: {
-					orgName: '',//组织名
-					orgTypeId: null,//组织类型id
-					parentOrgId: '',//所属组织ID
-					seviceTelephone: '',//售后电话
-					affiliateHotline: '',//加盟热线
-					brandName: '',//品牌名称
-					orgDesc: '',//组织描述
-					orgLogoUrl: '/uploadFile/defaultImages/orgLogo.png'//默认组织Logo
+					orgName: '', //组织名
+					orgTypeId: null, //组织类型id
+					parentOrgId: '', //所属组织ID
+					seviceTelephone: '', //售后电话
+					affiliateHotline: '', //加盟热线
+					brandName: '', //品牌名称
+					orgDesc: '', //组织描述
+					orgLogoUrl: '/uploadFile/defaultImages/orgLogo.png' //默认组织Logo
 				},
 				vmOrgRules: {
 					orgName: [{
@@ -173,13 +174,13 @@
 			}
 		},
 		watch: {
-			orgId(val) {//监听组织ID
+			orgId(val) { //监听组织ID
 				this.getVMOrgInfo()
 
 			}
 		},
 		methods: {
-			getVMOrgInfo() {//获取组织信息
+			getVMOrgInfo() { //获取组织信息
 				if (this.orgId != null && this.orgId != '') {
 					this.disParentOrgId = true
 					getVMOrg(this.orgId).then(res => {
@@ -204,12 +205,12 @@
 					})
 				}
 			},
-			handleReset(name) {//重置表单
+			handleReset(name) { //重置表单
 				this.belongOrgName = ''
 				this.$refs[name].resetFields();
 			},
 
-			handleSubmit(name) {//提交表单
+			handleSubmit(name) { //提交表单
 				this.$refs[name].validate((valid) => {
 					if (valid) {
 						this.showSpin = true
@@ -255,18 +256,18 @@
 				})
 			},
 
-			showBelongOrgList() {//显示所属组织列表
+			showBelongOrgList() { //显示所属组织列表
 				this.belongOrgTitle = this.belongOrgName
 				this.showBelongOrg = true
 
 			},
-			showBelongOrgInfo(data) {//显示所选所属组织信息
+			showBelongOrgInfo(data) { //显示所选所属组织信息
 				//console.log(JSON.stringify(data))
 				this.belongOrgInfo = data
 				this.belongOrgTitle = data[0].orgName
 				//this.belongOrgTitle = '当前选择: ' + val[0].orgName
 			},
-			belongOrgOk() {//确定所属组织
+			belongOrgOk() { //确定所属组织
 				//const selectedNodes = this.$refs.belongOrgTree.getSelectedNodes();
 				this.vmOrg.parentOrgId = this.belongOrgInfo[0].orgId
 				this.belongOrgName = this.belongOrgInfo[0].orgName
@@ -274,7 +275,7 @@
 			},
 		},
 		created() {
-			getAllOrgTypeList().then(res => {//获取组织类型列表
+			getAllOrgTypeList().then(res => { //获取组织类型列表
 				const data = res.data
 				if (data.success == 1) {
 					this.orgTypeList = data.orgTypeList
