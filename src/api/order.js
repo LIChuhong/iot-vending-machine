@@ -81,3 +81,17 @@ export const updateVMRtuDayTotalData = (rtuNumber,day) => {
   })
 }
 
+//机器销售明细
+export const getCargoSellDatasList = (rtuNumber,startTimeStr,endTimeStr) => {
+  return axios.request({
+    url: '/api2.0/getCargoSellDatasList',
+	params:{
+		'rtuNumber':rtuNumber,
+		'startTimeStr':startTimeStr,
+		'endTimeStr':endTimeStr,
+	},
+    method: 'get'
+  })
+}
+
+

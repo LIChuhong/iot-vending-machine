@@ -84,7 +84,7 @@ export const proportionColumns = [{
 	}
 ]
 
-export const adColumns =[{
+export const adColumns = [{
 		title: 'ID',
 		key: 'id',
 		align: 'center',
@@ -115,4 +115,40 @@ export const adColumns =[{
 		slot: 'action',
 		align: 'center',
 
-	}]
+	},
+]
+
+//销售明细列表
+export const mSalesColumns = [{
+		title: '货道',
+		key: 'cargoNo',
+		align: 'center',
+		//width:80
+		//tooltip: true,
+	},
+	{
+		title: '商品名',
+		key: 'commodityName',
+		align: 'center',
+		tooltip: true,
+	},
+
+	{
+		title: '总收入',
+		key: 'totalAmount',
+		align: 'center',
+
+	},
+	{
+		title: '总成本',
+		key: 'totalCostAmount',
+		align: 'center',
+	
+	},
+	{
+		title: '总利润',
+		slot: 'totalProfits',
+		align: 'center',
+	
+	}
+]
