@@ -7,6 +7,7 @@
 
 <script>
 import './error.less'
+import data from '@/data/data'
 export default {
   name: 'backBtnGroup',
   data () {
@@ -17,9 +18,16 @@ export default {
   },
   methods: {
     backHome () {
-      this.$router.replace({
-        name: this.$config.homeName
-      })
+			if(data.interface == 0){
+				 this.$router.replace({
+				  name: this.$config.homeName
+				})
+			}else{
+				 this.$router.replace({
+				  name: this.$config.mHomeName
+				})
+			}
+     
     },
     backPrev () {
       this.$router.go(-1)
