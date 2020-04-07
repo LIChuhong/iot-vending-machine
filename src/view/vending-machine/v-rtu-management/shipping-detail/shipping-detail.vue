@@ -21,13 +21,13 @@
 				<Button type="primary" @click="handleSubmit('shippingModel')">查找</Button>
 			</FormItem>
 		</Form>
-		<Table size="small" border :columns="shippingColumns" :data="shippingList">
+		<Table size="small" border :columns="shippingColumns" :data="shippingList" max-height="500">
 			<template slot-scope="{ row, index }" slot="action">
-				<Button type="primary" size="small" style="margin-right: 5px" @click="getGoodsDetail(row)">明细</Button>
+				<Button type="primary" size="small" style="margin-right: 5px" @click="getShippingDetail(row)">明细</Button>
 			</template>
 		</Table>
-		<Modal v-model="showGoodsDetail" fullscreen title="出货明细" footer-hide>
-			<div>This is a fullscreen modal</div>
+		<Modal v-model="showGoodsDetail" :title="modalTitle+'出货明细'" footer-hide width="60%">
+			<detail :cargoOutCommodityOrderList ="cargoOutCommodityOrderList" ></detail>
 		</Modal>
 
 	</div>
@@ -41,12 +41,18 @@
 		getVMRtuDayOutCommodityRecordList
 	} from '@/api/order'
 	import {
-		getNowFormatDateTime
+		getNowFormatDateTime,timestampToTime
 	} from '@/libs/tools'
+	import Detail from './detail.vue'
+	
 	export default {
 		name: 'shipping_detail',
+		components:{
+			Detail
+		},
 		data() {
 			return {
+				modalTitle:'',
 				showGoodsDetail: false,
 				shippingModel: {
 					rtuNumber: '',
@@ -82,7 +88,8 @@
 					}],
 					},
 				shippingColumns: shippingColumns,
-				shippingList: [{}],
+				shippingList: [],
+				cargoOutCommodityOrderList:[]
 
 			}
 		},
@@ -98,6 +105,7 @@
 								const data = res.data
 								if (data.success == 1) {
 									//this.$Message.success('添加成功')
+									this.shippingList = data.cargoOutCommoditysDetailsList
 								} else {
 									this.$Message.error(data.errorMessage)
 								}
@@ -110,7 +118,15 @@
 					}
 				})
 			},
-			getGoodsDetail(row) {
+			getShippingDetail(row) {
+				this.modalTitle = this.shippingModel.rtuNumber+'机器'+ '-'+row.cargoNo + '货道'
+				this.cargoOutCommodityOrderList = row.cargoOutCommodityOrderList.map(item=>{
+					item.orderTime = timestampToTime(item.orderTime)
+					if(item.outCommoditysFinishedTime != 0){
+						item.outCommoditysFinishedTime = timestampToTime(item.outCommoditysFinishedTime)
+					}
+					return item
+				})
 				this.showGoodsDetail = true
 			}
 		},

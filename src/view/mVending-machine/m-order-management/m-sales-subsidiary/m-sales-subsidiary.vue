@@ -20,7 +20,7 @@
 				</Col>
 			</Row>
 		</div>
-		<Table :loading="tableLoading" border :columns="mSalesColumns" :data="mSalesData" size="small" class="mSalesStyle">
+		<Table :loading="tableLoading" border :columns="mSalesColumns" :data="mSalesData" size="small" class="mSalesStyle" max-height="300">
 			<template slot-scope="{ row, index }" slot="totalProfits">
 				{{row.totalAmount-row.totalCostAmount}}
 			</template>

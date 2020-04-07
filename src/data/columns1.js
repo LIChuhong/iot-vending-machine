@@ -152,3 +152,25 @@ export const mSalesColumns = [{
 	
 	}
 ]
+
+//出货明细详情列表
+export const shippingDetailColumns = [{
+		title: '订单ID',
+		slot: 'orderId',
+		align: 'center',
+		//width:80
+		//tooltip: true,
+	},
+	{
+		title: '下单时间',
+		key: 'orderTime',
+		align: 'center',
+	
+	},
+	{
+		title: '出货时间',
+		key: 'outCommoditysFinishedTime',
+		align: 'center',
+	
+	}
+]

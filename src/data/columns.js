@@ -183,40 +183,29 @@ export const replenishmentColumns = [{
 //出货明细列表Columns
 export const shippingColumns = [{
 		title: '货道',
-		key: 'aisle',
+		key: 'cargoNo',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 
 	},
 	{
 		title: '商品名',
-		key: 'goodsName',
+		key: 'commodityName',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 	},
 	{
 		title: '总出货',
-		key: 'shippingAll',
+		key: 'totalFinishedCount',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 	},
-	{
-		title: '购买出货',
-		key: 'buyShipping',
-		align: 'center',
-		ellipsis: true,
-	},
-	{
-		title: '免单出货',
-		key: 'luckyShipping',
-		align: 'center',
-		ellipsis: true,
-	},
+	
 	{
 		title: '现库存',
-		key: 'nowInventory',
+		key: 'nowStock',
 		align: 'center',
-		ellipsis: true,
+		tooltip: true,
 	},
 
 	{
