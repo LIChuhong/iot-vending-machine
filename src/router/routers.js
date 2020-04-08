@@ -560,7 +560,7 @@ export default [{
 					title: '近日收益',
 					hideInMenu: true,
 					hideInBread: true,
-					keepAlive: true
+					//keepAlive: true
 				},
 				component: resolve => require(['@/view/mVending-machine/m-earnings/m-earnings.vue'], resolve)
 

@@ -48,16 +48,9 @@
 					userName,
 					password
 				}).then(res => {
-					//alert(2)
 					this.getUserInfo().then(res => {
-						
-						// this.$router.push({
-						//   name: this.$config.homeName
-						// })
-						//console.log(this.$config.homeName)
-						//MainActivity.saveUserKey('user1','123')
-						//console.log(1)
 						if (data.interface == 1 || data.interface == 2) {
+							//$App.saveUserKey(userName, password)
 							this.$router.push({
 								name: this.$config.mHomeName
 								// name:one
@@ -71,8 +64,13 @@
 					})
 				})
 			},
+		
 			
 		},
+		mounted() {
+			//window.updateTokenFunction = this.updateTokenFunction
+		}
+		
 		
 
 	}
