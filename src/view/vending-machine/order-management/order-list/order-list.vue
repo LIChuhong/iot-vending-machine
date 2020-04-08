@@ -1,11 +1,11 @@
 <template>
 	<div>
 		<div style="overflow: hidden;">
-			<p class="showText">订单总笔额:<span class="textColor">{{vmOrgTotalCount}}</span></p>
-			<p class="showText">订单总金额:<span class="textColor">{{vmOrgTotalAmount}}</span></p>
-			<p class="showText">订单数:<span class="textColor">{{totalCount}}</span></p>
-			<p class="showText">收入:<span class="textColor">{{totalAmount}}</span></p>
-			<p class="showText">利润:<span class="textColor">{{profitAmount}}</span></p>
+			<p class="showText">订单总笔额:<span style="color: #fa8c35;">{{vmOrgTotalCount}}</span></p>
+			<p class="showText">订单总金额:<span style="color: #9ed900;">${{vmOrgTotalAmount}}</span></p>
+			<p class="showText">订单数:<span style="color: #fa8c35;">{{totalCount}}</span></p>
+			<p class="showText">收入:<span style="color: #9ed900;">${{totalAmount}}</span></p>
+			<p class="showText">利润:<span style="color: #f00056;">${{profitAmount}}</span></p>
 		</div>
 		<Form ref="orderModel" :model="orderModel" :rules="orderRule" inline>
 			<FormItem prop="orderIdKey">

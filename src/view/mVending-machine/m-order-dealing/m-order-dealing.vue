@@ -6,17 +6,17 @@
 				<Row>
 					<Col span="8">
 					<div>
-						<p>订单数:{{totalCount}}</p>
+						<p>订单数:<span style="color: #fa8c35;">{{totalCount}}</span></p>
 					</div>
 					</Col>
 					<Col span="8">
 					<div>
-						<p>收入:${{totalAmount}}</p>
+						<p>收入:<span style="color: #9ed900;">${{totalAmount}}</span></p>
 					</div>
 					</Col>
 					<Col span="8">
 					<div>
-						<p>利润:${{profitAmount}}</p>
+						<p>利润:<span style="color: #f00056;">${{profitAmount}}</span></p>
 					</div>
 					</Col>
 				</Row>
@@ -303,8 +303,8 @@
 					this.orderListLoading = false
 					if (data.success == 1) {
 						this.totalCount = data.totalCount
-						this.totalAmount = data.totalAmount
-						this.profitAmount = data.profitAmount
+						this.totalAmount = data.totalAmount.toFixed(2)
+						this.profitAmount = data.profitAmount.toFixed(2)
 						const buyStateList = this.buyStateList
 						this.orderData = data.orderList.map(item => {
 							this.orderStateList.map(i => {

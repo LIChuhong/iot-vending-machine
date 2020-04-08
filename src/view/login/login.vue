@@ -10,8 +10,8 @@
 					<login-form @on-success-valid="handleSubmit"></login-form>
 					<!-- <p class="login-tip">输入任意用户名和密码即可</p> -->
 					<!-- {{msg}} -->
-					
-					
+
+
 				</div>
 			</Card>
 		</div>
@@ -38,7 +38,7 @@
 				'handleLogin',
 				'getUserInfo'
 			]),
-			
+
 			handleSubmit({
 				userName,
 				password
@@ -50,6 +50,10 @@
 				}).then(res => {
 					this.getUserInfo().then(res => {
 						if (data.interface == 1 || data.interface == 2) {
+							var ua = navigator.userAgent.toLowerCase()
+							if (ua.indexOf('zrwlweb') > -1) {
+								$App.saveUserKey(userName, password)
+							}
 							//$App.saveUserKey(userName, password)
 							this.$router.push({
 								name: this.$config.mHomeName
@@ -64,14 +68,15 @@
 					})
 				})
 			},
-		
-			
+
+
 		},
 		mounted() {
+
 			//window.updateTokenFunction = this.updateTokenFunction
 		}
-		
-		
+
+
 
 	}
 </script>

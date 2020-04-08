@@ -5,25 +5,25 @@
 			<Col span="12" style="border-right: 0.0625rem solid #515A6E; ;">
 			<div style="overflow: hidden;">
 				<span style="font-size: 1.25rem;">昨天</span>
-				<Button type="primary" @click="showDetailModal('昨天',yd)" shape="circle" style="float: right;margin-right:10%;">{{detail}}</Button>
+				<Button type="text" @click="showDetailModal('昨天',yd)" style="float: right;margin-right:10%;color: #2D8CF0;">{{detail}}</Button>
 			</div>
 			<Row>
 				<Col span="8">
 				<div>
 					<p>订单数</p>
-					<p>{{ydTotalCount}}</p>
+					<p style="color: #fa8c35;">{{ydTotalCount}}</p>
 				</div>
 				</Col>
 				<Col span="8">
 				<div>
 					<p>收入</p>
-					<p>${{ydTotalAmount.toFixed(2)}}</p>
+					<p style="color: #9ed900;">${{ydTotalAmount.toFixed(2)}}</p>
 				</div>
 				</Col>
 				<Col span="8">
 				<div>
 					<p>利润</p>
-					<p>${{ydProfits.toFixed(2)}}</p>
+					<p style="color: #f00056;">${{ydProfits.toFixed(2)}}</p>
 				</div>
 				</Col>
 			</Row>
@@ -31,25 +31,25 @@
 			<Col span="12">
 			<div style="overflow: hidden;">
 				<span style="font-size: 1.25rem;">今天</span>
-				<Button type="primary" @click="showDetailModal('今天',td)" shape="circle" style="float: right;margin-right:10%;">{{detail}}</Button>
+				<Button type="text" @click="showDetailModal('今天',td)" style="float: right;margin-right:10%;color: #2D8CF0;">{{detail}}</Button>
 			</div>
 			<Row>
 				<Col span="8">
 				<div>
 					<p>订单数</p>
-					<p>{{tdTotalCount}}</p>
+					<p style="color: #fa8c35;">{{tdTotalCount}}</p>
 				</div>
 				</Col>
 				<Col span="8">
 				<div>
 					<p>收入</p>
-					<p>${{tdTotalAmount.toFixed(2)}}</p>
+					<p style="color: #9ed900;">${{tdTotalAmount.toFixed(2)}}</p>
 				</div>
 				</Col>
 				<Col span="8">
 				<div>
 					<p>利润</p>
-					<p>${{tdProfits.toFixed(2)}}</p>
+					<p style="color: #f00056;">${{tdProfits.toFixed(2)}}</p>
 				</div>
 				</Col>
 			</Row>
@@ -60,17 +60,17 @@
 				<Row>
 					<Col span="8">
 					<div>
-						<p>总订单数:{{totalCount}}</p>
+						<p>总订单数:<span style="color: #fa8c35;">{{totalCount}}</span></p>
 					</div>
 					</Col>
 					<Col span="8">
 					<div>
-						<p>总收入:${{totalAmount.toFixed(2)}}</p>
+						<p>总收入:<span style="color: #9ed900;">${{totalAmount.toFixed(2)}}</span></p>
 					</div>
 					</Col>
 					<Col span="8">
 					<div>
-						<p>总利润:${{totalProfits.toFixed(2)}}</p>
+						<p>总利润:<span style="color: #f00056;">${{totalProfits.toFixed(2)}}</span></p>
 					</div>
 					</Col>
 				</Row>
@@ -135,34 +135,34 @@
 				totalCount: 0, //总订单数
 				totalAmount: 0, //总收入
 				totalCostAmount: 0, //总成本
-				incomeList: [],//收益列表
-				yd: '',//昨天
-				td: '',//今天
-				pageNo: 0,//页码
+				incomeList: [], //收益列表
+				yd: '', //昨天
+				td: '', //今天
+				pageNo: 0, //页码
 				pageSize: 10,
-				detailDay: '',//查看详情日期
+				detailDay: '', //查看详情日期
 				detail: '明细',
 				modalTitle: '',
 				mEdetailColumns: mEdetailColumns,
-				mEdetailData: [],//详情列表
+				mEdetailData: [], //详情列表
 
 
 			}
 
 		},
 		computed: {
-			totalProfits() {//总利润
+			totalProfits() { //总利润
 				return (this.totalAmount - this.totalCostAmount)
 			},
-			ydProfits() {//昨天利润
+			ydProfits() { //昨天利润
 				return this.ydTotalAmount - this.ydTotalCostAmount
 			},
-			tdProfits() {//今天利润
+			tdProfits() { //今天利润
 				return this.tdTotalAmount - this.tdTotalCostAmount
 			}
 		},
 		methods: {
-			getDayIncomeList(startDay, endDay) {//获取近一个月收益列表数据
+			getDayIncomeList(startDay, endDay) { //获取近一个月收益列表数据
 				this.totalCount = 0, //总订单数
 					this.totalAmount = 0, //总收入
 					this.totalCostAmount = 0, //总成本
@@ -237,12 +237,36 @@
 								},
 								series: [{
 										type: 'line',
+										itemStyle: {
+											normal: {
+												color: '#fa8c35', //圈圈的颜色
+												lineStyle: {
+													color: '#fa8c35' //线的颜色
+												}
+											}
+										},
 									},
 									{
 										type: 'line',
+										itemStyle: {
+											normal: {
+												color: '#9ed900', //圈圈的颜色
+												lineStyle: {
+													color: '#9ed900' //线的颜色
+												}
+											}
+										},
 									},
 									{
 										type: 'line',
+										itemStyle: {
+											normal: {
+												color: '#f00056', //圈圈的颜色
+												lineStyle: {
+													color: '#f00056' //线的颜色
+												}
+											}
+										},
 									},
 								]
 
@@ -261,14 +285,14 @@
 					alert(error)
 				})
 			},
-			showDetailModal(title, day) {//显示详情对话框
+			showDetailModal(title, day) { //显示详情对话框
 				this.modalTitle = title + this.detail
 				this.pageNo = 0
 				this.detailDay = day
 				this.modalValue = true
 				this.getRtuDayIncomeList()
 			},
-			getRtuDayIncomeList() {//获取详情列表数据
+			getRtuDayIncomeList() { //获取详情列表数据
 				this.tableLoading = true
 				getVMOrgRtuDayIncomeList(this.detailDay, this.pageNo, this.pageSize).then(res => {
 					const data = res.data

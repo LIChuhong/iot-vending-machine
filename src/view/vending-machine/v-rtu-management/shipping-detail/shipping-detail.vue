@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div style="padding-top: 0.625rem;">
 		<Form ref="shippingModel" :model="shippingModel" :rules="shippingRule" inline :label-width="100">
 			<FormItem label="机器编号" prop="rtuNumber">
 				<Input type="number" v-model="shippingModel.rtuNumber" placeholder="请输入机器编号">
@@ -21,7 +21,7 @@
 				<Button type="primary" @click="handleSubmit('shippingModel')">查找</Button>
 			</FormItem>
 		</Form>
-		<Table size="small" border :columns="shippingColumns" :data="shippingList" max-height="500">
+		<Table size="small" border :columns="shippingColumns" :data="shippingList" max-height="500" class="shippingDatailStyle">
 			<template slot-scope="{ row, index }" slot="action">
 				<Button type="primary" size="small" style="margin-right: 5px" @click="getShippingDetail(row)">明细</Button>
 			</template>
@@ -135,4 +135,10 @@
 </script>
 
 <style>
+	@media screen and (min-width:300px) and (max-width:900px) {
+		.shippingDatailStyle .ivu-table-cell {
+			padding: 0;
+			margin: 0;
+		}
+	}
 </style>

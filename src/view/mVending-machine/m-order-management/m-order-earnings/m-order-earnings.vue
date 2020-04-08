@@ -5,11 +5,11 @@
 			<Row>
 				<Col span="12">
 				<span>订单总金额:</span>
-				<span>{{totalAmount}}</span>
+				<span style="color: #9ed900;">${{totalAmount}}</span>
 				</Col>
 				<Col span="12">
 				<span>订单总笔数:</span>
-				<span>{{totalCount}}</span>
+				<span style="color: #fa8c35;">{{totalCount}}</span>
 				</Col>
 			</Row>
 			<Row style="padding:0.625rem 0;">
