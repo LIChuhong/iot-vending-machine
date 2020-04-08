@@ -168,11 +168,7 @@
 					this.$Message.warning('请先选择日期')
 					return
 				}
-				// if(this.orderModel.rtuNumber != null || this.orderModel.cargoNo != null){
-				// 	this.orderModel.rtuNumber = parseInt(this.orderModel.rtuNumber)
-				// 	this.orderModel.cargoNo = parseInt(this.orderModel.cargoNo)
-				// }
-				//var rtuNumber = this.orderModel.rtuNumber
+				
 				var orderIdKey = this.orderModel.orderIdKey
 				let rtuNumber = null
 				if (this.orderModel.rtuNumber != null && this.orderModel.rtuNumber != '') {

@@ -19,7 +19,7 @@
 						<Avatar :icon="item.icon" />
 					</template>
 				</ListItemMeta>
-				<template slot="action">
+				<template slot="action" >
 					<div @click="actionPlay(item)">
 						<Icon type="ios-arrow-forward" size="30" />
 					</div>
