@@ -124,6 +124,7 @@
 	import minLogo from '@/assets/images/logo-min.jpg'
 	import maxLogo from '@/assets/images/logo.png'
 	import data from '@/data/data'
+	import { setToken } from '@/libs/util'
 	import './main.less'
 	export default {
 		name: 'Main',
@@ -184,7 +185,6 @@
 			//console.log(this.showPc)
 
 		},
-
 		computed: {
 
 			...mapGetters([
@@ -232,6 +232,9 @@
 				//'getUnreadMessageCount',
 				'setMenuList'
 			]),
+			updateTokenFunction(str) {
+				setToken(str)
+			},
 			turnToPage(route) {
 				let {
 					name,
@@ -309,6 +312,7 @@
 			/**
 			 * @description 初始化设置面包屑导航和标签导航
 			 */
+			window.updateTokenFunction = this.updateTokenFunction
 			this.setTagNavList()
 			this.setHomeRoute(routers)
 			const {
