@@ -9,7 +9,7 @@
 				<Input v-model="vmRtu.rtuName" placeholder="请输入设备名称"></Input>
 			</FormItem>
 			<FormItem label="机器类型" prop="rtuTypeId">
-				<Select :disabled="disEditor" v-model="vmRtu.rtuTypeId" placeholder="请选择设备类型" @on-change="getRtuType">
+				<Select @on-open-change="openRtuTypeList" :disabled="disEditor" v-model="vmRtu.rtuTypeId" placeholder="请选择设备类型" @on-change="getRtuType">
 					<Option v-for="item in rtuTypeList" :key="item.id" :value="item.id">{{item.rtuTypeName}}</Option>
 				</Select>
 			</FormItem>
@@ -29,7 +29,7 @@
 				<Input readonly v-model="payeeName" search enter-button="选择" placeholder="请选择收款账户" @on-search="showPayId=true"></Input>
 			</FormItem>
 			<FormItem label="页面风格" prop="shopType">
-				<Select placeholder="请选择页面风格" v-model="vmRtu.shopType">
+				<Select @on-open-change="openShopTypeList" placeholder="请选择页面风格" v-model="vmRtu.shopType">
 					<Option v-for="item in shopTypeList" :key="item.id" :value="item.id">{{item.shopTypeName}}({{item.pageName}})</Option>
 				</Select>
 			</FormItem>
@@ -233,9 +233,40 @@
 		// 	}
 		// },
 		methods: {
+			openShopTypeList(val){
+				if(val){
+					getVMOrgShopTypeList(this.userBelongOrgId).then(res => {
+						const data = res.data
+						if (data.success == 1) {
+							this.shopTypeList = data.shopTypeList
+						} else {
+							this.$Message.error(data.errorMessage)
+						}
+					}).catch(error => {
+						alert(error)
+					})
+				}
+			},
+			openRtuTypeList(val){
+				if(val){
+					getAllRtuTypeList().then(res => {
+							const data = res.data
+							if (data.success == 1) {
+								//console.log(data)
+								this.rtuTypeList = data.rtuTypeList
+							} else {
+								this.$Message.error(data.errorMessage)
+							}
+						}).catch(error => {
+							alert(error)
+						})
+				}
+			},
 			getRtuInfo() {
 				if (this.rtuNumber != null && this.rtuNumber != '') {
 					this.disEditor = true
+					this.openShopTypeList(true)
+					this.openRtuTypeList(true)
 					getVMRtu(this.rtuNumber).then(res => {
 						const data = res.data
 						if (data.success == 1) {
@@ -389,28 +420,6 @@
 			this.getRtuInfo()
 		},
 		created() {
-			getAllRtuTypeList().then(res => {
-					const data = res.data
-					if (data.success == 1) {
-						//console.log(data)
-						this.rtuTypeList = data.rtuTypeList
-					} else {
-						this.$Message.error(data.errorMessage)
-					}
-				}).catch(error => {
-					alert(error)
-				}),
-				getVMOrgShopTypeList(this.userBelongOrgId).then(res => {
-					const data = res.data
-					if (data.success == 1) {
-						this.shopTypeList = data.shopTypeList
-					} else {
-						this.$Message.error(data.errorMessage)
-					}
-				}).catch(error => {
-					alert(error)
-				})
-
 		}
 
 	}

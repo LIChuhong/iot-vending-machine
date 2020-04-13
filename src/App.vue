@@ -12,7 +12,7 @@
 
 <script>
 	import data from '@/data/data'
-	//import { setToken } from '@/libs/util'
+	import { setToken } from '@/libs/util'
 	export default {
 		name: 'App',
 		data() {
@@ -33,25 +33,13 @@
 			},
 			// updateTokenFunction(str) {
 			// 	setToken(str)
-			// 	//this.msg = "我通过原生方法改变了文字" + str
-			// 	//console.log(this.msg)
-			// 	//return "js调用成功"
-			// 	// if (data.interface == 1) {
-			// 	// 	this.$router.push({
-			// 	// 		name: this.$config.mHomeName
-			// 	// 		// name:one
-			// 	// 	})
-			// 	// } else {
-			// 	// 	this.$router.push({
-			// 	// 		name: this.$config.homeName
-			// 	// 		// name:one
-			// 	// 	})
-			// 	// }
+			// 	
 			// }
 		},
 		mounted() {
 			//将要给原生调用的方法挂载到 window 上面
 			//window.updateTokenFunction = this.updateTokenFunction
+			//alert(1)
 		},
 		created() {
 			//var show = this.currentTarget.previousElementSibling.innerHTML

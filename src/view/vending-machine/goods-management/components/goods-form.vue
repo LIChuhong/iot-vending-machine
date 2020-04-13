@@ -5,7 +5,7 @@
 				<Input type="text" :maxlength="30" v-model="goodsModel.commodityName" placeholder="请输入商品名称"></Input>
 			</FormItem>
 			<FormItem label="商品类别" prop="commodityTypeId">
-				<Select v-model="goodsModel.commodityTypeId" placeholder="请选择商品类别">
+				<Select @on-open-change="openCommodityTypeList" v-model="goodsModel.commodityTypeId" placeholder="请选择商品类别">
 					<Option v-for="item in goodsTypeList" :value="item.id" :key="item.id">{{ item.commodityTypeName}}</Option>
 				</Select>
 			</FormItem>
@@ -86,8 +86,23 @@
 		},
 
 		methods: {
+			openCommodityTypeList(val){
+				if(val){
+					getCommodityTypeList().then(res => {
+						const data = res.data
+						if (data.success == 1) {
+							this.goodsTypeList = data.commodityTypeList
+						} else {
+							this.$Message.error(data.errorMessage)
+						}
+					}).catch(error => {
+						alert(error)
+					})
+				}
+			},
 			getGoodsInfo(){
-				if(this.goodsId){
+				if(this.goodsId != null && this.goodId != ''){
+					this.openCommodityTypeList(true)
 					getCommodity(this.goodsId).then(res=>{
 						const data = res.data
 						if(data.success == 1){
@@ -159,16 +174,16 @@
 			},
 		},
 		created() {
-			getCommodityTypeList().then(res => {
-				const data = res.data
-				if (data.success == 1) {
-					this.goodsTypeList = data.commodityTypeList
-				} else {
-					this.$Message.error(data.errorMessage)
-				}
-			}).catch(error => {
-				alert(error)
-			})
+			// getCommodityTypeList().then(res => {
+			// 	const data = res.data
+			// 	if (data.success == 1) {
+			// 		this.goodsTypeList = data.commodityTypeList
+			// 	} else {
+			// 		this.$Message.error(data.errorMessage)
+			// 	}
+			// }).catch(error => {
+			// 	alert(error)
+			// })
 		}
 
 	}

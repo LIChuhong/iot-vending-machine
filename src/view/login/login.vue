@@ -8,11 +8,12 @@
 			<Card icon="log-in" title="欢迎登录" :bordered="false">
 				<div class="form-con">
 					<login-form @on-success-valid="handleSubmit"></login-form>
-					<!-- <p class="login-tip">输入任意用户名和密码即可</p> -->
-					<!-- {{msg}} -->
-
 
 				</div>
+				<!-- <Spin fix>
+					<Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
+					<div>登录中...</div>
+				</Spin> -->
 			</Card>
 		</div>
 	</div>
@@ -48,13 +49,20 @@
 					userName,
 					password
 				}).then(res => {
+					var ua = navigator.userAgent.toLowerCase()
+					if (ua.indexOf('zrwlweb') > -1) {
+						try {
+							$App.saveUserKey(userName, password)
+						} catch (e) {
+							//TODO handle the exception
+							//alert(e)
+						}
+					}
 					this.getUserInfo().then(res => {
 						if (data.interface == 1 || data.interface == 2) {
-							var ua = navigator.userAgent.toLowerCase()
-							if (ua.indexOf('zrwlweb') > -1) {
-								$App.saveUserKey(userName, password)
-							}
+
 							//$App.saveUserKey(userName, password)
+
 							this.$router.push({
 								name: this.$config.mHomeName
 								// name:one
