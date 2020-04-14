@@ -1,16 +1,16 @@
 <template>
 	<div>
 		<div style="padding:0.625rem;">
-			<Row style="padding:0 0 0.625rem ;">
-				<Col span="12" style="padding-right: 0.3125rem">
-				<DatePicker v-model="startTimeStr" type="datetime" placeholder="请选择起始时间"></DatePicker>
-				</Col>
-				<Col span="12" style="padding-left: 0.3125rem">
-				<DatePicker v-model="endTimeStr" type="datetime" placeholder="请选择截止时间"></DatePicker>
-				</Col>
-			</Row>
+			<div>
+				<span>起始时间:</span>
+				<DatePicker :editable="false" v-model="startTimeStr" type="datetime" placeholder="请选择起始时间"></DatePicker>
+			</div>
+			<div style="padding: 0.625rem 0;">
+				<span>结束时间:</span>
+				<DatePicker :editable="false" v-model="endTimeStr" type="datetime" placeholder="请选择结束时间"></DatePicker>
+			</div>
 			<Row>
-				<Col span="16" style="padding-left: 0.625rem;">
+				<Col span="16">
 				<span>机器编号:</span>
 				<Input style="width: 70%;" v-model="rtuNumber" type="number" placeholder="请输入机器编号" />
 				</Col>
@@ -20,7 +20,8 @@
 				</Col>
 			</Row>
 		</div>
-		<Table :loading="tableLoading" border :columns="mSalesColumns" :data="mSalesData" size="small" class="mSalesStyle" max-height="300">
+		<Table :loading="tableLoading" border :columns="mSalesColumns" :data="mSalesData" size="small" class="mSalesStyle"
+		 max-height="300">
 			<template slot-scope="{ row, index }" slot="totalProfits">
 				{{row.totalAmount-row.totalCostAmount}}
 			</template>

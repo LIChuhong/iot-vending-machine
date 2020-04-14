@@ -5,7 +5,7 @@
 			</Input>
 		</FormItem>
 		<FormItem label="日期" prop="day">
-			<DatePicker v-model="updateTotalData.day" type="date" placeholder="请选择纠正日期"></DatePicker>
+			<DatePicker :editable="false" v-model="updateTotalData.day" type="date" placeholder="请选择纠正日期"></DatePicker>
 		</FormItem>
 		<FormItem>
 			<Button type="primary" @click="handleSubmit('updateTotalData')">纠正</Button>

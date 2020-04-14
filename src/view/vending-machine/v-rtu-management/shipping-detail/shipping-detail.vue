@@ -7,10 +7,10 @@
 			</FormItem>
 			
 			<FormItem label="起始" prop="startTimeStr">
-				<DatePicker v-model="shippingModel.startTimeStr" type="datetime" placeholder="请选择起始时间"></DatePicker>
+				<DatePicker :editable="false" v-model="shippingModel.startTimeStr" type="datetime" placeholder="请选择起始时间"></DatePicker>
 			</FormItem>
 			<FormItem label="结束" prop="endTimeStr">
-				<DatePicker v-model="shippingModel.endTimeStr" type="datetime" placeholder="请选择起始时间"></DatePicker>
+				<DatePicker :editable="false" v-model="shippingModel.endTimeStr" type="datetime" placeholder="请选择起始时间"></DatePicker>
 			</FormItem>
 			<FormItem label="货道" prop="cargoNo">
 				<Input type="number" v-model="shippingModel.cargoNo" placeholder="请输入货道">

@@ -208,7 +208,7 @@
 					}],
 					maxBuyCount: [{
 						required: true,
-						type: 'number',
+						//type: 'number',
 						message: '该列不能为空',
 						trigger: 'blur'
 					}],
@@ -356,7 +356,7 @@
 							'rtuSerialNumber': 'l1' + '-' + this.rtuTypeTag + '-' + this.vmRtu.rtuVersion + '-' + getNowFormatDate(this.vmRtu.date, '') + '-' + this.vmRtu.productionBatch + '-' + this.vmRtu.rtuNumber,
 							'rtuTypeId': this.vmRtu.rtuTypeId,
 							'belongOrgId': this.vmRtu.belongOrgId,
-							'maxBuyCount': this.vmRtu.maxBuyCount,
+							'maxBuyCount':parseInt(this.vmRtu.maxBuyCount),
 							'shopType': this.vmRtu.shopType,
 							'serviceTelePhone': this.vmRtu.serviceTelePhone,
 							'address': this.vmRtu.address,

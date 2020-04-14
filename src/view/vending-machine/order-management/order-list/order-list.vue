@@ -23,7 +23,7 @@
 				</Select>
 			</FormItem>
 			<FormItem prop="day">
-				<DatePicker type="date" placeholder="请选择日期" v-model="orderModel.day"></DatePicker>
+				<DatePicker :editable="false" type="date" placeholder="请选择日期" v-model="orderModel.day"></DatePicker>
 			</FormItem>
 			<FormItem>
 				<Button type="primary" @click="setOrderListData">查询</Button>
