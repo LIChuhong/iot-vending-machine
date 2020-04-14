@@ -17,7 +17,7 @@
 				<Input :disabled="disEditor" type="number" v-model="vmRtu.rtuVersion" placeholder="请输入设备版本"></Input>
 			</FormItem>
 			<FormItem label="生产日期" prop="date">
-				<DatePicker :disabled="disEditor" type="date" placeholder="请选择生产日期" v-model="vmRtu.date"></DatePicker>
+				<DatePicker :editable="false" :disabled="disEditor" type="date" placeholder="请选择生产日期" v-model="vmRtu.date"></DatePicker>
 			</FormItem>
 			<FormItem label="生产批次" prop="productionBatch">
 				<Input :disabled="disEditor" type="number" v-model="vmRtu.productionBatch" placeholder="请输入生产批次"></Input>
@@ -44,7 +44,7 @@
 				<Input type="number" v-model="vmRtu.maxBuyCount"></Input>
 			</FormItem>
 			<FormItem label="到期时间" prop="expirationDate">
-				<DatePicker :disabled="disEditor" type="date" placeholder="请选择设备到期日期" v-model="vmRtu.expirationDate"></DatePicker>
+				<DatePicker :editable="false" :disabled="disEditor" type="date" placeholder="请选择设备到期日期" v-model="vmRtu.expirationDate"></DatePicker>
 			</FormItem>
 			<FormItem>
 				<Button @click="handleReset('vmRtu')" style="margin-right: 8px">重置</Button>
@@ -154,7 +154,7 @@
 				vmRtuRule: {
 					rtuNumber: [{
 						required: true,
-						type:'number',
+						//type:'number',
 						message: '机器编号不能为空',
 						trigger: 'blur'
 					}],
@@ -172,7 +172,7 @@
 					}],
 					rtuVersion: [{
 						required: true,
-						type:'number',
+						//type:'number',
 						message: '设备版本不能为空',
 						trigger: 'blur'
 					}],
@@ -190,7 +190,7 @@
 					}],
 					productionBatch: [{
 						required: true,
-						type:'number',
+						//type:'number',
 						message: '生产批次不能为空',
 						trigger: 'blur'
 					}],
@@ -217,12 +217,7 @@
 						validator: validateTel,
 						trigger: 'blur'
 					}],
-					// expirationDate: [{
-					// 	required: true,
-					// 	type: 'date',
-					// 	message: '请选择到期时间',
-					// 	trigger: 'change'
-					// }],
+					
 				}
 
 			}
@@ -354,10 +349,10 @@
 							'rtuNumber': parseInt(this.vmRtu.rtuNumber),
 							'rtuName': this.vmRtu.rtuName,
 							'rtuSerialNumber': 'l1' + '-' + this.rtuTypeTag + '-' + this.vmRtu.rtuVersion + '-' + getNowFormatDate(this.vmRtu.date, '') + '-' + this.vmRtu.productionBatch + '-' + this.vmRtu.rtuNumber,
-							'rtuTypeId': this.vmRtu.rtuTypeId,
-							'belongOrgId': this.vmRtu.belongOrgId,
+							'rtuTypeId': parseInt(this.vmRtu.rtuTypeId),
+							'belongOrgId': parseInt(this.vmRtu.belongOrgId),
 							'maxBuyCount':parseInt(this.vmRtu.maxBuyCount),
-							'shopType': this.vmRtu.shopType,
+							'shopType': parseInt(this.vmRtu.shopType),
 							'serviceTelePhone': this.vmRtu.serviceTelePhone,
 							'address': this.vmRtu.address,
 							'payId': this.vmRtu.payId,

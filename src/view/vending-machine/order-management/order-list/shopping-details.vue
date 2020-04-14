@@ -31,6 +31,9 @@
 	import {
 		shoppingColumns
 	} from '@/data/columns.js'
+	import {
+		refund
+	} from '@/api/order'
 	export default {
 		name: 'shopping_details',
 		props:['detailsRows'],
@@ -71,6 +74,7 @@
 							this.$Message.error('退款失败')
 							this.$Modal.remove();
 						} else {
+							
 							refund(this.detailsRows.orderId, parseFloat(this.detailsRows.refundTotalAmount)).then(res => {
 								this.$Modal.remove();
 								const data = res.data

@@ -35,10 +35,12 @@
 				<p>商户:{{row.orderId}}</p>
 			</template>
 			<template slot-scope="{ row }" slot="customerInfo">
+				<div v-if="row.wechatUserInfo != undefined">
 				<p>openId:{{row.wechatUserInfo.openid}}</p>
 				<img :src="row.wechatUserInfo.headimgurl" width="50" height="50" style="float: right;" />
 				<p>昵称:{{row.wechatUserInfo.nickname}}</p>
 				<p>所在城市:{{row.wechatUserInfo.province+'-'+row.wechatUserInfo.city}}</p>
+				</div>
 			</template>
 			<template slot-scope="{ row, index }" slot="action">
 				<p>下单:{{row.orderTime}}</p>
@@ -184,6 +186,7 @@
 				getOrderList(rtuNumber,orderIdKey,cargoNo,day,buyState,this.pageNo,this.pageSize).then(res=>{
 					const data = res.data
 					this.orderListLoading = false
+					this.orderList = []
 					if(data.success == 1){
 						this.vmOrgTotalAmount = data.vmOrgTotalAmount
 						this.vmOrgTotalCount = data.vmOrgTotalCount

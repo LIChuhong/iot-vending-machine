@@ -3,7 +3,7 @@
 		<div style="overflow: hidden;padding:0.625rem 0.625rem;">
 			<Input search enter-button placeholder="请输入组织名称关键字" @on-search="findOrgList" style="width: 60%;float: left;" />
 		</div>
-		<Table border :columns="coopListColumns" :data="coopListData" size="small" class="mCooperListTableStyle">
+		<Table :loading="tableLoading" border :columns="coopListColumns" :data="coopListData" size="small" class="mCooperListTableStyle">
 
 			<template slot-scope="{ row, index }" slot="action">
 				<Button type="primary" size="small" icon="md-create" @click="orgEditor(row)" style="margin-right:0.3125rem"></Button>
@@ -35,25 +35,26 @@
 		},
 		data() {
 			return {
-				orgName: '',//组织名称
+				tableLoading: false,
+				orgName: '', //组织名称
 				pageSize: 10,
 				maxId: 0,
 				coopListColumns: coopListColumns,
-				coopListData: [],//页面合作列表
+				coopListData: [], //页面合作列表
 				showOrgEditor: false,
-				orgId: null,//组织ID
-				prevId:[0]
+				orgId: null, //组织ID
+				prevId: [0]
 			}
 		},
 		methods: {
-			findOrgList(orgName){//查找组织
+			findOrgList(orgName) { //查找组织
 				this.orgName = orgName
 				this.maxId = 0
 				this.prevId = [0]
 				this.getOrgList()
-				
+
 			},
-			changeSwitch(row) {//启禁用组织
+			changeSwitch(row) { //启禁用组织
 				row.switchLoading = true
 				isEnableVMOrg(row.id, row.isEnable).then(res => {
 					const data = res.data
@@ -75,7 +76,7 @@
 				})
 
 			},
-			orgEditor(row) {//编辑组织
+			orgEditor(row) { //编辑组织
 				this.orgId = row.id
 				this.showOrgEditor = true
 			},
@@ -89,30 +90,32 @@
 					this.getOrgList()
 					//console.log(this.maxId)
 				}
-			
+
 			},
 			prevPage() {
-				if(this.prevId.length>1){
+				if (this.prevId.length > 1) {
 					this.prevId.pop()
-					this.maxId = this.prevId[this.prevId.length-1]
-						this.getOrgList()
-				}else{
+					this.maxId = this.prevId[this.prevId.length - 1]
+					this.getOrgList()
+				} else {
 					this.$Message.warning('这是第一页');
 				}
-				
+
 			},
-			getOrgList() {//获取组织列表
+			getOrgList() { //获取组织列表
+				this.tableLoading = true
 				getVMOrgList(this.orgName, this.maxId, this.pageSize).then(res => {
 					const data = res.data
 					//console.log(data)
+					this.tableLoading = false
 					if (data.success == 1) {
-						data.vmOrgList.map(item=>{
-							if(this.maxId < item.id){
+						data.vmOrgList.map(item => {
+							if (this.maxId < item.id) {
 								this.maxId = item.id
 							}
-							if(item.orgId == "0"){
+							if (item.orgId == "0") {
 								item.disabled = true
-							}else{
+							} else {
 								item.disabled = false
 							}
 							item.switchLoading = false
@@ -124,6 +127,7 @@
 					}
 
 				}).catch(error => {
+					this.tableLoading = false
 					alert(error)
 				})
 			}

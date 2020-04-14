@@ -301,6 +301,7 @@
 				getOrderList(rtuNumber, this.orderIdKey, null, day, this.buyState, this.pageNo, this.pageSize).then(res => {
 					const data = res.data
 					this.orderListLoading = false
+					this.orderData = []
 					if (data.success == 1) {
 						this.totalCount = data.totalCount
 						this.totalAmount = data.totalAmount.toFixed(2)
