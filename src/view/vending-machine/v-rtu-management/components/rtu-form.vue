@@ -44,7 +44,7 @@
 				<Input type="number" v-model="vmRtu.maxBuyCount"></Input>
 			</FormItem>
 			<FormItem label="到期时间" prop="expirationDate">
-				<DatePicker :editable="false" :disabled="disEditor" type="date" placeholder="请选择设备到期日期" v-model="vmRtu.expirationDate"></DatePicker>
+				<DatePicker :editable="false" type="date" placeholder="请选择设备到期日期" v-model="vmRtu.expirationDate"></DatePicker>
 			</FormItem>
 			<FormItem>
 				<Button @click="handleReset('vmRtu')" style="margin-right: 8px">重置</Button>
@@ -269,21 +269,21 @@
 							//console.log(vmRtu)
 							if (vmRtu) {
 								this.id = vmRtu.id
-								this.vmRtu.rtuNumber = parseInt(vmRtu.rtuNumber)
+								this.vmRtu.rtuNumber = vmRtu.rtuNumber.toString()
 								this.vmRtu.rtuName = vmRtu.rtuName
 								this.vmRtu.belongOrgId = vmRtu.belongOrgId
 								this.belongOrgName = vmRtu.orgName
 								this.vmRtu.address = vmRtu.address
 								this.vmRtu.shopType = vmRtu.shopType
 								this.vmRtu.serviceTelePhone = vmRtu.serviceTelePhone
-								this.vmRtu.maxBuyCount = vmRtu.maxBuyCount
+								this.vmRtu.maxBuyCount = vmRtu.maxBuyCount.toString()
 								this.vmRtu.expirationDate = vmRtu.expirationDate
 								this.vmRtu.payId = vmRtu.payId
 								this.payeeName = vmRtu.payeeName
 								this.rtuTypeTag = vmRtu.rtuTypeTag
 								const rtuSerialNumber = vmRtu.rtuSerialNumber.split('-')
-								this.vmRtu.rtuVersion = parseFloat(rtuSerialNumber[2])
-								this.vmRtu.productionBatch = parseFloat(rtuSerialNumber[4])
+								this.vmRtu.rtuVersion = rtuSerialNumber[2]
+								this.vmRtu.productionBatch = rtuSerialNumber[4]
 								this.vmRtu.date = rtuSerialNumber[3]
 								this.vmRtu.rtuTypeId = vmRtu.rtuTypeId
 							}

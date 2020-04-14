@@ -2,7 +2,9 @@ import axios from 'axios'
 import store from '@/store'
 // import { Spin } from 'iview'
 import data from '@/data/data'
-
+import {
+	setToken,
+} from '@/libs/util'
 const addErrorLog = errorInfo => {
 	const {
 		statusText,
@@ -64,8 +66,11 @@ class HttpRequest {
 			this.destroy(url)
 			const {
 				data,
-				status
+				status,
+				headers
 			} = res
+			//setToken(headers.token)
+			console.log(res)
 			return {
 				data,
 				status
