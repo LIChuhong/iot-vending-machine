@@ -27,15 +27,12 @@
 							<tags-nav :value="$route" @input="handleClick" :list="tagNavList" @on-close="handleCloseTag" />
 						</div>
 						<Content class="content-wrapper">
-							<!-- <keep-alive>
-								
-							  <router-view v-if="$route.meta.keepAlive"></router-view>
-							</keep-alive>
-							<router-view v-if="!$route.meta.keepAlive"></router-view> -->
-							<!-- <keep-alive> -->
-							<!-- <keep-alive> -->
-								<router-view />
-							<!-- </keep-alive> -->
+							
+								<!-- <router-view /> -->
+								<keep-alive>
+									<router-view v-if="$route.meta.keepAlive"></router-view>
+								</keep-alive>
+								<router-view v-if="!$route.meta.keepAlive"></router-view>
 							<ABackTop :height="100" :bottom="80" :right="50" container=".content-wrapper"></ABackTop>
 						</Content>
 					</Layout>
@@ -60,13 +57,14 @@
 			<Layout>
 				<Content style="position: absolute;width: 100%;bottom:3.125rem;top:3.125rem;overflow: auto;">
 					<!-- <keep-alive> -->
-					<keep-alive include="my_rtu,m_my_rtu">
+					<!-- <keep-alive include="my_rtu,m_my_rtu">
 						<router-view />
-					</keep-alive>
+					</keep-alive> -->
 
-					<!-- <router-view v-if="$route.meta.keepAlive"></router-view>
+					<keep-alive>
+						<router-view v-if="$route.meta.keepAlive"></router-view>
 					</keep-alive>
-					<router-view v-if="!$route.meta.keepAlive"></router-view> -->
+					<router-view v-if="!$route.meta.keepAlive"></router-view>
 
 				</Content>
 			</Layout>

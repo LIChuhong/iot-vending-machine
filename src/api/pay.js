@@ -55,10 +55,11 @@ export const prepayment = (prepaymentParameter) => {
 }
 
 //退款
-export const refund = (orderId) => {
+export const refund = (orderId,refundTotalAmount) => {
 	//console.log(vmOrg)
 	const data = new URLSearchParams()
 	data.append('orderId', orderId)
+	data.append('refundTotalAmount', parseFloat(refundTotalAmount))
 	return axios.request({
 		url: '/api2.0/refund',
 		data,
