@@ -8,7 +8,7 @@
 			</FormItem>
 			<FormItem prop="orgTypeId" label="组织类型">
 				<RadioGroup v-model="vmOrg.orgTypeId">
-					<Radio v-for="item in orgTypeList" :key="item.id" :label="item.id">{{item.orgTypeName}}</Radio>
+					<Radio :disabled="disParentOrgId" v-for="item in orgTypeList" :key="item.id" :label="item.id">{{item.orgTypeName}}</Radio>
 				</RadioGroup>
 			</FormItem>
 			<FormItem prop="parentOrgId" label="所属组织">
@@ -45,7 +45,7 @@
 				<!-- //<span>Delete confirmation</span> -->
 			</div>
 			<div class="tree-style">
-				<org-tree v-if="showBelongOrg" @getBelongOrgInfo="showBelongOrgInfo"></org-tree>
+				<org-tree v-if="showBelongOrg" @getBelongOrgInfo="showBelongOrgInfo" :orgTypeId="vmOrg.orgTypeId"></org-tree>
 			</div>
 			<div slot="footer">
 
@@ -279,6 +279,9 @@
 				const data = res.data
 				if (data.success == 1) {
 					this.orgTypeList = data.orgTypeList
+					if(this.orgTypeList.length>0){
+						this.vmOrg.orgTypeId = this.orgTypeList[0].id
+					}
 				} else {
 					this.$Message.error(data.errorMessage)
 				}

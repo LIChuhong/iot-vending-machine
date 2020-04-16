@@ -53,6 +53,17 @@ export const getOrgChildrenList = () => {
 	})
 }
 
+//获取子合作代理
+export const getVMOrgChildrenList = (orgTypeId) => {
+	return axios.request({
+		url: '/api2.0/getVMOrgChildrenList',
+		params: {
+			'orgTypeId':orgTypeId
+		},
+		method: 'get'
+	})
+}
+
 //获取合作类型列表
 export const getAllOrgTypeList = () => {
 	return axios.request({

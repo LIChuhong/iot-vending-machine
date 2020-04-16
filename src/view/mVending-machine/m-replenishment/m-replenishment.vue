@@ -192,13 +192,14 @@
 			},
 
 			getCargos(rtuNumber) {//获取货道信息列表
-				this.rtuNumber = rtuNumber
-				this.stopRtuBtn = true
+				
 				this.aisleListLoading = true
 				getCargosData(rtuNumber).then(res => {
 					this.aisleListLoading = false
 					const data = res.data
 					if (data.success == 1) {
+						this.rtuNumber = rtuNumber
+						this.stopRtuBtn = true
 						let cargosData = data.cargosData
 						if (cargosData) {
 							const cargoList = cargosData.cargoList

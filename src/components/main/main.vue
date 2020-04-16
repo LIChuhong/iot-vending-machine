@@ -1,6 +1,6 @@
 <template>
 	<div style="height: 100%;">
-		<Layout style="height: 100%;" class="main" v-if="showPc">
+		<Layout style="height: 100%;" class="main" v-if="show == 'pc'">
 			<Sider hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed" class="left-sider" :style="{overflow: 'hidden'}">
 				<side-menu accordion ref="sideMenu" :active-name="$route.name" :collapsed="collapsed" @on-select="turnToPage"
 				 :menu-list="menuList">
@@ -27,23 +27,23 @@
 							<tags-nav :value="$route" @input="handleClick" :list="tagNavList" @on-close="handleCloseTag" />
 						</div>
 						<Content class="content-wrapper">
-							
-								<!-- <router-view /> -->
-								<keep-alive>
-									<router-view v-if="$route.meta.keepAlive"></router-view>
-								</keep-alive>
-								<router-view v-if="!$route.meta.keepAlive"></router-view>
+
+							<!-- <router-view /> -->
+							<keep-alive>
+								<router-view v-if="$route.meta.keepAlive"></router-view>
+							</keep-alive>
+							<router-view v-if="!$route.meta.keepAlive"></router-view>
 							<ABackTop :height="100" :bottom="80" :right="50" container=".content-wrapper"></ABackTop>
 						</Content>
 					</Layout>
 				</Content>
 			</Layout>
 		</Layout>
-		<Layout v-else style="padding: 0;background: #f5f7f9;">
+		<Layout v-if="show == 'mobile'" style="padding: 0;background: #f5f7f9;">
 			<Layout>
 
 				<Header style="color: #FFFFFF;text-align: center;position: relative;">
-					<div style="position: absolute;left: 0.625rem;" @click="handleDrawer">
+					<div v-if="replenishment" style="position: absolute;left: 0.625rem;" @click="handleDrawer">
 						<Icon type="ios-menu" size="45" />
 					</div>
 
@@ -72,7 +72,7 @@
 				<!-- <Footer class="foot-style"> -->
 				<div class="foot-style">
 					<Menu mode="horizontal" :active-name="activeName" ref="activeName" @on-select="turnToPage">
-						<MenuItem v-for="item in mMenuList" :key="item" :name="item.name" :to="item.to" class="foot-menu-style">
+						<MenuItem v-if="replenishment" v-for="item in mMenuList" :key="item" :name="item.name" :to="item.to" class="foot-menu-style">
 						<div>
 							<Icon size="20" :type="item.iconType" />
 						</div>
@@ -122,7 +122,10 @@
 	import minLogo from '@/assets/images/logo-min.jpg'
 	import maxLogo from '@/assets/images/logo.png'
 	import data from '@/data/data'
-	import { setToken } from '@/libs/util'
+	import {
+		setToken
+	} from '@/libs/util'
+	//import mReplenishment from '@/view/mVending-machine/m-replenishment/m-replenishment.vue'
 	import './main.less'
 	export default {
 		name: 'Main',
@@ -135,15 +138,17 @@
 			ErrorStore,
 			User,
 			ABackTop,
+			//mReplenishment
 		},
 		data() {
 			return {
 				//unreadCount:this.$store.state.user.unreadCount,
+				replenishment: true,
 				collapsed: false,
 				minLogo,
 				maxLogo,
 				isFullscreen: false,
-				showPc: true,
+				show: 'pc',
 				drawerValue: false,
 				theme1: 'dark',
 				activeName: 'm_earnings',
@@ -178,7 +183,13 @@
 		created() {
 			//console.log(data.interface)
 			if (data.interface == 1 || data.interface == 2) {
-				this.showPc = false
+				this.show = 'mobile'
+				if (this.$store.state.user.userInfo.userRolesId == 3) {
+					this.replenishment = false
+				}
+				//console.log(this.$store.state.user.userInfo)
+			} else {
+				this.show = 'pc'
 			}
 			//console.log(this.showPc)
 
@@ -295,7 +306,7 @@
 					},
 					type: 'push'
 				})
-				if (!this.showPc) {
+				if (this.show == 'mobile') {
 					this.drawerValue = false
 					this.activeName = newRoute.name
 					this.menuText = newRoute.meta.title
@@ -319,10 +330,18 @@
 				query,
 				meta
 			} = this.$route
-			if (!this.showPc) {
+			if (this.show == 'mobile') {
+				if (this.$store.state.user.userInfo.userRolesId == 3) {
+					this.$router.push({
+						name: 'm_replenishment'
+					})
+				}else{
+					this.$refs.activeName.updateActiveName()
+				}
 				this.activeName = this.$route.path.slice(1)
-				this.$refs.activeName.updateActiveName()
 				this.menuText = this.$route.meta.title
+
+
 			}
 			this.addTag({
 				route: {
@@ -350,16 +369,17 @@
 	}
 </script>
 <style>
-@media screen and (min-width:300px) and (max-width:900px) {
-	.navDrawer .ivu-drawer-header{
-		padding: 0;
-		border-bottom: 0px;
-		background: #515a6e;
+	@media screen and (min-width:300px) and (max-width:900px) {
+		.navDrawer .ivu-drawer-header {
+			padding: 0;
+			border-bottom: 0px;
+			background: #515a6e;
+		}
+
+		.navDrawer .ivu-drawer-body {
+			background: #515a6e;
+			overflow: hidden;
+
+		}
 	}
-	.navDrawer .ivu-drawer-body{
-		background: #515a6e;
-		overflow: hidden;
-		
-	}
-}
 </style>

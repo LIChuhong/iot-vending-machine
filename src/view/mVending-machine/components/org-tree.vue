@@ -4,9 +4,10 @@
 
 <script>
 	import {
-		getOrgChildrenList
+		getOrgChildrenList,getVMOrgChildrenList
 	} from '@/api/org.js'
 	export default{
+		props:['orgTypeId'],
 		data(){
 			return{
 				belongOrgList:[]//组织书结构列表
@@ -19,18 +20,34 @@
 			},
 		},
 		created() {
-			getOrgChildrenList().then(res=>{//获取组织结构列表
-				this.belongOrgList = []
-				const data =res.data
-				if(data.success == 1){
-					const org = data.org
-					this.belongOrgList.push(org)
-				}else{
-					this.$Message.error(data.Message);
-				}
-			}).catch(error => {
-				alert(error)
-			})
+			if(this.orgTypeId != null && this.orgTypeId != ''){
+				getVMOrgChildrenList(this.orgTypeId).then(res=>{//获取组织结构列表
+					this.belongOrgList = []
+					const data =res.data
+					if(data.success == 1){
+						const org = data.org
+						this.belongOrgList.push(org)
+					}else{
+						this.$Message.error(data.Message);
+					}
+				}).catch(error => {
+					alert(error)
+				})
+			}else{
+				getOrgChildrenList().then(res=>{//获取组织结构列表
+					this.belongOrgList = []
+					const data =res.data
+					if(data.success == 1){
+						const org = data.org
+						this.belongOrgList.push(org)
+					}else{
+						this.$Message.error(data.Message);
+					}
+				}).catch(error => {
+					alert(error)
+				})
+			}
+			
 		}
 		
 		

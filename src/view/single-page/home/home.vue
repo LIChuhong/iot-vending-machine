@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<Icon type=" iconfont icon-hzgl" />
+		<!-- <Icon type=" iconfont icon-hzgl" /> -->
 	</div>
 	<!-- <div style="height: 100%;position: relative;">
 			<chart-bg style="height: 100%;width: 100%;" ></chart-bg>

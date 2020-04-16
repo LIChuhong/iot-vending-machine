@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
 // import { Spin } from 'iview'
+import router from '@/router'
 import data from '@/data/data'
 import {
 	setToken,
@@ -32,8 +33,6 @@ class HttpRequest {
 		const config = {
 			baseURL: this.baseUrl,
 			headers: {
-				//
-
 				'Accept-Language': 'zh-cn',
 				'From': data.interface,
 				'Token':store.state.user.token
@@ -67,14 +66,22 @@ class HttpRequest {
 			const {
 				data,
 				status,
-				headers
+				//headers
 			} = res
 			//setToken(headers.token)
-			console.log(res)
-			return {
-				data,
-				status
+			//console.log(res)
+			if(data.errorCode == 'VM100000011'){
+				router.replace({
+					path: '/login',
+				
+				})
+			}else{
+				return {
+					data,
+					status
+				}
 			}
+			
 		}, error => {
 			this.destroy(url)
 			let errorInfo = error.response
