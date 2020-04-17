@@ -27,6 +27,7 @@ export const saveErrorLogger = info => {
     data: info,
     method: 'post'
   })
+
 }
 
 export const uploadImg = formData => {

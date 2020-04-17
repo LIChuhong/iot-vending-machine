@@ -3,7 +3,7 @@
 		<div style="overflow: hidden;padding-bottom: 8px;">
 			<Input search enter-button placeholder="请输入用户名关键字" @on-search="findUserList" style="width: 200px;float: left;" />
 		</div>
-		<Table size="small" border :columns="userColumns" :data="userList">
+		<Table :loading="userTableLoading" size="small" border :columns="userColumns" :data="userList">
 			<template slot-scope="{ row, index }" slot="userHeadImgUrl">
 				<img :src="row.userHeadImgUrl" width="50px" />
 			</template>
@@ -46,6 +46,7 @@
 		},
 		data() {
 			return {
+				//tableLoading:false,
 				vmUserId:null,
 				showPwd:false,
 				userColumns: userColumns,

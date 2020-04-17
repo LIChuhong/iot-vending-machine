@@ -11,7 +11,8 @@ import {
 } from '@/api/user'
 import {
 	setToken,
-	getToken
+	getToken,
+	setTagNavListInLocalstorage
 } from '@/libs/util'
 import data from '@/data/data'
 //import store from '@/store'
@@ -99,6 +100,7 @@ export default {
 			userName,
 			password
 		}) {
+			setTagNavListInLocalstorage([])
 			userName = userName.trim()
 			return new Promise((resolve, reject) => {
 				login({
@@ -107,7 +109,7 @@ export default {
 				}).then(res => {
 					const data = res.data
 					commit('setToken', data.token)
-					resolve()
+					resolve(res)
 				}).catch(err => {
 					alert(err)
 					reject(err)
@@ -130,6 +132,7 @@ export default {
 				// 如果你的退出登录无需请求接口，则可以直接使用下面三行代码而无需使用logout调用接口
 				commit('setToken', '')
 				commit('setAccess', [])
+				setTagNavListInLocalstorage([])
 				resolve()
 			})
 		},
@@ -153,6 +156,7 @@ export default {
 							commit('setAccess', data.access)
 							commit('setHasGetInfo', true)
 							commit('setMessageCount', user.news) //判断是不是有新信息
+							
 
 						} else {
 							alert(errorMessage)

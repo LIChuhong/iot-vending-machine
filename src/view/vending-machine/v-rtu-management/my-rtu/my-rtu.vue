@@ -7,7 +7,7 @@
 			</Select>
 			<Input search enter-button placeholder="请输入关键字" @on-search="findRtuList" style="width: 300px;float: left;" />
 		</div>
-		<Table size="small" border :columns="rtuColumns" :data="rtuList">
+		<Table :loading="tableLoading" size="small" border :columns="rtuColumns" :data="rtuList">
 			<template slot-scope="{ row, index }" slot="name-type-serialNumber">
 				<p>{{row.rtuName}}</p>
 				<p>{{row.rtuSerialNumber}}</p>
@@ -90,6 +90,7 @@
 		},
 		data() {
 			return {
+				tableLoading:false,
 				Ewm,
 				bigEwm:'',
 				ewmTitle:'',
@@ -205,8 +206,10 @@
 				
 			},
 			getRtuList() {
+				this.tableLoading = true
 				getVMRtuList(this.keyField, this.searchKey, this.maxId, this.pageSize).then(res => {
 					const data = res.data
+					this.tableLoading = false
 					if (data.success == 1) {
 						//console.log(data)
 						this.rtuList = data.rtuList.map(item => {
@@ -223,7 +226,8 @@
 						this.$Message.error(data.errorMessage)
 					}
 				}).catch(error => {
-					this.mRtuListLoading = false
+					this.tableLoading = false
+					//this.mRtuListLoading = false
 					alert(error)
 				})
 			},

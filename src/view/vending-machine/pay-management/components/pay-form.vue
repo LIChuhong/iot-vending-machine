@@ -156,6 +156,11 @@
 						validator: validateSystemId,
 						trigger: 'blur'
 					}],
+					agentNo: [{
+						required: true,
+						message: '服务商商号不能为空',
+						trigger: 'blur'
+					}],
 					desKey: [{
 						required: false,
 						validator: validateKey,
@@ -241,6 +246,7 @@
 				this.$refs[name].validate((valid) => {
 					if (valid) {
 						//console.log(this.jdPayInfo)
+						this.jdPayInfo.agentNo = parseInt(this.jdPayInfo.agentNo)
 						this.showSpin = true
 						if (this.jdPayInfo.id) {
 							updateJDPayInfo(this.jdPayInfo).then(res => {

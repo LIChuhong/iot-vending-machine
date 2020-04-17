@@ -20,7 +20,7 @@
 				</Col>
 			</Row>
 		</div>
-		<Table size="small" border :columns="replenishmentColumns" :data="replenishmentList">
+		<Table :loading="tableLoading" size="small" border :columns="replenishmentColumns" :data="replenishmentList">
 			<template slot-scope="{ row, index }" slot="stock">
 				<span>{{row.oldStock}}/{{row.newStock}}</span>
 			</template>
@@ -52,6 +52,7 @@
 		name: 'replenishment_record',
 		data() {
 			return {
+				tableLoading:false,
 				startDate: '',
 				endDate: '',
 				rtuNumber: '',
@@ -101,9 +102,11 @@
 					var compareDate = CompareDate(endDate, startDate)
 					if (num < 7 && compareDate) {
 						this.pageNo = 0
+						this.tableLoading = true
 						stockHistoryDetailsList(parseInt(this.rtuNumber), startDate, endDate).then(res => {
 							const data = res.data
 							//console.log(data)
+							this.tableLoading = false
 							if (data.success == 1) {
 								this.stockHistoryDetailsList = data.stockHistoryDetailsList.map(item => {
 									item.addTime = timestampToTime(item.addTime)
@@ -114,6 +117,7 @@
 								this.$Message.error(data.errorMessage)
 							}
 						}).catch(error => {
+							this.tableLoading = false
 							alert(error)
 						})
 

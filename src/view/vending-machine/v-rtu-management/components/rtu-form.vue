@@ -147,7 +147,7 @@
 					serviceTelePhone: '', //售后电话
 					address: '', //机器地址
 					expirationDate: new Date(), //过期时间
-					maxBuyCount: 3, //最多购买数量
+					maxBuyCount: '3', //最多购买数量
 
 				},
 				//addRtuRules: [],

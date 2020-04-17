@@ -1,14 +1,14 @@
 <template>
   <Form ref="loginForm" :model="form" :rules="rules" @keydown.enter.native="handleSubmit">
     <FormItem prop="userName">
-      <Input v-model="form.userName" placeholder="请输入用户名">
+      <Input v-model="form.userName" placeholder="请输入用户名" @on-focus="focus('userName')">
         <span slot="prepend">
           <Icon :size="16" type="ios-person"></Icon>
         </span>
       </Input>
     </FormItem>
     <FormItem prop="password">
-      <Input type="password" v-model="form.password" placeholder="请输入密码">
+      <Input type="password" v-model="form.password" placeholder="请输入密码" @on-focus="focus('pwd')">
         <span slot="prepend">
           <Icon :size="14" type="md-lock"></Icon>
         </span>
@@ -75,6 +75,9 @@ export default {
     }
   },
   methods: {
+		focus(val){
+			this.$emit('on-focus',val)
+		},
 		changeCode(){
 		//alert(this.$config. baseUrl.dev)
 			this.verCodeSrc = this.$config.baseUrl.dev+'/verifycode?from=3&rend='+Math.random()

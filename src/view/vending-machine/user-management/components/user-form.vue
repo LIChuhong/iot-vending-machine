@@ -182,7 +182,7 @@
 							this.belongOrgName =data.vmUser.orgName
 							this.vmUser.userHeadImgUrl = data.vmUser.userHeadImgUrl
 						}else{
-							this.$Message.error(data.Message)
+							this.$Message.error(data.errorMessage)
 						}
 					}).catch(error=>{
 						alert(error)
@@ -223,7 +223,7 @@
 								//alert(JSON.stringify(data))
 								//this.userRolesList = data.userRolesList
 							}else{
-								this.$Message.error(data.Message);
+								this.$Message.error(data.errorMessage);
 							}
 						}).catch(error=>{
 							alert(error)
