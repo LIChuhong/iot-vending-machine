@@ -54,7 +54,7 @@
 				<div class="aisleTextInput"><Input v-model="item.promotionPrice" size="small" type="number"></Input></div>
 				<div class="aisleTextInput"><Input v-model="item.costPrice" size="small" type="number"></Input></div>
 				<div @click="shopAisle(item)" :title="item.stoped" class="aisleTextInput">
-					<Badge style="cursor:pointer" :type="item.badgeType" :count="item.cargoNo"></Badge>
+					<Badge overflow-count="101" style="cursor:pointer" :type="item.badgeType" :count="item.cargoNo"></Badge>
 				</div>
 				</Col>
 			</Row>
@@ -119,7 +119,7 @@
 				if (this.levelAisleList.length > 0) {
 					this.levelAisleList.map(item => {
 						item.aisleList.map(i => {
-							totalCostNum += parseInt(i.stock) * parseInt(i.costPrice)
+							totalCostNum += parseInt(i.stock) * parseFloat(i.costPrice)
 						})
 
 					})
@@ -134,49 +134,57 @@
 		methods: {
 			updateCargos() {
 				let cargoList = []
+				let len = 0
 				this.levelAisleList.map(j => {
 					let aisleList = j.aisleList
+					len += j.aisleList.length
 					for (var i = 0; i < aisleList.length; i++) {
 						var item = aisleList[i]
-						if (item.price <= item.costPrice || item.promotionPrice < item.costPrice) {
+						if (item.price < item.costPrice || item.promotionPrice < item.costPrice) {
 							this.$Message.error(item.cargoNo + '货道单价或促销价少于成本价');
 							return;
-						} else if (item.price < item.promotionPrice) {
+						}
+						if (item.price < item.promotionPrice) {
 							this.$Message.error(item.cargoNo + '货道促销价不能大于单价');
 							return;
-						} else {
-							cargoList.push({
-								cargoNo: parseInt(item.cargoNo),
-								level: parseInt(item.level),
-								sortIndex: parseInt(item.sortIndex),
-								commodityId: parseInt(item.commodityId),
-								stock: parseInt(item.stock),
-								stockWarn: parseInt(item.stockWarn),
-								costPrice: parseFloat(item.costPrice),
-								price: parseFloat(item.price),
-								promotionPrice: parseFloat(item.promotionPrice),
-								stoped: item.stoped,
-
-							})
 						}
-					}
-				})
-				const cargosData = {
-					rtuNumber: this.rtuNumber,
-					replenishment: false,
-					cargoList: cargoList
+						cargoList.push({
+							cargoNo: parseInt(item.cargoNo),
+							level: parseInt(item.level),
+							sortIndex: parseInt(item.sortIndex),
+							commodityId: parseInt(item.commodityId),
+							stock: parseInt(item.stock),
+							stockWarn: parseInt(item.stockWarn),
+							costPrice: parseFloat(item.costPrice),
+							price: parseFloat(item.price),
+							promotionPrice: parseFloat(item.promotionPrice),
+							stoped: item.stoped,
 
-				}
-				updateCargosData(cargosData).then(res => {
-					const data = res.data
-					if (data.success == 1) {
-						this.$Message.success('保存成功')
-					} else {
-						this.$Message.error(data.errorMessage)
+						})
+
 					}
-				}).catch(error => {
-					alert(error)
 				})
+				//console.log(this.levelAisleList.aisleList)
+				//console.log(cargoList)
+				if (cargoList.length == len) {
+					
+					const cargosData = {
+						rtuNumber: this.rtuNumber,
+						replenishment: false,
+						cargoList: cargoList
+
+					}
+					updateCargosData(cargosData).then(res => {
+						const data = res.data
+						if (data.success == 1) {
+							this.$Message.success('保存成功')
+						} else {
+							this.$Message.error(data.errorMessage)
+						}
+					}).catch(error => {
+						alert(error)
+					})
+				}
 
 			},
 			shopAisle(item) {
@@ -197,10 +205,10 @@
 						} else {
 							item.badgeType = 'success'
 						}
-			
+
 					},
 					onCancel: () => {
-			
+
 					}
 				});
 			},
@@ -237,9 +245,11 @@
 										item.badgeType = 'success'
 									}
 								})
-								this.levelAisleList.push({
-									aisleList: cargoList
-								})
+								// this.levelAisleList.push({
+								// 	aisleList: cargoList
+								// })
+								// console.log(this.levelAisleList)
+								this.getCargoList(cargoList)
 							}
 						}
 					} else {
@@ -248,6 +258,23 @@
 				}).catch(error => {
 					alert(error)
 				})
+			},
+			getCargoList(cargoList) {
+			    var num = Math.max.apply(Math, cargoList.map(function (o) {
+			        return o.level
+			    }));
+			    for (var i = 0; i < num + 1; i++) {
+			        var arr = cargoList.filter(function (e) {
+			            return e.level == i
+			        });
+			        if (arr) {
+			            this.levelAisleList.push({
+							level:i,
+			            	aisleList: arr
+			            })
+			        }
+					
+			    }
 			},
 			getGoodsInfo(val) {
 				let i = this.index

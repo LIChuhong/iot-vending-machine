@@ -254,6 +254,7 @@
 				if (data.success == 1) {
 					//alert(JSON.stringify(data))
 					this.userRolesList = data.userRolesList
+					this.vmUser.userRolesId = this.userRolesList[0].id
 				} else {
 					this.$Message.error(data.errorMessage);
 				}

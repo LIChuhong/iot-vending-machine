@@ -41,7 +41,7 @@
 				<ListItem v-for="(item,i) in aisleList" :key="item.cargoNo">
 					<div style="overflow: hidden;height: 3.125rem;">
 						<div @click="shopAisle(item)" :title="item.stoped">
-							<Badge :type="item.badgeType" :count="item.cargoNo" style="float: left;"></Badge>
+							<Badge overflow-count="101" :type="item.badgeType" :count="item.cargoNo" style="float: left;"></Badge>
 						</div>
 						<div @click="getCommodityImg(item,i)" style="height:100%;width: 3.125rem;float: left;background: #515A6E;margin: 0 0.625rem;">
 							<img :src="item.commodity.commodityImgUrl" :title="item.commodityId" width="100%" />
@@ -125,7 +125,7 @@
 		},
 		data() {
 			return {
-				copyRtuNumber:null,
+				copyRtuNumber: null,
 				aisleListLoading: false,
 				index: null,
 				showGoodsImg: false,
@@ -137,7 +137,7 @@
 				//replenishment: false,
 				rtuNumber: this.$route.query.rtuNumber,
 				aisleList: [],
-				disCreateBtn:false
+				disCreateBtn: false
 
 			}
 		},
@@ -173,15 +173,15 @@
 			this.getCargos(this.rtuNumber)
 		},
 		methods: {
-			againAisleList(){
+			againAisleList() {
 				this.aisleList = []
 				this.level = 0
 				this.allAisle = 0
-				
+
 			},
-			copyAisle(){
+			copyAisle() {
 				alert(this.copyRtuNumber)
-				if(this.copyRtuNumber != null){
+				if (this.copyRtuNumber != null) {
 					this.getCargos(parseInt(this.copyRtuNumber))
 				}
 			},
@@ -222,48 +222,50 @@
 				let aisleList = this.aisleList
 				for (var i = 0; i < aisleList.length; i++) {
 					var item = aisleList[i]
-					if (item.price <= item.costPrice || item.promotionPrice < item.costPrice) {
+					if (item.price < item.costPrice || item.promotionPrice < item.costPrice) {
 						this.$Message.error(item.cargoNo + '货道单价或促销价少于成本价');
 						return;
-					} else if (item.price < item.promotionPrice) {
+					}
+					if (item.price < item.promotionPrice) {
 						this.$Message.error(item.cargoNo + '货道促销价不能大于单价');
 						return;
-					} else {
-						cargoList.push({
-							cargoNo: parseInt(item.cargoNo),
-							level: parseInt(item.level),
-							sortIndex: parseInt(item.sortIndex),
-							commodityId: parseInt(item.commodityId),
-							stock: parseInt(item.stock),
-							stockWarn: parseInt(item.stockWarn),
-							costPrice: parseFloat(item.costPrice),
-							price: parseFloat(item.price),
-							promotionPrice: parseFloat(item.promotionPrice),
-							stoped: item.stoped,
-
-						})
 					}
-				}
+					cargoList.push({
+						cargoNo: parseInt(item.cargoNo),
+						level: parseInt(item.level),
+						sortIndex: parseInt(item.sortIndex),
+						commodityId: parseInt(item.commodityId),
+						stock: parseInt(item.stock),
+						stockWarn: parseInt(item.stockWarn),
+						costPrice: parseFloat(item.costPrice),
+						price: parseFloat(item.price),
+						promotionPrice: parseFloat(item.promotionPrice),
+						stoped: item.stoped,
 
-				const cargosData = {
-					rtuNumber: this.rtuNumber,
-					replenishment: false,
-					cargoList: cargoList
+					})
 
 				}
-				this.aisleListLoading = true
-				updateCargosData(cargosData).then(res => {
-					const data = res.data
-					this.aisleListLoading = false
-					if (data.success == 1) {
-						this.$Message.success('保存成功')
-					} else {
-						this.$Message.error(data.errorMessage)
+				if(cargoList.length == aisleList.length){
+					const cargosData = {
+						rtuNumber: this.rtuNumber,
+						replenishment: false,
+						cargoList: cargoList
+					
 					}
-				}).catch(error => {
-					this.aisleListLoading = false
-					alert(error)
-				})
+					this.aisleListLoading = true
+					updateCargosData(cargosData).then(res => {
+						const data = res.data
+						this.aisleListLoading = false
+						if (data.success == 1) {
+							this.$Message.success('保存成功')
+						} else {
+							this.$Message.error(data.errorMessage)
+						}
+					}).catch(error => {
+						this.aisleListLoading = false
+						alert(error)
+					})
+				}
 
 			},
 			shopAisle(item) {
@@ -333,14 +335,14 @@
 
 						})
 					}
-					if(this.level == 9){
+					if (this.level == 9) {
 						this.disCreateBtn = true
 					}
 					this.level += 1
-					
+
 					//console.log(this.aisleList)
 
-				}  else {
+				} else {
 					this.$Message.error('创建货道不能大于10或少于0')
 				}
 

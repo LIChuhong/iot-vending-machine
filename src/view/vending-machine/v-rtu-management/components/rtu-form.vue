@@ -3,7 +3,7 @@
 
 		<Form ref="vmRtu" :model="vmRtu" :rules="vmRtuRule" :label-width="80">
 			<FormItem label="设备编号" prop="rtuNumber">
-				<Input type="number" v-model="vmRtu.rtuNumber" placeholder="请输入机器编号"></Input>
+				<Input :disabled="disEditor" type="number" v-model="vmRtu.rtuNumber" placeholder="请输入机器编号"></Input>
 			</FormItem>
 			<FormItem label="设备名称" prop="rtuName">
 				<Input v-model="vmRtu.rtuName" placeholder="请输入设备名称"></Input>
