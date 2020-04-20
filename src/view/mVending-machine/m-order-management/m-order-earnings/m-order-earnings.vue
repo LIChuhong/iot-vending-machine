@@ -15,7 +15,7 @@
 			<Row style="padding:0.625rem 0 0;">
 				<Col span="10">
 				<span>订单总金额:</span>
-				<span style="color: #9ed900;">${{totalAmount}}</span>
+				<span style="color: #9ed900;">{{totalAmount.toFixed(2)}}</span>
 				</Col>
 				<Col span="10">
 				<span>订单总笔数:</span>
@@ -109,7 +109,9 @@
 								this.VMOrgDayIncomeList = data.VMOrgDayIncomeList.map(item => {
 									this.totalAmount += item.totalAmount
 									this.totalCount += item.totalCount
-									item.profits = item.totalAmount - item.totalCostAmount
+									item.profits = (item.totalAmount - item.totalCostAmount).toFixed(2)
+									item.totalAmount = item.totalAmount.toFixed(2)
+									item.totalCostAmount = item.totalCostAmount.toFixed(2)
 									return item
 								})
 								//this.VMOrgDayIncomeList

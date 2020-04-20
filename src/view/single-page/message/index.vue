@@ -13,28 +13,37 @@
 						</div>
 						<div>
 							<span style="color: #FF0000;">帮助:{{item.help}}</span>
+							
 						</div>
 
 					</template>
 				</ListItemMeta>
 				<template slot="action">
-					<li style="text-align: left;">
-						<Poptip width="150" confirm title="您是否确认删除该消息?" placement="bottom-end" @on-ok="delMsg(item)">
-							<Button type="text" ghost style="color: red;" size="small">删除</Button>
-						</Poptip>
-					</li>
-					<li>
+					<div v-if="$store.state.user.userInfo.orgId == item.orgId">
+						<li style="text-align: left;">
+							<Poptip width="150" confirm title="您是否确认删除该消息?" placement="bottom-end" @on-ok="delMsg(item)">
+								<Button type="text" ghost style="color: red;" size="small">删除</Button>
+							</Poptip>
+						</li>
+						<li>
 
-						<Button @click="hasReadmsg(item)" :disabled="item.readed" type="text" ghost :style="{color:item.readed?'#c5c8ce':'#2d8cf0'}"
-						 size="small">{{item.readed?'已阅读':'阅读'}}</Button>
-					</li>
+							<Button @click="hasReadmsg(item)" :disabled="item.readed" type="text" ghost :style="{color:item.readed?'#c5c8ce':'#2d8cf0'}"
+							 size="small">{{item.readed?'已阅读':'阅读'}}</Button>
+						</li>
+					</div>
+					<div v-else>
+						<li>
+							<Button type="text" ghost :style="{color:item.readed?'#c5c8ce':'#2d8cf0'}"
+							 size="small">{{item.readed?'已阅读':'未阅读'}}</Button>
+						</li>
+					</div>
 				</template>
 			</ListItem>
 		</List>
 		<div style="overflow: hidden;padding:0.625rem 0.625rem;">
 			<Button type="primary" ghost style="float: right;" @click="nextPage">下一页</Button>
 			<Button type="primary" ghost style="float: right;margin-right: 0.625rem;" @click="prevPage">上一页</Button>
-		
+
 		</div>
 	</Card>
 </template>
@@ -55,7 +64,7 @@
 				pageNo: 0,
 				pageSize: 10,
 				messageList: [],
-				oldMsgList:[]
+				oldMsgList: []
 			}
 		},
 		computed: {
@@ -68,8 +77,8 @@
 				} else {
 					this.pageNo++
 					this.getMessageListData()
-				 }
-			
+				}
+
 			},
 			prevPage() {
 				if (this.pageNo > 0) {
@@ -125,6 +134,7 @@
 
 		},
 		mounted() {
+			//console.log(this.$store.state.user.userInfo)
 
 		},
 		created() {

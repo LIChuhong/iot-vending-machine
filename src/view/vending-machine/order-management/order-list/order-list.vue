@@ -2,10 +2,10 @@
 	<div>
 		<div style="overflow: hidden;">
 			<p class="showText">订单总笔额:<span style="color: #fa8c35;">{{vmOrgTotalCount}}</span></p>
-			<p class="showText">订单总金额:<span style="color: #9ed900;">${{vmOrgTotalAmount}}</span></p>
+			<p class="showText">订单总金额:<span style="color: #9ed900;">{{vmOrgTotalAmount.toFixed(2)}}</span></p>
 			<p class="showText">订单数:<span style="color: #fa8c35;">{{totalCount}}</span></p>
-			<p class="showText">收入:<span style="color: #9ed900;">${{totalAmount}}</span></p>
-			<p class="showText">利润:<span style="color: #f00056;">${{profitAmount}}</span></p>
+			<p class="showText">收入:<span style="color: #9ed900;">{{totalAmount.toFixed(2)}}</span></p>
+			<p class="showText">利润:<span style="color: #f00056;">{{profitAmount.toFixed(2)}}</span></p>
 		</div>
 		<Form ref="orderModel" :model="orderModel" :rules="orderRule" inline>
 			<FormItem prop="orderIdKey">
@@ -43,9 +43,9 @@
 				</div>
 			</template>
 			<template slot-scope="{ row, index }" slot="action">
-				<p>下单:{{row.orderTime}}</p>
+				<p>下单时间:{{row.orderTime}}</p>
 				<p>支付完成:{{row.payedFinishTime}}</p>
-				<p>出货:{{row.outCommoditysFinishedTime}}</p>
+				<p>出货时间:{{row.outCommoditysFinishedTime}}</p>
 				<Button icon="md-cart" type="primary" size="small" @click="showOrderDetails(row)">详情</Button>
 			</template>
 		</Table>
@@ -77,6 +77,7 @@
 		},
 		data() {
 			return {
+				orderRule:{},
 				detailsRows:'',
 				orderListLoading:false,
 				showShopping: false,
@@ -197,16 +198,30 @@
 							this.orderStateList.map(i => {
 								if (item.orderState == i.id) {
 									item.orderStateName = i.label
+									if(item.refundTotalAmount > 0 && i.id == 5){
+										item.orderStateName = '部分退款'
+									}
 								}
 							})
+							item.payTotalAmount = item.payTotalAmount.toFixed(2)
 							if(item.payType=='WX'){
 								item.payTypeName = '微信'
 							}else{
 								item.payTypeName = '支付宝'
 							}
 							item.orderTime = this.getTime(item.orderTime)
-							item.payedFinishTime = this.getTime(item.payedFinishTime)
-							item.outCommoditysFinishedTime = this.getTime(item.outCommoditysFinishedTime)
+							//item.payedFinishTime = this.getTime(item.payedFinishTime)
+							if(item.payedFinishTime != 0){
+								item.payedFinishTime = this.getTime(item.payedFinishTime)
+							}else{
+								item.payedFinishTime = ''
+							}
+							if(item.outCommoditysFinishedTime != 0){
+								item.outCommoditysFinishedTime = this.getTime(item.outCommoditysFinishedTime)
+							}else{
+								item.outCommoditysFinishedTime = ''
+							}
+							
 							return item
 						})
 					}else{

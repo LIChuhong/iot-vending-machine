@@ -22,8 +22,14 @@
 		</div>
 		<Table :loading="tableLoading" border :columns="mSalesColumns" :data="mSalesData" size="small" class="mSalesStyle"
 		 max-height="300">
+		 <template slot-scope="{ row, index }" slot="totalAmount">
+		 	{{row.totalAmount.toFixed(2)}}
+		 </template>
+		 <template slot-scope="{ row, index }" slot="totalCostAmount">
+		 	{{row.totalCostAmount.toFixed(2)}}
+		 </template>
 			<template slot-scope="{ row, index }" slot="totalProfits">
-				{{row.totalAmount-row.totalCostAmount}}
+				{{(row.totalAmount-row.totalCostAmount).toFixed(2)}}
 			</template>
 		</Table>
 

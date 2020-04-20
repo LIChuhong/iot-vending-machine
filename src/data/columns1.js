@@ -135,13 +135,13 @@ export const mSalesColumns = [{
 
 	{
 		title: '总收入',
-		key: 'totalAmount',
+		slot: 'totalAmount',
 		align: 'center',
 
 	},
 	{
 		title: '总成本',
-		key: 'totalCostAmount',
+		slot: 'totalCostAmount',
 		align: 'center',
 	
 	},

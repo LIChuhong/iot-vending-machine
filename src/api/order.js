@@ -59,9 +59,10 @@ export const getVMRtuDayIncomeSummaryList = (startDay,endDay,rtuNumber) => {
 
 
 //退款
-export const refund = (orderId) => {
+export const refund = (orderId,refundTotalAmount) => {
 	const data = new URLSearchParams()
 	data.append('orderId', orderId)
+	data.append('refundTotalAmount', refundTotalAmount)
   return axios.request({
     url: '/api2.0/refund',
 		data,

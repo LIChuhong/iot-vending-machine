@@ -90,10 +90,10 @@
 		name: 'm_replenishment',
 		data() {
 			return {
-				rtuNumber:null,
+				rtuNumber: null,
 				stopBtnText: '停止',
 				stopRtuBtn: false,
-				copyRtuNumber: null,//复制机器编号
+				copyRtuNumber: null, //复制机器编号
 				aisleListLoading: false,
 				index: null,
 				showGoodsImg: false,
@@ -103,7 +103,7 @@
 				aisle: '', //每层货道
 				//totalCost: 0,
 				//replenishment: false,
-				aisleList: [],//货道列表
+				aisleList: [], //货道列表
 				disCreateBtn: false
 			}
 		},
@@ -111,7 +111,7 @@
 
 		},
 		methods: {
-			changeStopRtu() {//启禁用营业
+			changeStopRtu() { //启禁用营业
 				let title = ''
 				let enable = false
 				if (this.stopBtnText == '停止') {
@@ -148,7 +148,7 @@
 					onCancel: () => {}
 				});
 			},
-			shopAisle(item) {//启禁用货道
+			shopAisle(item) { //启禁用货道
 				//const a = res.stoped
 				let title = ''
 				if (item.stoped) {
@@ -174,13 +174,13 @@
 				});
 			},
 
-			getCommodityImg(item, i) {//选择商品
+			getCommodityImg(item, i) { //选择商品
 				//this.commodityImg = val
 				this.index = i
 				this.showGoodsImg = true
 				//console.log(index)
 			},
-			getGoodsInfo(val) {//获取选择商品信息
+			getGoodsInfo(val) { //获取选择商品信息
 				let i = this.index
 				//console.log(val)
 				if (this.index != null) {
@@ -191,14 +191,14 @@
 
 			},
 
-			getCargos(rtuNumber) {//获取货道信息列表
-				
+			getCargos(rtuNumber) { //获取货道信息列表
+
 				this.aisleListLoading = true
 				getCargosData(rtuNumber).then(res => {
 					this.aisleListLoading = false
 					const data = res.data
 					if (data.success == 1) {
-						this.rtuNumber = rtuNumber
+						this.rtuNumber = parseInt(rtuNumber)
 						this.stopRtuBtn = true
 						let cargosData = data.cargosData
 						if (cargosData) {
@@ -215,6 +215,16 @@
 									} else {
 										item.badgeType = 'success'
 									}
+									if(item.costPrice != 0){
+										item.costPrice = item.costPrice.toFixed(2)
+									}
+									if(item.price != 0){
+										item.price = item.price.toFixed(2)
+									}
+									if(item.promotionPrice != 0){
+										item.promotionPrice = item.promotionPrice.toFixed(2)
+									}
+									
 								})
 								this.aisleList = cargoList
 								//console.log(1)
@@ -229,56 +239,66 @@
 					alert(error)
 				})
 			},
-			updateCargos() {//更新货道
+			updateCargos() { //更新货道
 				if (this.rtuNumber) {
-					if (this.aisleList.length>0) {
+					if (this.aisleList.length > 0) {
 						let cargoList = []
 						let aisleList = this.aisleList
 						for (var i = 0; i < aisleList.length; i++) {
 							var item = aisleList[i]
-							if (item.price <= item.costPrice || item.promotionPrice < item.costPrice) {
-								this.$Message.error(item.cargoNo + '货道单价或促销价少于成本价');
+							if (parseFloat(item.price) < parseFloat(item.costPrice)) {
+								this.$Message.error(item.cargoNo + '货道单价不能少于成本价');
 								return;
-							} else if (item.price < item.promotionPrice) {
-								this.$Message.error(item.cargoNo + '货道促销价不能大于单价');
-								return;
-							} else {
-								cargoList.push({
-									cargoNo: parseInt(item.cargoNo),
-									level: parseInt(item.level),
-									sortIndex: parseInt(item.sortIndex),
-									commodityId: parseInt(item.commodityId),
-									stock: parseInt(item.stock),
-									stockWarn: parseInt(item.stockWarn),
-									costPrice: parseFloat(item.costPrice),
-									price: parseFloat(item.price),
-									promotionPrice: parseFloat(item.promotionPrice),
-									stoped: item.stoped,
-
-								})
 							}
+							if (parseFloat(item.promotionPrice) > 0) {
+								if (parseFloat(item.promotionPrice) < parseFloat(item.costPrice)) {
+									this.$Message.error(item.cargoNo + '货道促销价不能少于成本价');
+									return;
+								}
+								if (parseFloat(item.promotionPrice) >= parseFloat(item.price) ) {
+									this.$Message.error(item.cargoNo + '货道促销价不能大于单价');
+									return;
+								}
+							}
+						
+							cargoList.push({
+								cargoNo: parseInt(item.cargoNo),
+								level: parseInt(item.level),
+								sortIndex: parseInt(item.sortIndex),
+								commodityId: parseInt(item.commodityId),
+								stock: parseInt(item.stock),
+								stockWarn: parseInt(item.stockWarn),
+								costPrice: parseFloat(item.costPrice),
+								price: parseFloat(item.price),
+								promotionPrice: parseFloat(item.promotionPrice),
+								stoped: item.stoped,
+
+							})
+
 						}
 
-						const cargosData = {
-							rtuNumber: this.rtuNumber,
-							replenishment: true,
-							cargoList: cargoList
+						if (cargoList.length == aisleList.length) {
+							const cargosData = {
+								rtuNumber: this.rtuNumber,
+								replenishment: false,
+								cargoList: cargoList
 
-						}
-						this.aisleListLoading = true
-						updateCargosData(cargosData).then(res => {
-							const data = res.data
-							this.aisleListLoading = false
-							if (data.success == 1) {
-								this.$Message.success(this.rtuNumber+'机器货道保存成功')
-							} else {
-								this.$Message.error(data.errorMessage)
 							}
-						}).catch(error => {
-							this.aisleListLoading = false
-							alert(error)
-						})
-					}else{
+							this.aisleListLoading = true
+							updateCargosData(cargosData).then(res => {
+								const data = res.data
+								this.aisleListLoading = false
+								if (data.success == 1) {
+									this.$Message.success('保存成功')
+								} else {
+									this.$Message.error(data.errorMessage)
+								}
+							}).catch(error => {
+								this.aisleListLoading = false
+								alert(error)
+							})
+						}
+					} else {
 						this.$Message.warning('请先查找设备再进行保存')
 					}
 				} else {

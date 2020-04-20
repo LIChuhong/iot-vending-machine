@@ -130,11 +130,11 @@ export const getNowFormatDateTime = (date, seperator1) => { //日期格式化
 	if (strDate >= 0 && strDate <= 9) {
 		strDate = "0" + strDate;
 	}
-	var h = date.getHours()<10?'0'+date.getHours():date.getHours();
-	var m = date.getMinutes()<10?'0'+date.getMinutes():date.getMinutes();
-	var s = date.getSeconds()<10?'0'+date.getSeconds():date.getSeconds();
-	var currentdate = year + seperator1 + month + seperator1 + strDate + ' ' +h +':'+m+':'+s;
-	
+	var h = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+	var m = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+	var s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+	var currentdate = year + seperator1 + month + seperator1 + strDate + ' ' + h + ':' + m + ':' + s;
+
 	return currentdate;
 }
 
@@ -149,9 +149,9 @@ export const timestampToTime = timestamp => {
 	var Y = date.getFullYear() + '-';
 	var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
 	var D = date.getDate() + ' ';
-	var h = date.getHours() + ':';
-	var m = date.getMinutes() + ':';
-	var s = date.getSeconds();
+	var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+	var m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+	var s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
 	return Y + M + D + h + m + s;
 }
 

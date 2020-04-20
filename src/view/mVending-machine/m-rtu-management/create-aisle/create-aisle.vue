@@ -24,7 +24,7 @@
 					</Col>
 					<Col span="6">
 					<p>总成本</p>
-					<p>{{totalCost}}</p>
+					<p>{{totalCost.toFixed(2)}}</p>
 					</Col>
 				</Row>
 			</div>
@@ -162,7 +162,7 @@
 				let totalCostNum = 0
 				if (this.aisleList.length > 0) {
 					this.aisleList.map(item => {
-						totalCostNum += parseInt(item.stock) * parseInt(item.costPrice)
+						totalCostNum += parseInt(item.stock) * parseFloat(item.costPrice)
 					})
 				}
 				return totalCostNum
@@ -204,6 +204,15 @@
 									} else {
 										item.badgeType = 'success'
 									}
+									if(item.costPrice != 0){
+										item.costPrice = item.costPrice.toFixed(2)
+									}
+									if(item.price != 0){
+										item.price = item.price.toFixed(2)
+									}
+									if(item.promotionPrice != 0){
+										item.promotionPrice = item.promotionPrice.toFixed(2)
+									}
 								})
 								this.aisleList = cargoList
 							}
@@ -222,13 +231,33 @@
 				let aisleList = this.aisleList
 				for (var i = 0; i < aisleList.length; i++) {
 					var item = aisleList[i]
-					if (item.price < item.costPrice || item.promotionPrice < item.costPrice) {
-						this.$Message.error(item.cargoNo + '货道单价或促销价少于成本价');
+					// if (item.price < item.costPrice) {
+					// 	this.$Message.error(item.cargoNo + '货道单价少于成本价');
+					// 	return;
+					// }
+					// if (item.promotionPrice > 0) {
+					// 	if (item.promotionPrice < item.costPrice) {
+					// 		this.$Message.error(item.cargoNo + '货道促销价不能少于成本价');
+					// 		return;
+					// 	}
+					// 	if (item.promotionPrice >= item.price) {
+					// 		this.$Message.error(item.cargoNo + '货道促销价不能大于单价');
+					// 		return;
+					// 	}
+					// }
+					if (parseFloat(item.price) < parseFloat(item.costPrice)) {
+						this.$Message.error(item.cargoNo + '货道单价不能少于成本价');
 						return;
 					}
-					if (item.price < item.promotionPrice) {
-						this.$Message.error(item.cargoNo + '货道促销价不能大于单价');
-						return;
+					if (parseFloat(item.promotionPrice) > 0) {
+						if (parseFloat(item.promotionPrice) < parseFloat(item.costPrice)) {
+							this.$Message.error(item.cargoNo + '货道促销价不能少于成本价');
+							return;
+						}
+						if (parseFloat(item.promotionPrice) >= parseFloat(item.price) ) {
+							this.$Message.error(item.cargoNo + '货道促销价不能大于单价');
+							return;
+						}
 					}
 					cargoList.push({
 						cargoNo: parseInt(item.cargoNo),
@@ -245,12 +274,12 @@
 					})
 
 				}
-				if(cargoList.length == aisleList.length){
+				if (cargoList.length == aisleList.length) {
 					const cargosData = {
 						rtuNumber: this.rtuNumber,
 						replenishment: false,
 						cargoList: cargoList
-					
+
 					}
 					this.aisleListLoading = true
 					updateCargosData(cargosData).then(res => {

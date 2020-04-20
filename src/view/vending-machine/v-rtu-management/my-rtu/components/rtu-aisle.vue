@@ -17,7 +17,7 @@
 				</Col>
 				<Col span="6">
 				<span>总成本:</span>
-				<span>{{totalCost}}</span>
+				<span>{{totalCost.toFixed(2)}}</span>
 				</Col>
 			</Row>
 			<div style="overflow: hidden;padding-bottom: 0.625rem;">
@@ -135,19 +135,27 @@
 			updateCargos() {
 				let cargoList = []
 				let len = 0
+				//console.log(this.levelAisleList)
 				this.levelAisleList.map(j => {
 					let aisleList = j.aisleList
 					len += j.aisleList.length
 					for (var i = 0; i < aisleList.length; i++) {
 						var item = aisleList[i]
-						if (item.price < item.costPrice || item.promotionPrice < item.costPrice) {
-							this.$Message.error(item.cargoNo + '货道单价或促销价少于成本价');
+						if (parseFloat(item.price) < parseFloat(item.costPrice)) {
+							this.$Message.error(item.cargoNo + '货道单价不能少于成本价');
 							return;
 						}
-						if (item.price < item.promotionPrice) {
-							this.$Message.error(item.cargoNo + '货道促销价不能大于单价');
-							return;
+						if (parseFloat(item.promotionPrice) > 0) {
+							if (parseFloat(item.promotionPrice) < parseFloat(item.costPrice)) {
+								this.$Message.error(item.cargoNo + '货道促销价不能少于成本价');
+								return;
+							}
+							if (parseFloat(item.promotionPrice) >= parseFloat(item.price) ) {
+								this.$Message.error(item.cargoNo + '货道促销价不能大于单价');
+								return;
+							}
 						}
+
 						cargoList.push({
 							cargoNo: parseInt(item.cargoNo),
 							level: parseInt(item.level),
@@ -167,7 +175,7 @@
 				//console.log(this.levelAisleList.aisleList)
 				//console.log(cargoList)
 				if (cargoList.length == len) {
-					
+
 					const cargosData = {
 						rtuNumber: this.rtuNumber,
 						replenishment: false,
@@ -244,6 +252,15 @@
 									} else {
 										item.badgeType = 'success'
 									}
+									if(item.costPrice != 0){
+										item.costPrice = item.costPrice.toFixed(2)
+									}
+									if(item.price != 0){
+										item.price = item.price.toFixed(2)
+									}
+									if(item.promotionPrice != 0){
+										item.promotionPrice = item.promotionPrice.toFixed(2)
+									}
 								})
 								// this.levelAisleList.push({
 								// 	aisleList: cargoList
@@ -260,21 +277,21 @@
 				})
 			},
 			getCargoList(cargoList) {
-			    var num = Math.max.apply(Math, cargoList.map(function (o) {
-			        return o.level
-			    }));
-			    for (var i = 0; i < num + 1; i++) {
-			        var arr = cargoList.filter(function (e) {
-			            return e.level == i
-			        });
-			        if (arr) {
-			            this.levelAisleList.push({
-							level:i,
-			            	aisleList: arr
-			            })
-			        }
-					
-			    }
+				var num = Math.max.apply(Math, cargoList.map(function(o) {
+					return o.level
+				}));
+				for (var i = 0; i < num + 1; i++) {
+					var arr = cargoList.filter(function(e) {
+						return e.level == i
+					});
+					if (arr) {
+						this.levelAisleList.push({
+							level: i,
+							aisleList: arr
+						})
+					}
+
+				}
 			},
 			getGoodsInfo(val) {
 				let i = this.index

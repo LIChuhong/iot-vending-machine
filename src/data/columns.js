@@ -345,7 +345,7 @@ export const shoppingColumns = [{
 	},
 	{
 		title: '单价',
-		key: 'price',
+		slot: 'price',
 		align: 'center',
 		ellipsis: true,
 		width: 100,
@@ -353,7 +353,7 @@ export const shoppingColumns = [{
 	},
 	{
 		title: '成本价',
-		key: 'costPrice',
+		slot: 'costPrice',
 		align: 'center',
 		ellipsis: true,
 		width: 100,
@@ -698,24 +698,27 @@ export const mOrderDealColumns = [{
 		title: '订单ID',
 		key: 'orderId',
 		align: 'center',
-		tooltip: true,
+		//tooltip: true,
 	}, {
 		title: '消费金额',
 		key: 'payTotalAmount',
 		align: 'center',
 		//ellipsis: true,
+		width: 70
 	},
 	{
 		title: '订单状态',
 		key: 'orderStateLabel',
 		align: 'center',
 		//ellipsis: true,
+		width: 70
 	},
 	{
 		title: '机器编号',
 		key: 'rtuNumber',
 		align: 'center',
 		//ellipsis: true,
+		width: 70
 	},
 	{
 		title: '详情',
@@ -779,7 +782,7 @@ export const mOcontentColumns = [{
 	},
 	{
 		title: '单价',
-		key: 'price',
+		slot: 'price',
 		align: 'center',
 		//tooltip: true,
 	},

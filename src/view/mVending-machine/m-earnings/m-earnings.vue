@@ -17,13 +17,13 @@
 				<Col span="8">
 				<div>
 					<p>收入</p>
-					<p style="color: #9ed900;">${{ydTotalAmount.toFixed(2)}}</p>
+					<p style="color: #9ed900;">{{ydTotalAmount.toFixed(2)}}</p>
 				</div>
 				</Col>
 				<Col span="8">
 				<div>
 					<p>利润</p>
-					<p style="color: #f00056;">${{ydProfits.toFixed(2)}}</p>
+					<p style="color: #f00056;">{{ydProfits.toFixed(2)}}</p>
 				</div>
 				</Col>
 			</Row>
@@ -43,13 +43,13 @@
 				<Col span="8">
 				<div>
 					<p>收入</p>
-					<p style="color: #9ed900;">${{tdTotalAmount.toFixed(2)}}</p>
+					<p style="color: #9ed900;">{{tdTotalAmount.toFixed(2)}}</p>
 				</div>
 				</Col>
 				<Col span="8">
 				<div>
 					<p>利润</p>
-					<p style="color: #f00056;">${{tdProfits.toFixed(2)}}</p>
+					<p style="color: #f00056;">{{tdProfits.toFixed(2)}}</p>
 				</div>
 				</Col>
 			</Row>
@@ -65,12 +65,12 @@
 					</Col>
 					<Col span="8">
 					<div>
-						<p>总收入:<span style="color: #9ed900;">${{totalAmount.toFixed(2)}}</span></p>
+						<p>总收入:<span style="color: #9ed900;">{{totalAmount.toFixed(2)}}</span></p>
 					</div>
 					</Col>
 					<Col span="8">
 					<div>
-						<p>总利润:<span style="color: #f00056;">${{totalProfits.toFixed(2)}}</span></p>
+						<p>总利润:<span style="color: #f00056;">{{totalProfits.toFixed(2)}}</span></p>
 					</div>
 					</Col>
 				</Row>
@@ -81,19 +81,19 @@
 		<Modal v-model="modalValue" fullscreen footer-hide :title="modalTitle" class="mEdetailModalStyle">
 			<Table :loading="tableLoading" border :columns="mEdetailColumns" :data="mEdetailData" size="small">
 				<template slot-scope="{ row, index }" slot="totalBillSplitAmount">
-					{{row.vmRtuDayIncomeSummary.jdBillSplit.totalBillSplitAmount}}
+					{{row.vmRtuDayIncomeSummary.jdBillSplit.totalBillSplitAmount.toFixed(2)}}
 				</template>
 				<template slot-scope="{ row, index }" slot="totalCount">
 					{{row.vmRtuDayIncomeSummary.totalCount}}
 				</template>
 				<template slot-scope="{ row, index }" slot="totalAmount">
-					{{row.vmRtuDayIncomeSummary.totalAmount}}
+					{{row.vmRtuDayIncomeSummary.totalAmount.toFixed(2)}}
 				</template>
 				<template slot-scope="{ row, index }" slot="totalCostAmount">
-					{{row.vmRtuDayIncomeSummary.totalCostAmount}}
+					{{row.vmRtuDayIncomeSummary.totalCostAmount.toFixed(2)}}
 				</template>
 				<template slot-scope="{ row, index }" slot="profits">
-					{{row.vmRtuDayIncomeSummary.totalAmount-row.vmRtuDayIncomeSummary.totalCostAmount}}
+					{{(row.vmRtuDayIncomeSummary.totalAmount-row.vmRtuDayIncomeSummary.totalCostAmount).toFixed(2)}}
 				</template>
 			</Table>
 			<div style="overflow: hidden;padding:0.625rem 0.625rem;">
@@ -195,8 +195,8 @@
 								this.incomeList.push({
 									'day': item.day,
 									'订单数': item.totalCount,
-									'收入': item.totalAmount,
-									'利润': item.totalAmount - item.totalCostAmount
+									'收入': item.totalAmount.toFixed(2),
+									'利润': (item.totalAmount - item.totalCostAmount).toFixed(2)
 								})
 							})
 							const option = {

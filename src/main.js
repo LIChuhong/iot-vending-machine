@@ -29,6 +29,10 @@ Vue.use(VOrgTree)
  * @description 注册admin内置插件
  */
 installPlugin(Vue)
+Vue.prototype.$Message.config({
+   // top: 100,
+    duration:3
+});
 /**
  * @description 生产环境关掉提示
  */

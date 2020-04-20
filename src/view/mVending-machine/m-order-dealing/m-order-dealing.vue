@@ -11,12 +11,12 @@
 					</Col>
 					<Col span="8">
 					<div>
-						<p>收入:<span style="color: #9ed900;">${{totalAmount}}</span></p>
+						<p>收入:<span style="color: #9ed900;">{{totalAmount.toFixed(2)}}</span></p>
 					</div>
 					</Col>
 					<Col span="8">
 					<div>
-						<p>利润:<span style="color: #f00056;">${{profitAmount}}</span></p>
+						<p>利润:<span style="color: #f00056;">{{profitAmount.toFixed(2)}}</span></p>
 					</div>
 					</Col>
 				</Row>
@@ -120,13 +120,16 @@
 				</ListItem>
 				<ListItem style="overflow: hidden;">
 					<span>应退金额:</span>
-					<p style="float: right;">{{refundTotalAmount}}<Button v-show="refundTotalBtn" @click="refundTotal(refundTotalAmount)" type="warning">退款</Button></p>
+					<p style="float: right;">{{refundTotalAmount}}<span v-show="refundedTotalAmount>0">(已退:{{refundedTotalAmount}})</span><Button :disabled="refundTotalAmount <=  0" @click="refundTotal(refundTotalAmount)" type="warning">退款</Button></p>
 				</ListItem>
 			</List>
 
 			<Table border :columns="mOcontentColumns" :data="buyCommodityList" size="small">
+				<template slot-scope="{ row, index }" slot="price">
+					{{row.price.toFixed(2)}}
+				</template>
 				<template slot-scope="{ row, index }" slot="totalPrice">
-					{{row.price*row.buyCount}}
+					{{(row.price*row.buyCount).toFixed(2)}}
 				</template>
 			</Table>
 
@@ -152,10 +155,11 @@
 		data() {
 			return {
 				orderListLoading: false,
-				refundTotalBtn: false,//是否显示退款按钮
+				//refundTotalBtn: false,//是否显示退款按钮
 				rowRtuNumber: null,//机器编号
 				orderId: null,//订单ID
 				refundTotalAmount: null, //退款金额
+				refundedTotalAmount:0,//已退款金额
 				payTotalAmount: null, //支付金额
 				transaction_id: null, //支付订单ID
 				collAccount: null, //商户订单Id
@@ -167,8 +171,8 @@
 				mOcontentColumns: mOcontentColumns,
 				contentModalValue: false,
 				totalCount: null, //订单数
-				totalAmount: null, //收入
-				profitAmount: null, //利润
+				totalAmount: 0, //收入
+				profitAmount: 0, //利润
 				orderIdKey: null, //订单关键字
 				rtuNumber: null, //机器编号
 				cargoNo: null, //货道
@@ -234,21 +238,26 @@
 				this.pageNo = 0
 				this.getOrderListData()
 			},
-			refundTotal(refundTotalAmount) {//退款
+			refundTotal(refundTotalNum) {//退款
+				let newRefundTotalNum = refundTotalNum
 				this.$Modal.confirm({
 					title: '请确认退款金额',
 					render: (h) => {
 						return h('div', [h('Input', {
 								props: {
-									value: refundTotalAmount,
+									value: refundTotalNum,
 									autofocus: true,
 									placeholder: '请输入退款金额',
 									type: 'Number',
 								},
 								on: {
 									input: (val) => {
-										this.refundTotalAmount = val;
-									}
+										newRefundTotalNum = val;
+									},
+									// focus: (val) => {
+									// 	console.log(val)
+									// }
+									
 								}
 							}),
 							h('p', {
@@ -261,16 +270,17 @@
 					},
 					loading: true,
 					onOk: () => {
-						if (this.refundTotalAmount <= 0 || this.refundTotalAmount > refundTotalAmount) {
-							this.$Message.error('退款失败')
-							this.$Modal.remove();
-						} else {
-							refund(this.orderId, parseFloat(this.refundTotalAmount)).then(res => {
+						//console.log(this.refundTotalNum)
+						if (parseFloat(newRefundTotalNum) <= parseFloat(refundTotalNum)) {
+							refund(this.orderId, parseFloat(newRefundTotalNum)).then(res => {
 								this.$Modal.remove();
 								const data = res.data
 								if (data.success == 1) {
-									this.refundTotalAmount = 0
-									this.refundTotalBtn = false
+									// this.detailsRows.refundTotalAmount = data.refundTotalAmount
+									// this.detailsRows.refundTotalAmount = data.refundedTotalAmount
+									this.refundTotalAmount = data.refundTotalAmount
+									//this.refundTotalBtn = false
+									this.refundedTotalAmount = data.refundedTotalAmount
 									this.$Message.success('退款成功')
 								} else {
 									this.$Message.error(data.errorMessage)
@@ -279,6 +289,10 @@
 								this.$Modal.remove();
 								alert(error)
 							})
+						} else {
+							this.$Message.error('退款失败')
+							this.$Modal.remove();
+							
 						}
 
 					},
@@ -299,20 +313,27 @@
 				}
 				this.orderListLoading = true
 				getOrderList(rtuNumber, this.orderIdKey, null, day, this.buyState, this.pageNo, this.pageSize).then(res => {
+					//console.log(res)
 					const data = res.data
 					this.orderListLoading = false
 					this.orderData = []
 					if (data.success == 1) {
 						this.totalCount = data.totalCount
-						this.totalAmount = data.totalAmount.toFixed(2)
-						this.profitAmount = data.profitAmount.toFixed(2)
+						this.totalAmount = data.totalAmount
+						this.profitAmount = data.profitAmount
 						const buyStateList = this.buyStateList
 						this.orderData = data.orderList.map(item => {
 							this.orderStateList.map(i => {
 								if (item.orderState == i.id) {
 									item.orderStateLabel = i.label
+									if(item.refundTotalAmount > 0 && i.id == 5){
+										item.orderStateLabel = '部分退款'
+									}
 								}
+								
 							})
+							
+							item.payTotalAmount = item.payTotalAmount.toFixed(2)
 							return item
 						})
 					} else {
@@ -330,9 +351,10 @@
 				this.rowRtuNumber = row.rtuNumber
 				this.openId = row.openId
 				this.payTotalAmount = row.payTotalAmount
-				this.totalCostAmount = row.totalCostAmount
-				this.refundTotalAmount = row.refundTotalAmount
-				this.refundTotalBtn = this.refundTotalAmount > 0 && row.orderState != 5? true : false
+				this.totalCostAmount = row.totalCostAmount.toFixed(2)
+				this.refundTotalAmount = row.refundTotalAmount.toFixed(2)
+				//this.refundTotalBtn = this.refundTotalAmount > 0
+				this.refundedTotalAmount = row.refundedTotalAmount.toFixed(2)
 				this.orderTime = timestampToTime(row.orderTime)
 				this.orderId = row.orderId
 				this.buyCommodityList = row.shoppingCart.buyCommodityList
