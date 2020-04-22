@@ -61,14 +61,14 @@
 							<Col span="8">
 							<div>
 								<span style="float: left;width: 40%;">库存：</span>
-								<Input type="number" v-model="item.stock" style="width: 60%;" />
+								<Input :disabled="item.disStock" type="number" v-model="item.stock" style="width: 60%;" />
 							</div>
 							</Col>
 							<Col span="8">
 							<div>
 
 								<span style="float: left;width: 40%;">预警：</span>
-								<Input type="number" v-model="item.stockWarn" style="width: 60%;" />
+								<Input :disabled="item.disStock" type="number" v-model="item.stockWarn" style="width: 60%;" />
 							</div>
 							</Col>
 						</Row>
@@ -213,6 +213,7 @@
 									if(item.promotionPrice != 0){
 										item.promotionPrice = item.promotionPrice.toFixed(2)
 									}
+									item.disStock = true
 								})
 								this.aisleList = cargoList
 							}
@@ -231,20 +232,7 @@
 				let aisleList = this.aisleList
 				for (var i = 0; i < aisleList.length; i++) {
 					var item = aisleList[i]
-					// if (item.price < item.costPrice) {
-					// 	this.$Message.error(item.cargoNo + '货道单价少于成本价');
-					// 	return;
-					// }
-					// if (item.promotionPrice > 0) {
-					// 	if (item.promotionPrice < item.costPrice) {
-					// 		this.$Message.error(item.cargoNo + '货道促销价不能少于成本价');
-					// 		return;
-					// 	}
-					// 	if (item.promotionPrice >= item.price) {
-					// 		this.$Message.error(item.cargoNo + '货道促销价不能大于单价');
-					// 		return;
-					// 	}
-					// }
+					
 					if (parseFloat(item.price) < parseFloat(item.costPrice)) {
 						this.$Message.error(item.cargoNo + '货道单价不能少于成本价');
 						return;
@@ -270,7 +258,6 @@
 						price: parseFloat(item.price),
 						promotionPrice: parseFloat(item.promotionPrice),
 						stoped: item.stoped,
-
 					})
 
 				}
@@ -286,6 +273,9 @@
 						const data = res.data
 						this.aisleListLoading = false
 						if (data.success == 1) {
+							this.aisleList.map(item=>{
+								item.disStock = true
+							})
 							this.$Message.success('保存成功')
 						} else {
 							this.$Message.error(data.errorMessage)
@@ -360,7 +350,8 @@
 							promotionPrice: 0, //该货道商品促销价
 							stoped: false, //是否禁用该货道，true为禁用
 							commodity: {},
-							badgeType: 'success'
+							badgeType: 'success',
+							disStock:false
 
 						})
 					}

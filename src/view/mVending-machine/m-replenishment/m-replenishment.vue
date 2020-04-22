@@ -280,7 +280,7 @@
 						if (cargoList.length == aisleList.length) {
 							const cargosData = {
 								rtuNumber: this.rtuNumber,
-								replenishment: false,
+								replenishment: true,
 								cargoList: cargoList
 
 							}

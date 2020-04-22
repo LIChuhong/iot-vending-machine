@@ -54,7 +54,7 @@
 			return {
 				tableLoading:false,
 				startDate: '',
-				endDate: '',
+				endDate: new Date(),
 				rtuNumber: '',
 				replenishmentColumns: replenishmentColumns,
 				replenishmentList: [],

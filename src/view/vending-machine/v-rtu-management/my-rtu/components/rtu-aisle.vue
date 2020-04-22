@@ -31,7 +31,7 @@
 			<Row class="aisleRowStyle" v-for="(j,index) in levelAisleList" :key="j.level">
 				<Col span="2">
 				<div style="height: 50px;width:50px;"></div>
-				<div>名称</div>
+				<div class="aisleTextInput">名称</div>
 				<div class="aisleTextInput">排序</div>
 				<div class="aisleTextInput">库存</div>
 				<div class="aisleTextInput">预警</div>
@@ -48,8 +48,8 @@
 				</div>
 				<div style="height: 21px;">{{item.commodity.commodityName}}</div>
 				<div class="aisleTextInput"><Input v-model="item.sortIndex" size="small" type="number"></Input></div>
-				<div class="aisleTextInput"><Input v-model="item.stock" size="small" type="number"></Input></div>
-				<div class="aisleTextInput"><Input v-model="item.stockWarn" size="small" type="number"></Input></div>
+				<div class="aisleTextInput"><Input :disabled="item.disStock" v-model="item.stock" size="small" type="number"></Input></div>
+				<div class="aisleTextInput"><Input :disabled="item.disStock" v-model="item.stockWarn" size="small" type="number"></Input></div>
 				<div class="aisleTextInput"><Input v-model="item.price" size="small" type="number"></Input></div>
 				<div class="aisleTextInput"><Input v-model="item.promotionPrice" size="small" type="number"></Input></div>
 				<div class="aisleTextInput"><Input v-model="item.costPrice" size="small" type="number"></Input></div>
@@ -155,7 +155,7 @@
 								return;
 							}
 						}
-
+						
 						cargoList.push({
 							cargoNo: parseInt(item.cargoNo),
 							level: parseInt(item.level),
@@ -185,6 +185,12 @@
 					updateCargosData(cargosData).then(res => {
 						const data = res.data
 						if (data.success == 1) {
+							this.levelAisleList.map(item => {
+								item.aisleList.map(i => {
+									i.disStock = true
+								})
+							
+							})
 							this.$Message.success('保存成功')
 						} else {
 							this.$Message.error(data.errorMessage)
@@ -261,6 +267,7 @@
 									if(item.promotionPrice != 0){
 										item.promotionPrice = item.promotionPrice.toFixed(2)
 									}
+									item.disStock = true
 								})
 								// this.levelAisleList.push({
 								// 	aisleList: cargoList
@@ -332,7 +339,8 @@
 							promotionPrice: 0, //该货道商品促销价
 							stoped: false, //是否禁用该货道，true为禁用
 							commodity: {},
-							badgeType: 'success'
+							badgeType: 'success',
+							disStock:false
 
 						})
 					}

@@ -1,6 +1,6 @@
 <template>
 	<Card shadow>
-		<List>
+		<List :loading="listLoading">
 			<ListItem v-for="item in messageList" :key="item.id">
 				<ListItemMeta>
 					<template slot="description">
@@ -61,6 +61,7 @@
 		name: 'message_page',
 		data() {
 			return {
+				listLoading:false,
 				pageNo: 0,
 				pageSize: 10,
 				messageList: [],
@@ -89,14 +90,17 @@
 				}
 			},
 			delMsg(item) {
+				this.listLoading = true
 				removeReaded(item.id).then(res => {
 					const data = res.data
+					this.listLoading = false
 					if (data.success == 1) {
 						item = ''
 					} else {
 						this.$Message.error(errorMessage)
 					}
 				}).catch(error => {
+					this.listLoading = false
 					alert(error)
 				})
 
@@ -114,10 +118,12 @@
 				})
 			},
 			getMessageListData() {
+				this.listLoading = true
 				getMessageList(this.pageNo, this.pageSize).then(res => {
 					const {
 						data
 					} = res
+					this.listLoading = false
 					if (data.success == 1) {
 						this.messageList = data.messageList.map(item => {
 							item.time = timestampToTime(item.time)
@@ -128,6 +134,7 @@
 						this.$Message.error(errorMessage)
 					}
 				}).catch(error => {
+					this.listLoading = false
 					alert(error)
 				})
 			}
