@@ -231,7 +231,7 @@
 						
 						//console.log(this.vmUser)
                     } else {
-                        this.$Message.error('Fail!');
+                        //this.$Message.error('Fail!');
                     }
                 })
             },
