@@ -161,6 +161,7 @@ export default {
       }
     },
     getTagElementByRoute (route) {
+			//console.log(route)
       this.$nextTick(() => {
         this.refsTag = this.$refs.tagsPageOpened
         this.refsTag.forEach((item, index) => {

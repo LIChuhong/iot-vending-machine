@@ -3,11 +3,11 @@
 		<div class="flexStyle">
 			<div>
 				<span>起始时间:</span>
-				<DatePicker :editable="false" v-model="startDate" type="datetime" placeholder="请选择起始时间"></DatePicker>
+				<DatePicker ref="startReplenishmentTime" @on-open-change="showDatePanel('startReplenishmentTime')" @on-change="showTimePanel('startReplenishmentTime')" :editable="false" v-model="startDate" type="datetime" placeholder="请选择起始时间"></DatePicker>
 			</div>
 			<div class="middleSpacing">
 				<span>结束时间:</span>
-				<DatePicker :editable="false" v-model="endDate" type="datetime" placeholder="请选择结束时间"></DatePicker>
+				<DatePicker ref="endReplenishmentTime" @on-open-change="showDatePanel('endReplenishmentTime')" @on-change="showTimePanel('endReplenishmentTime')" :editable="false" v-model="endDate" type="datetime" placeholder="请选择结束时间"></DatePicker>
 			</div>
 			<Row>
 				<Col span="16">
@@ -65,6 +65,14 @@
 			}
 		},
 		methods: {
+			showDatePanel(refName){
+							this.$refs[refName].onSelectionModeChange('date');
+						},
+						showTimePanel(refName) {
+							/* 此处的onSelectionModeChange方法，就是同点击 选择时间 按钮后触发的方法
+			具体此方法的代码逻辑，可以下载组件源码查看*/
+							this.$refs[refName].onSelectionModeChange('time');
+						},
 			nextPage() {
 				if (this.replenishmentList.length < this.pageSize) {
 					this.$Message.warning('这是最后一页');

@@ -144,11 +144,21 @@
 			//console.log(this.$store.state.user.userInfo)
 
 		},
+		activated(){
+			//console.log(this.$route)
+			if(this.$route.meta.keepAlive == false){
+				this.$route.meta.keepAlive = true
+				this.getMessageListData()
+				
+			}
+			
+		},
 		created() {
+			
 			this.getMessageListData()
 
 		}
-
+// 
 	}
 </script>
 

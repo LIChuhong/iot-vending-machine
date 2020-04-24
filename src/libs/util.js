@@ -146,6 +146,7 @@ export const getHomeRoute = (routers, homeName = 'home') => {
  * @description 如果该newRoute已经存在则不再添加
  */
 export const getNewTagList = (list, newRoute) => {
+		
   const { name, path, meta } = newRoute
   let newList = [...list]
   if (newList.findIndex(item => item.name === name) >= 0) return newList

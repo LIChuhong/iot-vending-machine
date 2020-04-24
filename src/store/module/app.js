@@ -25,10 +25,13 @@ const {
 } = config
 
 const closePage = (state, route) => {
+	//console.log(route)
+	//route.meta.keepAlive = false
 	const nextRoute = getNextRoute(state.tagNavList, route)
 	state.tagNavList = state.tagNavList.filter(item => {
 		return !routeEqual(item, route)
 	})
+	
 	router.push(nextRoute)
 }
 

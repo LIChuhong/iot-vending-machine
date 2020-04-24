@@ -3,11 +3,11 @@
 		<div style="padding:0.625rem;">
 			<div>
 				<span>起始时间:</span>
-				<DatePicker :editable="false" v-model="startTimeStr" type="datetime" placeholder="请选择起始时间"></DatePicker>
+				<DatePicker ref="startMsalesSubTime" @on-open-change="showDatePanel('startMsalesSubTime')" @on-change="showTimePanel('startMsalesSubTime')" :editable="false" v-model="startTimeStr" type="datetime" placeholder="请选择起始时间"></DatePicker>
 			</div>
 			<div style="padding: 0.625rem 0;">
 				<span>结束时间:</span>
-				<DatePicker :editable="false" v-model="endTimeStr" type="datetime" placeholder="请选择结束时间"></DatePicker>
+				<DatePicker ref="endMsalesSubTime" @on-open-change="showDatePanel('endMsalesSubTime')" @on-change="showTimePanel('endMsalesSubTime')" :editable="false" v-model="endTimeStr" type="datetime" placeholder="请选择结束时间"></DatePicker>
 			</div>
 			<Row>
 				<Col span="16">
@@ -22,12 +22,12 @@
 		</div>
 		<Table :loading="tableLoading" border :columns="mSalesColumns" :data="mSalesData" size="small" class="mSalesStyle"
 		 max-height="300">
-		 <template slot-scope="{ row, index }" slot="totalAmount">
-		 	{{row.totalAmount.toFixed(2)}}
-		 </template>
-		 <template slot-scope="{ row, index }" slot="totalCostAmount">
-		 	{{row.totalCostAmount.toFixed(2)}}
-		 </template>
+			<template slot-scope="{ row, index }" slot="totalAmount">
+				{{row.totalAmount.toFixed(2)}}
+			</template>
+			<template slot-scope="{ row, index }" slot="totalCostAmount">
+				{{row.totalCostAmount.toFixed(2)}}
+			</template>
 			<template slot-scope="{ row, index }" slot="totalProfits">
 				{{(row.totalAmount-row.totalCostAmount).toFixed(2)}}
 			</template>
@@ -59,6 +59,14 @@
 			}
 		},
 		methods: {
+			showDatePanel(refName) {
+				this.$refs[refName].onSelectionModeChange('date');
+			},
+			showTimePanel(refName) {
+				/* 此处的onSelectionModeChange方法，就是同点击 选择时间 按钮后触发的方法
+			具体此方法的代码逻辑，可以下载组件源码查看*/
+				this.$refs[refName].onSelectionModeChange('time');
+			},
 			getCargoSellList() {
 				if (this.rtuNumber == null || this.rtuNumber == '') {
 					this.$Message.warning('机器编号不能为空')

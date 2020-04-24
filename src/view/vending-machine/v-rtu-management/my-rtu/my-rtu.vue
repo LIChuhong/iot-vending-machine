@@ -1,5 +1,5 @@
 <template>
-	<div class="myRtuStyle">
+	<div class="myRtuStyle" v-if="showMyRtu">
 
 		<div style="overflow: hidden;padding-bottom: 8px;">
 			<Select v-model="keyField" style="width:100px;float: left;margin-right: 8px;">
@@ -22,7 +22,7 @@
 			</template>
 			<template slot-scope="{ row, index }" slot="qrCode">
 				<div @click="getEwm(row)" style="width: 3.125rem;height: 3.125rem;margin: 0 auto;">
-					<img style="width: 100%;height: 100%;" :src="Ewm" :title="row.rtuNumber"/>
+					<img style="width: 100%;height: 100%;" :src="Ewm" :title="row.rtuNumber" />
 				</div>
 			</template>
 			<template slot-scope="{ row, index }" slot="action">
@@ -50,16 +50,16 @@
 			<copy-rtu v-else :rtuNumber="copyRtuNumber"></copy-rtu>
 
 		</Modal>
-		<Modal fullscreen :title="title+'机器货道'"  v-model="showAislePage" footer-hide>
-		<rtu-aisle :rtuNumber="rtuNumber" v-if="showAislePage"></rtu-aisle>
+		<Modal fullscreen :title="title+'机器货道'" v-model="showAislePage" footer-hide>
+			<rtu-aisle :rtuNumber="rtuNumber" v-if="showAislePage"></rtu-aisle>
 		</Modal>
-		<Modal width="65%" :title="'设置'+title+'机器分成'"  v-model="showProportionPage" footer-hide>
-		<proportion :rtuNumber="rtuNumber" v-if="showProportionPage"></proportion>
+		<Modal width="65%" :title="'设置'+title+'机器分成'" v-model="showProportionPage" footer-hide>
+			<proportion :rtuNumber="rtuNumber" v-if="showProportionPage"></proportion>
 		</Modal>
 		<Modal :title="'机器:'+ ewmTitle" v-model="showEwmModal" footer-hide width="360">
-			<img style="width: 100%;height: 100%;" :src="bigEwm"/>
+			<img style="width: 100%;height: 100%;" :src="bigEwm" />
 		</Modal>
-		
+
 	</div>
 
 </template>
@@ -90,14 +90,15 @@
 		},
 		data() {
 			return {
-				tableLoading:false,
+				showMyRtu: true,
+				tableLoading: false,
 				Ewm,
-				bigEwm:'',
-				ewmTitle:'',
-				showEwmModal:false,
-				showProportionPage:false,
-				rtuNumber:null,
-				title:'',
+				bigEwm: '',
+				ewmTitle: '',
+				showEwmModal: false,
+				showProportionPage: false,
+				rtuNumber: null,
+				title: '',
 				showAislePage: false,
 				showEditorRtu: false,
 				copyRtuNumber: null,
@@ -123,22 +124,22 @@
 			}
 		},
 		methods: {
-			getEwm(item){
-				this.bigEwm=''
+			getEwm(item) {
+				this.bigEwm = ''
 				this.ewmTitle = item.rtuNumber
 				this.showEwmModal = true
-				getVMRtuQRCode(item.rtuNumber).then(res=>{
+				getVMRtuQRCode(item.rtuNumber).then(res => {
 					const data = res.data
-					if(data.success == 1){
+					if (data.success == 1) {
 						//console.log(data)
 						this.bigEwm = data.qrCodeUrl
-					}else{
+					} else {
 						this.$Message.error(errorMessage)
 					}
-				}).catch(error=>{
+				}).catch(error => {
 					alert(error)
 				})
-				
+
 			},
 			closeAislePage() {
 				this.showAislePage = false
@@ -203,7 +204,7 @@
 				this.rtuNumber = item.rtuNumber
 				this.title = item.rtuNumber
 				this.showProportionPage = true
-				
+
 			},
 			getRtuList() {
 				this.tableLoading = true
@@ -284,6 +285,24 @@
 		created() {
 			this.getRtuList()
 		},
+		activated(){
+			console.log(this.$route)
+			if(this.$route.meta.keepAlive == false){
+				this.showMyRtu = true
+			}
+		// 	
+		},
+		
+		beforeRouteLeave(to, from, next) {
+			//console.log(from)
+			if(this.$route.meta.keepAlive == false){
+				this.showMyRtu = false
+				//this.$route.meta.keepAlive = true
+				
+			}
+			next()
+		},
+
 
 	}
 </script>

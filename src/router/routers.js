@@ -101,7 +101,7 @@ export default [{
 				meta: {
 					icon: ' iconfont icon-tj',
 					title: '添加机器',
-					keepAlive: true
+					//keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/v-rtu-management/add-rtu/add-rtu.vue'], resolve)
 				//component: () => import('@/view/vending-machine/org/newOrg/newOrg.vue')
@@ -181,7 +181,7 @@ export default [{
 				meta: {
 					icon: ' iconfont icon-tj',
 					title: '添加商品',
-					keepAlive: true
+					//keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/goods-management/add-goods/add-goods.vue'], resolve)
 				//component: () => import('@/view/vending-machine/rtu/newrtu/newrtu.vue')
@@ -203,7 +203,7 @@ export default [{
 				meta: {
 					icon: ' iconfont icon-tj',
 					title: '添加分类',
-					keepAlive: true
+					//keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/goods-management/add-goods-type/add-goods-type.vue'],
 					resolve)
@@ -306,7 +306,7 @@ export default [{
 				meta: {
 					icon: ' iconfont icon-tj',
 					title: '添加支付',
-					keepAlive: true
+					//keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/pay-management/add-pay/add-pay.vue'], resolve)
 				//component: () => import('@/view/vending-machine/setting/addMenu/addMenu.vue')
@@ -329,7 +329,7 @@ export default [{
 				meta: {
 					icon: ' iconfont icon-tj',
 					title: '添加用户',
-					keepAlive: true
+					//keepAlive: true
 				},
 				component: resolve => require(['@/view/components/c-add-user.vue'], resolve)
 				//component: () => import('@/view/vending-machine/user/addUser/addUser.vue')
@@ -362,7 +362,7 @@ export default [{
 				meta: {
 					icon: ' iconfont icon-tj',
 					title: '添加合作',
-					keepAlive: true
+					//keepAlive: true
 				},
 				component: resolve => require(['@/view/components/c-add-cooperation.vue'], resolve)
 				//component: () => import('@/view/vending-machine/user/userLists/userLists.vue')
@@ -394,7 +394,7 @@ export default [{
 				meta: {
 					icon: ' iconfont icon-tj',
 					title: '添加类型',
-					keepAlive: true
+					//keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/shop-type/add-shop-type/add-shop-type.vue'], resolve)
 				//component: () => import('@/view/vending-machine/setting/menuManagement/menuManagement.vue')
@@ -428,7 +428,7 @@ export default [{
 				meta: {
 					icon: ' iconfont icon-tj',
 					title: '添加广告',
-					keepAlive: true
+					//keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/ad-management/add-ad/add-ad.vue'], resolve)
 				//component: () => import('@/view/vending-machine/setting/menuManagement/menuManagement.vue')
@@ -505,7 +505,8 @@ export default [{
 			name: 'message_page',
 			meta: {
 				icon: 'md-notifications',
-				title: '消息中心'
+				title: '消息中心',
+				keepAlive: true
 			},
 			//component: () => import('@/view/single-page/message/index.vue')
 			component: resolve => require(['@/view/single-page/message/index.vue'], resolve)

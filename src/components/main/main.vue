@@ -30,9 +30,9 @@
 
 							<!-- <router-view /> -->
 							<keep-alive>
-								<router-view v-if="$route.meta.keepAlive"></router-view>
+								<router-view></router-view>
 							</keep-alive>
-							<router-view v-if="!$route.meta.keepAlive"></router-view>
+							<!-- <router-view v-if="!$route.meta.keepAlive"></router-view> -->
 							<ABackTop :height="100" :bottom="80" :right="50" container=".content-wrapper"></ABackTop>
 						</Content>
 					</Layout>
@@ -56,15 +56,11 @@
 			</Layout>
 			<Layout>
 				<Content style="position: absolute;width: 100%;bottom:3.125rem;top:3.125rem;overflow: auto;">
-					<!-- <keep-alive> -->
-					<!-- <keep-alive include="my_rtu,m_my_rtu">
-						<router-view />
-					</keep-alive> -->
-
+					
 					<keep-alive>
-						<router-view v-if="$route.meta.keepAlive"></router-view>
+						<router-view></router-view>
 					</keep-alive>
-					<router-view v-if="!$route.meta.keepAlive"></router-view>
+					<!-- <router-view v-if="!$route.meta.keepAlive"></router-view> -->
 
 				</Content>
 			</Layout>
@@ -260,11 +256,18 @@
 					window.open(name.split('_')[1])
 					return
 				}
+				
 				this.$router.push({
 					name,
 					params,
 					query
 				})
+				// this.$router.replace({
+				// 	name,
+				// 	params,
+				// 	query
+				// })
+				// 
 			},
 			handleCollapsedChange(state) {
 				this.collapsed = state
@@ -275,6 +278,8 @@
 						this.turnToPage(this.$config.homeName)
 					} else {
 						if (routeEqual(this.$route, route)) {
+							//console.log(this.$route + 1)
+							this.$route.meta.keepAlive = false
 							this.closeTag(route)
 						}
 					}
@@ -282,6 +287,7 @@
 				this.setTagNavList(res)
 			},
 			handleClick(item) {
+				//console.log(item)
 				this.turnToPage(item)
 			},
 			handleDrawer() {

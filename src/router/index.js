@@ -26,6 +26,7 @@ const router = new Router({
 const LOGIN_PAGE_NAME = 'login'
 
 const turnTo = (to, access, next) => {
+	
 	if (canTurnTo(to.name, access, routes)) next() // 有权限，可访问
 	else next({
 		replace: true,
@@ -51,6 +52,7 @@ router.beforeEach((to, from, next) => {
 			})
 	} else {
 		if (store.state.user.hasGetInfo) {
+			//console.log(store.state.user.hasGetInfo)
 			turnTo(to, store.state.user.access, next)
 		} else {
 			store.dispatch('getUserInfo').then(user => {
