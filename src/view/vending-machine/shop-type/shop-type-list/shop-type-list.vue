@@ -27,13 +27,13 @@
 		shopTypeListColumns
 	} from '@/data/columns1'
 	export default {
-		components:{
+		components: {
 			ShopTypeForm
 		},
 		name: 'shop_type_list',
 		data() {
 			return {
-				shopTypeId:null,
+				shopTypeId: null,
 				showShopTypeEditor: false,
 				shopTypeListColumns: shopTypeListColumns,
 				shopTypeName: '',
@@ -100,6 +100,7 @@
 			}
 		},
 		created() {
+			this.$route.meta.keepAlive = true
 			this.getShopTypeListData()
 		}
 

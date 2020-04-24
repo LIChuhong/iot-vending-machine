@@ -15,7 +15,12 @@
 			return{
 				
 			}
-		}
+		},
+		created() {
+			this.$route.meta.keepAlive = true
+			
+		},
+		
 	}
 </script>
 

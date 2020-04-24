@@ -28,7 +28,7 @@
 					</div>
 				</Upload>
 				<p style="text-align: center;color: red;font-size: 12px;">建议上传图片大小为100px*100px，图片大小不超过50k的图片</p>
-			
+
 			</FormItem>
 
 			<FormItem label="真实姓名" prop="realName">
@@ -39,7 +39,7 @@
 			<FormItem label="所属组织" prop="belongOrgId">
 				<Input readonly v-model="belongOrgName" search enter-button="选择" placeholder="请选择所属组织" @on-search="showBelongOrgList"></Input>
 				<!-- <Button style="float: right;" type="primary" @click="showBelongOrgList" shape="circle">选择</Button> -->
-				
+
 			</FormItem>
 			<FormItem style="text-align:center;">
 				<Button @click="handleReset('vmUser')" style="margin-right:0.625rem">重置</Button>
@@ -190,7 +190,7 @@
 					this.$Message.error(response.errorMessage);
 				}
 			},
-			handleError(error){
+			handleError(error) {
 				this.$Message.error(error);
 			},
 			handleFormatError(file) {
@@ -246,32 +246,34 @@
 					}
 				})
 			},
+			showUserRolesList(){
+				getUserRolesList().then(res => {
+					const data = res.data
+					if (data.success == 1) {
+						//alert(JSON.stringify(data))
+						this.userRolesList = data.userRolesList
+						this.vmUser.userRolesId = this.userRolesList[0].id
+					} else {
+						this.$Message.error(data.errorMessage);
+					}
+				
+				}).catch(error => {
+					alert(error)
+				})
+			}
 
 		},
 		created() {
-			getUserRolesList().then(res => {
-				const data = res.data
-				if (data.success == 1) {
-					//alert(JSON.stringify(data))
-					this.userRolesList = data.userRolesList
-					this.vmUser.userRolesId = this.userRolesList[0].id
-				} else {
-					this.$Message.error(data.errorMessage);
-				}
-
-			}).catch(error => {
-				alert(error)
-			})
+			this.$route.meta.keepAlive = true
+			this.showUserRolesList()
 
 		},
-		mounted() {
-		},
-	
+		mounted() {},
+
 
 
 	}
 </script>
 <style>
-	@media screen and (min-width:300px) and (max-width:900px) {
-	}
+	@media screen and (min-width:300px) and (max-width:900px) {}
 </style>

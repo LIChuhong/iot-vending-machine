@@ -235,23 +235,25 @@
                     }
                 })
             },
+			showUserRolesList(){
+				getUserRolesList().then(res => {
+					const data = res.data
+					if (data.success == 1) {
+						//alert(JSON.stringify(data))
+						this.userRolesList = data.userRolesList
+						this.vmUser.userRolesId = this.userRolesList[0].id
+					} else {
+						this.$Message.error(data.errorMessage);
+					}
+				
+				}).catch(error => {
+					alert(error)
+				})
+			}
 			
 		},
 		created() {
-			getUserRolesList().then(res => {
-				const data = res.data
-				if(data.success == 1){
-					//alert(JSON.stringify(data))
-					this.userRolesList = data.userRolesList
-					//this.vmUser.userRolesId = this.userRolesList[0].id
-				}else{
-					this.$Message.error(data.Message);
-				}
-
-			}).catch(error => {
-				alert(error)
-			})
-			
+			this.showUserRolesList()
 		},
 		mounted() {
 			//console.log(this.userId)

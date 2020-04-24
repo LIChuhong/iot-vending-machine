@@ -38,12 +38,12 @@
 		},
 		data() {
 			return {
-				adId:null,
-				tableLoading:false,
-				adName:'',
-				maxId:0,
-				pageSize:10,
-				showAdEditor:false,
+				adId: null,
+				tableLoading: false,
+				adName: '',
+				maxId: 0,
+				pageSize: 10,
+				showAdEditor: false,
 				adColumns: adColumns,
 				adList: [],
 				prevId: [0],
@@ -59,7 +59,7 @@
 					this.prevId.push(this.maxId)
 					this.getAdList()
 				}
-			
+
 			},
 			prevPage() {
 				if (this.prevId.length > 1) {
@@ -69,27 +69,27 @@
 				} else {
 					this.$Message.warning('这是第一页');
 				}
-			
+
 			},
-			getAdList(){
+			getAdList() {
 				this.tableLoading = true
-				getAdvertisementList(this.adName,this.maxId,this.pageSize).then(res=>{
+				getAdvertisementList(this.adName, this.maxId, this.pageSize).then(res => {
 					const data = res.data
 					this.tableLoading = false
-					if(data.success == 1){
+					if (data.success == 1) {
 						//console.log(data)
-						this.adList = data.advertisementList.map(item=>{
-							if(this.maxId < item.id){
+						this.adList = data.advertisementList.map(item => {
+							if (this.maxId < item.id) {
 								this.maxId = item.id
 							}
 							return item
 						})
-						
-					}else{
-						
+
+					} else {
+
 						this.$Message.error(data.errorMessage)
 					}
-				}).catch(error=>{
+				}).catch(error => {
 					this.tableLoading = false
 					alert(error)
 				})
@@ -109,6 +109,7 @@
 
 		},
 		created() {
+			this.$route.meta.keepAlive = true
 			this.getAdList()
 		}
 

@@ -1,5 +1,5 @@
 <template>
-	<div class="myRtuStyle" v-if="showMyRtu">
+	<div class="myRtuStyle">
 
 		<div style="overflow: hidden;padding-bottom: 8px;">
 			<Select v-model="keyField" style="width:100px;float: left;margin-right: 8px;">
@@ -90,7 +90,7 @@
 		},
 		data() {
 			return {
-				showMyRtu: true,
+				
 				tableLoading: false,
 				Ewm,
 				bigEwm: '',
@@ -262,48 +262,13 @@
 				this.prevId = [0]
 				this.getRtuList()
 			},
-			monitorOnline(row) {
-				//检测在线
-
-			},
-			rtuAisle(row) {
-				//机器货道
-			},
-			rtuEditor(row) {
-				//机器编辑
-			},
-			rtuDel(row) {
-				//机器删除
-			},
-			setDivided(row) {
-				//设置分成
-			},
-			// findRtuList(){
-			// 	//查找机器列表
-			// }
+			
 		},
 		created() {
+			this.$route.meta.keepAlive = true
 			this.getRtuList()
 		},
-		activated(){
-			console.log(this.$route)
-			if(this.$route.meta.keepAlive == false){
-				this.showMyRtu = true
-			}
-		// 	
-		},
-		
-		beforeRouteLeave(to, from, next) {
-			//console.log(from)
-			if(this.$route.meta.keepAlive == false){
-				this.showMyRtu = false
-				//this.$route.meta.keepAlive = true
-				
-			}
-			next()
-		},
-
-
+	
 	}
 </script>
 

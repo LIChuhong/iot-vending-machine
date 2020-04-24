@@ -64,6 +64,7 @@
 
 			}
 		},
+		
 		methods: {
 			showDatePanel(refName){
 							this.$refs[refName].onSelectionModeChange('date');
@@ -138,6 +139,10 @@
 					this.$Message.warning('机器编号不能为空')
 				}
 			}
+		},
+		created() {
+			this.$route.meta.keepAlive = true
+			
 		},
 	}
 </script>

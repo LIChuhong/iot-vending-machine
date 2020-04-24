@@ -13,7 +13,7 @@
 			<Button type="primary" ghost style="float: right;margin-right: 0.625rem;" @click="prevPage">上一页</Button>
 		</div>
 		<Modal v-model="showPayEditor" title="编辑用户信息" footer-hide>
-			<pay-form :merchantNo = "merchantNo">修改</pay-form>
+			<pay-form :merchantNo="merchantNo">修改</pay-form>
 		</Modal>
 	</div>
 </template>
@@ -33,7 +33,7 @@
 		},
 		data() {
 			return {
-				merchantNo:'',
+				merchantNo: '',
 				payeeName: '',
 				maxId: 0,
 				pageSize: 10,
@@ -69,7 +69,7 @@
 					this.tableLoading = false
 					if (data.success == 1) {
 						//console.log(data)
-						data.jdPayInfoList.map(item=>{
+						data.jdPayInfoList.map(item => {
 							if (this.maxId < item.id) {
 								this.maxId = item.id
 							}
@@ -95,9 +95,10 @@
 				this.showPayEditor = true
 
 			},
-		
+
 		},
 		created() {
+			this.$route.meta.keepAlive = true
 			this.getPayInfoList()
 		}
 

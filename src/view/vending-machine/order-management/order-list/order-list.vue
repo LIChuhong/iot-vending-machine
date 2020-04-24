@@ -251,9 +251,9 @@
 			
 		},
 		created() {
+			this.$route.meta.keepAlive = true
 			this.getOrderListData()
-		}
-		
+		},
 
 	}
 </script>

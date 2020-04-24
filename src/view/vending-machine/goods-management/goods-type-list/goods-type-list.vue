@@ -19,46 +19,50 @@
 		goodsTypeListColumns
 	} from '@/data/columns1'
 	import GoodsTypeForm from '../components/goods-type-form.vue'
-	export default{
-		name:'gooods_type_list',
-		components:{
+	export default {
+		name: 'gooods_type_list',
+		components: {
 			GoodsTypeForm
 		},
-		data(){
-			return{
-				tableLoading:false,
-				showGoodsTypeEditor:false,
-				goodsTypeListColumns:goodsTypeListColumns,
-				goodsTypeListData:[],
-				goodsTypeInfo:''
+		data() {
+			return {
+				tableLoading: false,
+				showGoodsTypeEditor: false,
+				goodsTypeListColumns: goodsTypeListColumns,
+				goodsTypeListData: [],
+				goodsTypeInfo: ''
 			}
 		},
-		
-		methods:{
-			getGoodsTypeList(){
+
+		methods: {
+			getGoodsTypeList() {
 				this.tableLoading = true
-				getCommodityTypeList().then(res=>{
+				getCommodityTypeList().then(res => {
 					this.tableLoading = false
 					const data = res.data
-					if(data.success == 1){
+					if (data.success == 1) {
 						this.goodsTypeListData = data.commodityTypeList
-					}else{
+					} else {
 						this.$Message.error(data.errorMessage)
 					}
-				}).catch(error=>{
+				}).catch(error => {
 					this.tableLoading = false
 					alert(error)
 				})
 			},
-			goodsTypeEditor(row){
+			goodsTypeEditor(row) {
 				this.goodsTypeInfo = row
 				this.showGoodsTypeEditor = true
 			}
 		},
-		
+
 		created() {
+			this.$route.meta.keepAlive = true
 			this.getGoodsTypeList()
-		}
+		},
+		// activated(){
+		// 	this.getGoodsTypeList()
+		// }
 	}
 </script>
 

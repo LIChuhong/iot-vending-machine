@@ -195,6 +195,7 @@
 
 			},
 			setProportion(item) {
+				//this.$route.meta.keepAlive = true
 				this.$router.push({
 					name: 'proportion',
 					query: {

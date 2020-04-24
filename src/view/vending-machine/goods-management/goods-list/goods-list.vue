@@ -5,7 +5,7 @@
 		</div>
 		<Table :loading="tableLoading" size="small" border :columns="goodsColumns" :data="goodsList">
 			<template slot-scope="{ row, index }" slot="commodityImgUrl">
-				<img :src="row.commodityImgUrl" width="50px" height="50px"/>
+				<img :src="row.commodityImgUrl" width="50px" height="50px" />
 			</template>
 			<template slot-scope="{ row, index }" slot="action">
 				<Button type="primary" size="small" icon="md-create" @click="goodsEditor(row)">编辑</Button>
@@ -36,12 +36,12 @@
 		},
 		data() {
 			return {
-				goodsId:null,
-				tableLoading:false,
-				commodityName:'',
-				maxId:0,
-				pageSize:10,
-				showGoodsEditor:false,
+				goodsId: null,
+				tableLoading: false,
+				commodityName: '',
+				maxId: 0,
+				pageSize: 10,
+				showGoodsEditor: false,
 				goodsColumns: goodsColumns,
 				goodsList: [],
 				prevId: [0],
@@ -57,7 +57,7 @@
 					this.prevId.push(this.maxId)
 					this.getCommodityListData()
 				}
-			
+
 			},
 			prevPage() {
 				if (this.prevId.length > 1) {
@@ -67,26 +67,26 @@
 				} else {
 					this.$Message.warning('这是第一页');
 				}
-			
+
 			},
-			getCommodityListData(){
+			getCommodityListData() {
 				this.tableLoading = true
-				getCommodityList(this.commodityName,this.maxId,this.pageSize).then(res=>{
+				getCommodityList(this.commodityName, this.maxId, this.pageSize).then(res => {
 					const data = res.data
 					this.tableLoading = false
-					if(data.success == 1){
+					if (data.success == 1) {
 						//console.log(data)
-						data.commodityList.map(item=>{
-							if(this.maxId < item.id){
+						data.commodityList.map(item => {
+							if (this.maxId < item.id) {
 								this.maxId = item.id
 							}
 						})
 						this.goodsList = data.commodityList
-					}else{
-						
+					} else {
+
 						this.$Message.error(data.errorMessage)
 					}
-				}).catch(error=>{
+				}).catch(error => {
 					this.tableLoading = false
 					alert(error)
 				})
@@ -106,8 +106,13 @@
 
 		},
 		created() {
+			this.$route.meta.keepAlive = true
 			this.getCommodityListData()
-		}
+		},
+		// activated(){
+		// 	this.maxId = 0
+		// 	this.getCommodityListData()
+		// }
 
 	}
 </script>

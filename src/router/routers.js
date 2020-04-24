@@ -62,24 +62,14 @@ export default [{
 		//component: Main,
 		component: resolve => require(['@/components/main'], resolve),
 		children: [
-			// {
-			// 	path: 'c_my_rtu',
-			// 	name: 'c_my_rtu',
-			// 	meta: {
-			// 		icon: 'md-infinite',
-			// 		title: '我的机器',
-			// 		keepAlive: true
-			// 	},
-			// 	component: resolve => require(['@/view/components/c-my-rtu.vue'], resolve)
-			// 	//component: () => import('@/view/vending-machine/org/orgLists/orgLists.vue')
-			// },
+			
 			{
 				path: 'm_my_rtu',
 				name: 'm_my_rtu',
 				meta: {
 					icon: ' iconfont icon-wdjq',
 					title: '我的机器',
-					keepAlive: true
+					keepAlive: false
 				},
 				component: resolve => require(['@/view/mVending-machine/m-rtu-management/m-my-rtu/m-my-rtu.vue'], resolve)
 				//component: () => import('@/view/vending-machine/org/orgLists/orgLists.vue')
@@ -101,7 +91,7 @@ export default [{
 				meta: {
 					icon: ' iconfont icon-tj',
 					title: '添加机器',
-					//keepAlive: true
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/v-rtu-management/add-rtu/add-rtu.vue'], resolve)
 				//component: () => import('@/view/vending-machine/org/newOrg/newOrg.vue')
@@ -112,7 +102,8 @@ export default [{
 				name: 'replenishment_record',
 				meta: {
 					icon: ' iconfont icon-bhjl',
-					title: '补货记录'
+					title: '补货记录',
+					keepAlive: true
 				},
 				component: resolve => require([
 					'@/view/vending-machine/v-rtu-management/replenishment-record/replenishment-record.vue'
@@ -124,7 +115,8 @@ export default [{
 				name: 'shipping_detail',
 				meta: {
 					icon: ' iconfont icon-chmx',
-					title: '出货明细'
+					title: '出货明细',
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/v-rtu-management/shipping-detail/shipping-detail.vue'],
 					resolve)
@@ -135,7 +127,8 @@ export default [{
 				name: 'm_rtu_test',
 				meta: {
 					icon: ' iconfont icon-csjq',
-					title: '测试机器'
+					title: '测试机器',
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/mVending-machine/m-rtu-test/m-rtu-test.vue'], resolve)
 				//component: () => import('@/view/vending-machine/org/orgManagement/orgManagement.vue')
@@ -147,7 +140,8 @@ export default [{
 					hideInMenu: true,
 					//icon: 'md-infinite',
 					title: '创建货道',
-					hideInBread: true
+					hideInBread: true,
+					keepAlive: false
 				},
 				component: resolve => require(['@/view/mVending-machine/m-rtu-management/create-aisle/create-aisle.vue'], resolve)
 				//component: () => import('@/view/vending-machine/org/orgLists/orgLists.vue')
@@ -159,7 +153,8 @@ export default [{
 					hideInMenu: true,
 					//icon: 'md-infinite',
 					title: '设置分成',
-					hideInBread: true
+					hideInBread: true,
+					keepAlive: false
 				},
 				component: resolve => require(['@/view/mVending-machine/m-rtu-management/proportion/proportion.vue'], resolve)
 				//component: () => import('@/view/vending-machine/org/orgLists/orgLists.vue')
@@ -181,7 +176,7 @@ export default [{
 				meta: {
 					icon: ' iconfont icon-tj',
 					title: '添加商品',
-					//keepAlive: true
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/goods-management/add-goods/add-goods.vue'], resolve)
 				//component: () => import('@/view/vending-machine/rtu/newrtu/newrtu.vue')
@@ -192,7 +187,8 @@ export default [{
 				name: 'goods_list',
 				meta: {
 					icon: ' iconfont icon-lb',
-					title: '商品列表'
+					title: '商品列表',
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/goods-management/goods-list/goods-list.vue'], resolve)
 				//component: () => import('@/view/vending-machine/rtu/rtuLists/rtuLists.vue')
@@ -203,7 +199,7 @@ export default [{
 				meta: {
 					icon: ' iconfont icon-tj',
 					title: '添加分类',
-					//keepAlive: true
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/goods-management/add-goods-type/add-goods-type.vue'],
 					resolve)
@@ -214,7 +210,8 @@ export default [{
 				name: 'goods_type_list',
 				meta: {
 					icon: ' iconfont icon-lb',
-					title: '分类列表'
+					title: '分类列表',
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/goods-management/goods-type-list/goods-type-list.vue'],
 					resolve)
@@ -228,7 +225,8 @@ export default [{
 		name: 'order_management',
 		meta: {
 			icon: ' iconfont icon-ddgl',
-			title: '订单管理'
+			title: '订单管理',
+			
 		},
 		//component: Main,
 		component: resolve => require(['@/components/main'], resolve),
@@ -237,7 +235,8 @@ export default [{
 				name: 'order_list',
 				meta: {
 					icon: ' iconfont icon-lb',
-					title: '订单列表'
+					title: '订单列表',
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/order-management/order-list/order-list.vue'], resolve)
 				//component: () => import('@/view/vending-machine/pictureFigure/newPictureFigure/newPictureFigure.vue')
@@ -247,7 +246,8 @@ export default [{
 				name: 'correct_statistics',
 				meta: {
 					icon: 'md-infinite',
-					title: '纠正统计'
+					title: '纠正统计',
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/order-management/correct-statistics/correct-statistics.vue'],
 					resolve)
@@ -258,7 +258,8 @@ export default [{
 				name: 'm_order_earnings',
 				meta: {
 					icon: 'md-infinite',
-					title: '收益'
+					title: '收益',
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/mVending-machine/m-order-management/m-order-earnings/m-order-earnings.vue'],
 					resolve)
@@ -269,7 +270,8 @@ export default [{
 				name: 'm_sales_subsidiary',
 				meta: {
 					icon: 'md-infinite',
-					title: '销售明细'
+					title: '销售明细',
+					keepAlive: true
 				},
 				component: resolve => require([
 					'@/view/mVending-machine/m-order-management/m-sales-subsidiary/m-sales-subsidiary.vue'
@@ -295,7 +297,8 @@ export default [{
 				name: 'pay_list',
 				meta: {
 					icon: ' iconfont icon-lb',
-					title: '支付列表'
+					title: '支付列表',
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/pay-management/pay-list/pay-list.vue'], resolve)
 				//component: () => import('@/view/vending-machine/setting/menuManagement/menuManagement.vue')
@@ -306,7 +309,7 @@ export default [{
 				meta: {
 					icon: ' iconfont icon-tj',
 					title: '添加支付',
-					//keepAlive: true
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/pay-management/add-pay/add-pay.vue'], resolve)
 				//component: () => import('@/view/vending-machine/setting/addMenu/addMenu.vue')
@@ -329,7 +332,7 @@ export default [{
 				meta: {
 					icon: ' iconfont icon-tj',
 					title: '添加用户',
-					//keepAlive: true
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/components/c-add-user.vue'], resolve)
 				//component: () => import('@/view/vending-machine/user/addUser/addUser.vue')
@@ -362,7 +365,7 @@ export default [{
 				meta: {
 					icon: ' iconfont icon-tj',
 					title: '添加合作',
-					//keepAlive: true
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/components/c-add-cooperation.vue'], resolve)
 				//component: () => import('@/view/vending-machine/user/userLists/userLists.vue')
@@ -372,7 +375,8 @@ export default [{
 				name: 'c_cooperation_list',
 				meta: {
 					icon: ' iconfont icon-lb',
-					title: '合作列表'
+					title: '合作列表',
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/components/c-cooperation-list.vue'], resolve)
 				//component: () => import('@/view/vending-machine/user/addUser/addUser.vue')
@@ -394,7 +398,7 @@ export default [{
 				meta: {
 					icon: ' iconfont icon-tj',
 					title: '添加类型',
-					//keepAlive: true
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/shop-type/add-shop-type/add-shop-type.vue'], resolve)
 				//component: () => import('@/view/vending-machine/setting/menuManagement/menuManagement.vue')
@@ -404,7 +408,8 @@ export default [{
 				name: 'shop_type_list',
 				meta: {
 					icon: ' iconfont icon-lb',
-					title: '类型列表'
+					title: '类型列表',
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/shop-type/shop-type-list/shop-type-list.vue'], resolve)
 				//component: () => import('@/view/vending-machine/setting/addMenu/addMenu.vue')
@@ -428,7 +433,7 @@ export default [{
 				meta: {
 					icon: ' iconfont icon-tj',
 					title: '添加广告',
-					//keepAlive: true
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/ad-management/add-ad/add-ad.vue'], resolve)
 				//component: () => import('@/view/vending-machine/setting/menuManagement/menuManagement.vue')
@@ -438,7 +443,8 @@ export default [{
 				name: 'ad_list',
 				meta: {
 					icon: ' iconfont icon-lb',
-					title: '广告列表'
+					title: '广告列表',
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/ad-management/ad-list/ad-list.vue'], resolve)
 				//component: () => import('@/view/vending-machine/setting/addMenu/addMenu.vue')
@@ -462,7 +468,8 @@ export default [{
 				name: 'curves_in',
 				meta: {
 					icon: 'md-infinite',
-					title: '曲线走势'
+					title: '曲线走势',
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/data-analysis/curves-in/curves-in.vue'], resolve)
 				//component: () => import('@/view/vending-machine/user/addUser/addUser.vue')
@@ -472,7 +479,8 @@ export default [{
 				name: 'hot_goods',
 				meta: {
 					icon: 'md-infinite',
-					title: '热销商品'
+					title: '热销商品',
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/data-analysis/hot-goods/hot-goods.vue'], resolve)
 				//component: () => import('@/view/vending-machine/user/userLists/userLists.vue')
@@ -483,7 +491,8 @@ export default [{
 				name: 'active_users',
 				meta: {
 					icon: 'md-infinite',
-					title: '活跃用户'
+					title: '活跃用户',
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/vending-machine/data-analysis/active-users/active-users.vue'], resolve)
 				//component: () => import('@/view/vending-machine/user/userLists/userLists.vue')
@@ -561,7 +570,7 @@ export default [{
 					title: '近日收益',
 					hideInMenu: true,
 					hideInBread: true,
-					//keepAlive: true
+					keepAlive: false
 				},
 				component: resolve => require(['@/view/mVending-machine/m-earnings/m-earnings.vue'], resolve)
 
@@ -572,7 +581,9 @@ export default [{
 				meta: {
 					//icon: 'md-infinite',
 					title: '补货',
-					hideInMenu: true
+					hideInMenu: true,
+					hideInBread: true,
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/mVending-machine/m-replenishment/m-replenishment.vue'], resolve)
 			},
@@ -582,7 +593,9 @@ export default [{
 				meta: {
 					//icon: 'md-infinite',
 					title: '订单处理',
-					hideInMenu: true
+					hideInMenu: true,
+					hideInBread: true,
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/mVending-machine/m-order-dealing/m-order-dealing.vue'], resolve)
 			},
@@ -592,7 +605,9 @@ export default [{
 				meta: {
 					//icon: 'md-infinite',
 					title: '用户信息',
-					hideInMenu: true
+					hideInMenu: true,
+					hideInBread: true,
+					keepAlive: true
 				},
 				component: resolve => require(['@/view/mVending-machine/me/me.vue'], resolve)
 			},
@@ -604,48 +619,4 @@ export default [{
 	},
 
 
-	{
-		path: '/m_replenishment_record',
-		name: 'm_replenishment_record',
-		meta: {
-			//icon: 'md-infinite',
-			//title: 'Login - 补货',
-			hideInMenu: true
-		},
-		component: resolve => require(['@/components/main'], resolve),
-		//component: resolve => require(['@/view/mVending-machine/navigation/navigation.vue'], resolve),
-		children: [{
-			path: '/m_replenishment_record',
-			name: 'm_replenishment_record',
-			meta: {
-				//icon: 'md-infinite',
-				title: 'Login - 补货记录',
-				hideInMenu: true
-			},
-			component: resolve => require(['@/view/mVending-machine/m-replenishment-record/m-replenishment-record.vue'],
-				resolve)
-		}, ]
-	},
-
-	{
-		path: '/m_shipping_detail',
-		name: 'm_shipping_detail',
-		meta: {
-			//icon: 'md-infinite',
-			//title: 'Login - 补货',
-			hideInMenu: true
-		},
-		component: resolve => require(['@/components/main'], resolve),
-		//component: resolve => require(['@/view/mVending-machine/navigation/navigation.vue'], resolve),
-		children: [{
-			path: '/m_shipping_detail',
-			name: 'm_shipping_detail',
-			meta: {
-				//icon: 'md-infinite',
-				title: 'Login - 出货明细',
-				hideInMenu: true
-			},
-			component: resolve => require(['@/view/mVending-machine/m-shipping-detail/m-shipping-detail.vue'], resolve)
-		}, ]
-	},
 ]
