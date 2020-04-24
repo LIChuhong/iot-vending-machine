@@ -13,7 +13,7 @@
 						</div>
 						<div>
 							<span style="color: #FF0000;">帮助:{{item.help}}</span>
-							
+
 						</div>
 
 					</template>
@@ -49,117 +49,106 @@
 </template>
 
 <script>
-	import {
-		timestampToTime
-	} from '@/libs/tools'
-	import {
-		getMessageList,
-		hasRead,
-		removeReaded
-	} from '@/api/user'
-	export default {
-		name: 'message_page',
-		data() {
-			return {
-				listLoading:false,
-				pageNo: 0,
-				pageSize: 10,
-				messageList: [],
-				oldMsgList: []
-			}
-		},
-		computed: {
+import {
+  timestampToTime
+} from '@/libs/tools'
+import {
+  getMessageList,
+  hasRead,
+  removeReaded
+} from '@/api/user'
+export default {
+  name: 'message_page',
+  data () {
+    return {
+      listLoading: false,
+      pageNo: 0,
+      pageSize: 10,
+      messageList: [],
+      oldMsgList: []
+    }
+  },
+  computed: {
 
-		},
-		methods: {
-			nextPage() {
-				if (this.oldMsgList.length < this.pageSize) {
-					this.$Message.warning('这是最后一页');
-				} else {
-					this.pageNo++
-					this.getMessageListData()
-				}
+  },
+  methods: {
+    nextPage () {
+      if (this.oldMsgList.length < this.pageSize) {
+        this.$Message.warning('这是最后一页')
+      } else {
+        this.pageNo++
+        this.getMessageListData()
+      }
+    },
+    prevPage () {
+      if (this.pageNo > 0) {
+        this.pageNo--
+        this.getMessageListData()
+      } else {
+        this.$Message.warning('这是第一页')
+      }
+    },
+    delMsg (item) {
+      this.listLoading = true
+      removeReaded(item.id).then(res => {
+        const data = res.data
+        this.listLoading = false
+        if (data.success == 1) {
+          item = ''
+        } else {
+          this.$Message.error(errorMessage)
+        }
+      }).catch(error => {
+        this.listLoading = false
+        alert(error)
+      })
+    },
+    hasReadmsg (item) {
+      hasRead(item.id).then(res => {
+        const data = res.data
+        if (data.success == 1) {
+          item.readed = true
+        } else {
+          this.$Message.error(errorMessage)
+        }
+      }).catch(error => {
+        alert(error)
+      })
+    },
+    getMessageListData () {
+      this.listLoading = true
+      getMessageList(this.pageNo, this.pageSize).then(res => {
+        const {
+          data
+        } = res
+        this.listLoading = false
+        if (data.success == 1) {
+          this.messageList = data.messageList.map(item => {
+            item.time = timestampToTime(item.time)
+            return item
+          })
+          this.oldMsgList = this.messageList
+        } else {
+          this.$Message.error(errorMessage)
+        }
+      }).catch(error => {
+        this.listLoading = false
+        alert(error)
+      })
+    }
 
-			},
-			prevPage() {
-				if (this.pageNo > 0) {
-					this.pageNo--
-					this.getMessageListData()
-				} else {
-					this.$Message.warning('这是第一页');
-				}
-			},
-			delMsg(item) {
-				this.listLoading = true
-				removeReaded(item.id).then(res => {
-					const data = res.data
-					this.listLoading = false
-					if (data.success == 1) {
-						item = ''
-					} else {
-						this.$Message.error(errorMessage)
-					}
-				}).catch(error => {
-					this.listLoading = false
-					alert(error)
-				})
+  },
+  mounted () {
+    // console.log(this.$store.state.user.userInfo)
 
-			},
-			hasReadmsg(item) {
-				hasRead(item.id).then(res => {
-					const data = res.data
-					if (data.success == 1) {
-						item.readed = true
-					} else {
-						this.$Message.error(errorMessage)
-					}
-				}).catch(error => {
-					alert(error)
-				})
-			},
-			getMessageListData() {
-				this.listLoading = true
-				getMessageList(this.pageNo, this.pageSize).then(res => {
-					const {
-						data
-					} = res
-					this.listLoading = false
-					if (data.success == 1) {
-						this.messageList = data.messageList.map(item => {
-							item.time = timestampToTime(item.time)
-							return item
-						})
-						this.oldMsgList = this.messageList
-					} else {
-						this.$Message.error(errorMessage)
-					}
-				}).catch(error => {
-					this.listLoading = false
-					alert(error)
-				})
-			}
+  },
 
-		},
-		mounted() {
-			//console.log(this.$store.state.user.userInfo)
-
-		},
-		activated(){
-			//console.log(this.$route)
-			if(this.$route.meta.keepAlive == false){
-				this.$route.meta.keepAlive = true
-				this.getMessageListData()
-				
-			}
-			
-		},
-		created() {
-			
-			this.getMessageListData()
-
-		}
-// 
-	}
+  created () {
+    this.$route.meta.keepAlive = true
+    this.getMessageListData()
+  }
+//
+}
 </script>
 
 <style lang="less">

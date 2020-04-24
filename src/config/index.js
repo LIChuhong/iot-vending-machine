@@ -18,14 +18,14 @@ export default {
    */
   baseUrl: {
     dev: 'http://vmbe.zrwl-iot.com',
-    pro: 'https://produce.com'
+    pro: 'http://vmbe.zrwl-iot.com'
   },
   /**
    * @description 默认打开的首页的路由name值，默认为home
    */
   homeName: 'home',
-	
-	mHomeName:'m_earnings',
+
+  mHomeName: 'm_earnings',
   /**
    * @description 需要加载的插件
    */
