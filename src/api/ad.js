@@ -21,7 +21,7 @@ export const updateAdvertisement = (advertisement) => {
 }
 
 //获取广告信息
-export const getAdvertisement = (id) => {
+export const getAdvertisement = id => {
 	return axios.request({
 		url: '/api2.0/getAdvertisement',
 		params: {
@@ -32,11 +32,12 @@ export const getAdvertisement = (id) => {
 }
 
 //获取广告列表
-export const getAdvertisementList = (adName,maxId,pageSize) => {
+export const getAdvertisementList = (adName,rtuTypeTag,maxId,pageSize) => {
 	return axios.request({
 		url: '/api2.0/getAdvertisementList',
 		params:{
 			'adName':adName,
+			'rtuTypeTag':rtuTypeTag,
 			'maxId':maxId,
 			'pageSize':pageSize
 		},

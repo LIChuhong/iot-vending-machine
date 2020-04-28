@@ -18,7 +18,7 @@
 		</div>
 		<Modal v-model="showAdEditor" title="编辑广告信息" footer-hide>
 			<!-- <goods-form :goodsId="goodsId">修改</goods-form> -->
-			<ad-form :adId="adId" style="text-align:left">修改</ad-form>
+			<ad-form v-if="showAdEditor" :adId="adId" style="text-align:left">修改</ad-form>
 		</Modal>
 	</div>
 </template>
@@ -73,7 +73,7 @@
 			},
 			getAdList() {
 				this.tableLoading = true
-				getAdvertisementList(this.adName, this.maxId, this.pageSize).then(res => {
+				getAdvertisementList(this.adName,'',this.maxId, this.pageSize).then(res => {
 					const data = res.data
 					this.tableLoading = false
 					if (data.success == 1) {

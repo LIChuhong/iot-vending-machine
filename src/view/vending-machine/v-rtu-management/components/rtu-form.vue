@@ -9,7 +9,8 @@
 				<Input v-model="vmRtu.rtuName" placeholder="请输入设备名称"></Input>
 			</FormItem>
 			<FormItem label="机器类型" prop="rtuTypeId">
-				<Select @on-open-change="openRtuTypeList" :disabled="disEditor" v-model="vmRtu.rtuTypeId" placeholder="请选择设备类型" @on-change="getRtuType">
+				<Select @on-open-change="openRtuTypeList" :disabled="disEditor" v-model="vmRtu.rtuTypeId" placeholder="请选择设备类型"
+				 @on-change="getRtuType">
 					<Option v-for="item in rtuTypeList" :key="item.id" :value="item.id">{{item.rtuTypeName}}</Option>
 				</Select>
 			</FormItem>
@@ -37,18 +38,28 @@
 				<Input v-model="vmRtu.serviceTelePhone" placeholder="请输入售后电话"></Input>
 			</FormItem>
 
+
+			<FormItem label="最多购买" prop="maxBuyCount">
+				<Input type="number" v-model="vmRtu.maxBuyCount"></Input>
+			</FormItem>
+			<FormItem v-show="disAd" label="广告名称" prop="adId">
+				<Input readonly v-model="adName" search enter-button="选择" placeholder="请选择广告名称" @on-search="showAdId = true"></Input>
+			</FormItem>
 			<FormItem label="机器地址" prop="address">
 				<Input v-model="vmRtu.address" :maxlength="255" placeholder="请输入机器所在地址"></Input>
 			</FormItem>
-			<FormItem label="最多购买" prop="maxBuyCount">
-				<Input type="number" v-model="vmRtu.maxBuyCount"></Input>
+			<FormItem label="机器描述" prop="rtuDesc">
+				<Input v-model="vmRtu.rtuDesc" placeholder="请描述一下机器"></Input>
 			</FormItem>
 			<FormItem label="到期时间" prop="expirationDate">
 				<DatePicker :editable="false" type="date" placeholder="请选择设备到期日期" v-model="vmRtu.expirationDate"></DatePicker>
 			</FormItem>
+
 			<FormItem>
 				<Button @click="handleReset('vmRtu')" style="margin-right: 8px">重置</Button>
-				<Button type="primary" @click="handleSubmit('vmRtu')"><slot></slot></Button>
+				<Button type="primary" @click="handleSubmit('vmRtu')">
+					<slot></slot>
+				</Button>
 			</FormItem>
 		</Form>
 		<Modal :title="'当前选择:'+ belongOrgTitle" v-model="showBelongOrg">
@@ -72,6 +83,15 @@
 			<pay-child-list v-if="showPayId" @getPayIdInfo="getPayIdInfo"></pay-child-list>
 
 		</Modal>
+		<Modal title="选择广告名称" v-model="showAdId" footer-hide>
+			<div slot="close" style="float: left;">
+				<Icon size="30" type="ios-arrow-forward" color="rgb(81,90,110)"></Icon>
+				<!-- //<span>Delete confirmation</span> -->
+			</div>
+			<!-- <pay-child-list v-if="showAdId" @getAdIdInfo="getAdIdInfo"></pay-child-list> -->
+			<ad-id-list v-if="showAdId" :rtuTypeTag="rtuTypeTag" @getAdIdInfo="getAdIdInfo"></ad-id-list>
+		
+		</Modal>
 		<Spin fix v-show="showSpin" class="show-spin-style">
 			<Icon type="ios-loading" size="18" class="demo-spin-icon-load"></Icon>
 		</Spin>
@@ -90,6 +110,7 @@
 	} from '@/api/shop'
 	import OrgTree from '@/view/mVending-machine/components/org-tree.vue'
 	import PayChildList from '@/view/components/pay-child-list.vue'
+	import AdIdList from '@/view/components/ad-id-list.vue'
 	import {
 		getNowFormatDate
 	} from '@/libs/tools'
@@ -99,7 +120,8 @@
 		props: ['rtuNumber'],
 		components: {
 			OrgTree,
-			PayChildList
+			PayChildList,
+			AdIdList
 		},
 		data() {
 			const validateRtuName = (rule, value, callback) => {
@@ -120,8 +142,20 @@
 					callback();
 				}
 			};
+			// const validateAdId = (rule, value, callback) => {
+			// 	if (!value || value.replace(/\s*/g, "") == "") {
+			// 		callback();
+			// 	} else if (this.rtuTypeTag == '') {
+			// 		return callback(new Error('请先选择机器类型，再选择广告ID'));
+			// 	} else {
+			// 		callback();
+			// 	}
+			// };
 			return {
-				id:null,
+				disAd:false,
+				adName:'',
+				showAdId:false,
+				id: null,
 				disEditor: false,
 				showSpin: false,
 				showPayId: false,
@@ -148,6 +182,8 @@
 					address: '', //机器地址
 					expirationDate: new Date(), //过期时间
 					maxBuyCount: '3', //最多购买数量
+					adId: null, //广告ID
+					rtuDesc: '', //机器描述
 
 				},
 				//addRtuRules: [],
@@ -218,18 +254,24 @@
 						trigger: 'blur'
 					}],
 					
+
 				}
 
 			}
 		},
-		// watch: {
-		// 	rtuNumber(val) {
-		// 		this.getRtuInfo()
-		// 	}
-		// },
+		watch:{
+			rtuTypeTag(val){
+				if(val == ''){
+					this.disAd = false
+				}else{
+					this.disAd = true
+				}
+			}
+		},
 		methods: {
-			openShopTypeList(val){
-				if(val){
+			
+			openShopTypeList(val) {
+				if (val) {
 					getVMOrgShopTypeList(this.userBelongOrgId).then(res => {
 						const data = res.data
 						if (data.success == 1) {
@@ -242,19 +284,19 @@
 					})
 				}
 			},
-			openRtuTypeList(val){
-				if(val){
+			openRtuTypeList(val) {
+				if (val) {
 					getAllRtuTypeList().then(res => {
-							const data = res.data
-							if (data.success == 1) {
-								//console.log(data)
-								this.rtuTypeList = data.rtuTypeList
-							} else {
-								this.$Message.error(data.errorMessage)
-							}
-						}).catch(error => {
-							alert(error)
-						})
+						const data = res.data
+						if (data.success == 1) {
+							//console.log(data)
+							this.rtuTypeList = data.rtuTypeList
+						} else {
+							this.$Message.error(data.errorMessage)
+						}
+					}).catch(error => {
+						alert(error)
+					})
 				}
 			},
 			getRtuInfo() {
@@ -286,6 +328,10 @@
 								this.vmRtu.productionBatch = rtuSerialNumber[4]
 								this.vmRtu.date = rtuSerialNumber[3]
 								this.vmRtu.rtuTypeId = vmRtu.rtuTypeId
+								this.vmRtu.adId = vmRtu.adId
+								// if(vmRtu.adName){
+									this.adName = vmRtu.adName
+								// }
 							}
 
 						} else {
@@ -302,6 +348,11 @@
 				this.payeeName = row.payeeName
 				this.showPayId = false
 
+			},
+			getAdIdInfo(row){
+				this.vmRtu.adId = row.id
+				this.adName = row.adName
+				this.showAdId = false
 			},
 			getBelongOrgInfo() {
 				//alert(1)
@@ -331,43 +382,44 @@
 				//this.vmRtu.rtuTypeId = val.id
 				//this.rtuTypeTag = val.rtuTypeTag
 			},
-			chooseBelongUser(row) {
-
-			},
-			chooseCollectionUser(row) {
-
-			},
+			
 			handleSubmit(name) {
 				this.$refs[name].validate((valid) => {
 					if (valid) {
 						var expirationDate = ''
-						if(this.vmRtu.expirationDate != null && this.vmRtu.expirationDate != ''){
-							 expirationDate = getNowFormatDate(this.vmRtu.expirationDate, '-')
+						if (this.vmRtu.expirationDate != null && this.vmRtu.expirationDate != '') {
+							expirationDate = getNowFormatDate(this.vmRtu.expirationDate, '-')
 						}
-						
+						if (this.vmRtu.adId != null && this.vmRtu.adId != '') {
+							this.vmRtu.adId = parseInt(this.vmRtu.adId)
+						}
+
 						const vmRtuModal = {
-							'rtuNumber': parseInt(this.vmRtu.rtuNumber),
-							'rtuName': this.vmRtu.rtuName,
-							'rtuSerialNumber': 'l1' + '-' + this.rtuTypeTag + '-' + this.vmRtu.rtuVersion + '-' + getNowFormatDate(this.vmRtu.date, '') + '-' + this.vmRtu.productionBatch + '-' + this.vmRtu.rtuNumber,
-							'rtuTypeId': parseInt(this.vmRtu.rtuTypeId),
-							'belongOrgId': parseInt(this.vmRtu.belongOrgId),
-							'maxBuyCount':parseInt(this.vmRtu.maxBuyCount),
-							'shopType': parseInt(this.vmRtu.shopType),
-							'serviceTelePhone': this.vmRtu.serviceTelePhone,
-							'address': this.vmRtu.address,
-							'payId': this.vmRtu.payId,
-							'expirationDate': expirationDate
+							"rtuNumber": parseInt(this.vmRtu.rtuNumber),
+							"rtuName": this.vmRtu.rtuName,
+							"rtuSerialNumber": 'l1' + '-' + this.rtuTypeTag + '-' + this.vmRtu.rtuVersion + '-' + getNowFormatDate(this.vmRtu
+								.date, '') + '-' + this.vmRtu.productionBatch + '-' + this.vmRtu.rtuNumber,
+							"rtuTypeId": parseInt(this.vmRtu.rtuTypeId),
+							"belongOrgId": parseInt(this.vmRtu.belongOrgId),
+							"maxBuyCount": parseInt(this.vmRtu.maxBuyCount),
+							"shopType": parseInt(this.vmRtu.shopType),
+							"serviceTelePhone": this.vmRtu.serviceTelePhone,
+							"address": this.vmRtu.address,
+							"payId": this.vmRtu.payId,
+							"expirationDate": expirationDate,
+							"adId":this.vmRtu.adId,
+							"rtuDesc":this.vmRtu.rtuDesc
 						}
 						//console.log(vmRtuModal)
 						this.showSpin = true
-						if(this.id != null && this.id != ''){
+						if (this.id != null && this.id != '') {
 							//console.log(this.id)
 							vmRtuModal.id = this.id
 							updateVMRtu(vmRtuModal).then(res => {
 								const data = res.data
 								this.showSpin = false
 								if (data.success == 1) {
-							
+
 									this.$Message.success('修改成功')
 								} else {
 									this.$Message.error(data.errorMessage)
@@ -376,12 +428,12 @@
 								this.showSpin = false
 								alert(error)
 							})
-						}else{
+						} else {
 							addVMRtu(vmRtuModal).then(res => {
 								const data = res.data
 								this.showSpin = false
 								if (data.success == 1) {
-							
+
 									this.$Message.success('添加成功')
 								} else {
 									this.$Message.error(data.errorMessage)
@@ -391,31 +443,22 @@
 								alert(error)
 							})
 						}
-						
-						//this.vmRtu.expirationDate = getNowFormatDate(this.vmRtu.expirationDate,'-')
 
 					} else {
-						this.$Message.error('Fail!');
+						
 					}
 				})
 			},
 			handleReset(name) {
 				this.$refs[name].resetFields();
 			},
-			findBelongUser(value) {
-
-			},
-			findCollectionUser(value) {
-
-			}
-
+			
 		},
 		mounted() {
 			//console.log(1)
 			this.getRtuInfo()
 		},
-		created() {
-		}
+		created() {}
 
 	}
 </script>

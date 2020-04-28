@@ -131,9 +131,9 @@
 			}
 		},
 		watch: {
-			adId(val) {
-				this.getAdInfo()
-			}
+			// adId(val) {
+			// 	this.getAdInfo()
+			// }
 		},
 		methods: {
 			getAdInfo() {
@@ -226,7 +226,11 @@
 			handleRemove(index) {
 				this.ad.adResourcesList.splice(index, 1);
 			}
-		}
+		},
+		mounted() {
+			//console.log(1)
+			this.getAdInfo()
+		},
 	}
 </script>
 

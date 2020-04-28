@@ -9,7 +9,8 @@
 		</div>
 		<Table :loading = "tableLoading" border :columns="shoppingColumns" :data="detailsRows.shoppingCart.buyCommodityList" size="small">
 			<template slot-scope="{ row, index }" slot="price">
-				{{row.price.toFixed(2)}}
+				<div><span :class="{priceStyle:row.promotionPrice>0}">{{row.price.toFixed(2)}}</span></div>
+				<div v-show="row.promotionPrice>0">{{row.promotionPrice.toFixed(2)}}</div>
 			</template>
 			<template slot-scope="{ row, index }" slot="costPrice">
 				{{row.costPrice.toFixed(2)}}
@@ -18,7 +19,9 @@
 				{{row.buyCount-row.finishCount}}
 			</template>
 			<template slot-scope="{ row, index }" slot="totalPrice">
-				{{(row.price*row.buyCount).toFixed(2)}}
+				<!-- {{(row.price*row.buyCount).toFixed(2)}} -->
+				<div v-show="row.promotionPrice<=0">{{(row.price*row.buyCount).toFixed(2)}}</div>
+				<div v-show="row.promotionPrice>0">{{(row.promotionPrice*row.buyCount).toFixed(2)}}</div>
 			</template>
 			<template slot-scope="{ row, index }" slot="totalCostPrice">
 				{{(row.costPrice*row.finishCount).toFixed(2)}}
@@ -111,6 +114,9 @@ export default {
 
 	.shoppingColor {
 		color: red;
+	}
+	.priceStyle{
+		text-decoration:line-through;
 	}
 </style>
 <style>
