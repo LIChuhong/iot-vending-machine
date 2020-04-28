@@ -85,314 +85,282 @@
 
 		</div>
 		<Modal v-model="contentModalValue" fullscreen footer-hide title="订单详情" class="contentModalStyle">
-			<List border item-layout="vertical" size="small">
-				<ListItem>
-					<span>支付订单ID:</span>
-					<p style="float: right;">{{transaction_id}}</p>
-				</ListItem>
-				<ListItem style="overflow: hidden;">
-					<span>商户ID:</span>
-					<p style="float: right;">{{collAccount}}</p>
-				</ListItem>
-				<ListItem style="overflow: hidden;">
-					<span>订单时间:</span>
-					<p style="float: right;">{{orderTime}}</p>
-				</ListItem>
-				<ListItem style="overflow: hidden;">
-					<span>订单状态:</span>
-					<p style="float: right;">{{orderStateLabel}}</p>
-				</ListItem>
-				<ListItem style="overflow: hidden;">
-					<span>机器编号:</span>
-					<p style="float: right;">{{rowRtuNumber}}</p>
-				</ListItem>
-				<ListItem style="overflow: hidden;">
-					<span>用户ID:</span>
-					<p style="float: right;">{{openId}}</p>
-				</ListItem>
-				<ListItem style="overflow: hidden;">
-					<span>支付金额:</span>
-					<p style="float: right;">{{payTotalAmount}}</p>
-				</ListItem>
-				<ListItem style="overflow: hidden;">
-					<span>总成本:</span>
-					<p style="float: right;">{{totalCostAmount}}</p>
-				</ListItem>
-				<ListItem style="overflow: hidden;">
-					<span>应退金额:</span>
-					<p style="float: right;">{{refundTotalAmount}}<span v-show="refundedTotalAmount>0">(已退:{{refundedTotalAmount}})</span><Button :disabled="refundTotalAmount <=  0" @click="refundTotal(refundTotalAmount)" type="warning">退款</Button></p>
-				</ListItem>
-			</List>
+			<div v-if="contentModalValue">
+				<List border item-layout="vertical" size="small">
+					<ListItem>
+						<span>支付订单ID:</span>
+						<p style="float: right;">{{detailsRows.transaction_id}}</p>
+					</ListItem>
+					<ListItem style="overflow: hidden;">
+						<span>商户ID:</span>
+						<p style="float: right;">{{detailsRows.collAccount}}</p>
+					</ListItem>
+					<ListItem style="overflow: hidden;">
+						<span>订单时间:</span>
+						<p style="float: right;">{{detailsRows.orderTime}}</p>
+					</ListItem>
+					<ListItem style="overflow: hidden;">
+						<span>订单状态:</span>
+						<p style="float: right;">{{detailsRows.orderStateLabel}}</p>
+					</ListItem>
+					<ListItem style="overflow: hidden;">
+						<span>机器编号:</span>
+						<p style="float: right;">{{detailsRows.rtuNumber}}</p>
+					</ListItem>
+					<ListItem style="overflow: hidden;">
+						<span>用户ID:</span>
+						<p style="float: right;">{{detailsRows.openId}}</p>
+					</ListItem>
+					<ListItem style="overflow: hidden;">
+						<span>支付金额:</span>
+						<p style="float: right;">{{detailsRows.payTotalAmount}}</p>
+					</ListItem>
+					<ListItem style="overflow: hidden;">
+						<span>总成本:</span>
+						<p style="float: right;">{{detailsRows.totalCostAmount.toFixed(2)}}</p>
+					</ListItem>
 
-			<Table border :columns="mOcontentColumns" :data="buyCommodityList" size="small">
-				<template slot-scope="{ row, index }" slot="price">
-					{{row.price.toFixed(2)}}
-				</template>
-				<template slot-scope="{ row, index }" slot="totalPrice">
-					{{(row.price*row.buyCount).toFixed(2)}}
-				</template>
-			</Table>
+				</List>
 
+				<Table :loading = "tableLoading" border :columns="mOcontentColumns" :data="detailsRows.shoppingCart.buyCommodityList" size="small">
+					<template slot-scope="{ row, index }" slot="price">
+						{{row.price.toFixed(2)}}
+					</template>
+					<template slot-scope="{ row, index }" slot="totalPrice">
+						{{(row.price*row.buyCount).toFixed(2)}}
+					</template>
+					<template slot-scope="{ row, index }" slot="action">
+						<Poptip confirm @on-ok="refundTotal(row)" placement="left">
+							<template slot="title">
+
+								<Icon type="md-remove-circle" @click="redCount(row)" />
+								{{count}}个
+								<Icon type="md-add-circle" @click="addCount(row)" />
+
+							</template>
+							<Button size="small" :disabled="(row.buyCount - row.finishCount - row.refundedCount) > 0 && detailsRows.orderState > 0 ? false : true"
+							 type="warning" @click="setCount(row)">退款</Button>
+
+						</Poptip>
+					</template>
+					<div slot="footer" style="height: 36px;"></div>
+				</Table>
+
+			</div>
 		</Modal>
-		
+
 	</div>
 </template>
 
 <script>
-	import {
-		getOrderList,
-		refund
-	} from '@/api/order'
-	import {
-		getNowFormatDate,
-		timestampToTime
-	} from '@/libs/tools'
-	import {
-		mOrderDealColumns,
-		mOcontentColumns
-	} from '@/data/columns.js'
-	export default {
-		data() {
-			return {
-				orderListLoading: false,
-				//refundTotalBtn: false,//是否显示退款按钮
-				rowRtuNumber: null,//机器编号
-				orderId: null,//订单ID
-				refundTotalAmount: null, //退款金额
-				refundedTotalAmount:0,//已退款金额
-				payTotalAmount: null, //支付金额
-				transaction_id: null, //支付订单ID
-				collAccount: null, //商户订单Id
-				orderTime: null, //订单时间
-				orderStateLabel:null,//订单状态
-				orderState: null, //订单时间
-				openId: null, //用户ID
-				buyCommodityList: [],//购买商品详情列表
-				mOcontentColumns: mOcontentColumns,
-				contentModalValue: false,
-				totalCount: null, //订单数
-				totalAmount: 0, //收入
-				profitAmount: 0, //利润
-				orderIdKey: null, //订单关键字
-				rtuNumber: null, //机器编号
-				cargoNo: null, //货道
-				totalCostAmount: null,//总成本
-				open: false,
-				date: getNowFormatDate(new Date(), '-'),//默认当前时间查找
-				//date: new Date(),
-				mOrderDealColumns: mOrderDealColumns,
-				orderData: [],
-				pageNo: 0, //页码
-				pageSize: 5, //页数
-				buyState: 0, //购买状态
-				buyStateList: [{
-						id: 0,
-						label: '所有订单'
-					},
-					{
-						id: 1,
-						label: '购买成功'
-					},
-					{
-						id: 2,
-						label: '购买失败'
-					},
-				],
-				orderStateList: [{//订单状态列表
-						id: 0,
-						label: '未支付'
-					},
-					{
-						id: 1,
-						label: '已支付'
-					},
-					{
-						id: 2,
-						label: '购买成功'
-					},
-					{
-						id: 3,
-						label: '购买失败'
-					},
-					{
-						id: 4,
-						label: '退款中'
-					},
-					{
-						id: 5,
-						label: '已退款'
-					},
-					{
-						id: 6,
-						label: '退款失败'
-					},
-				],
-			}
+import {
+  getOrderList,
+  refund
+} from '@/api/order'
+import {
+  getNowFormatDate,
+  timestampToTime
+} from '@/libs/tools'
+import {
+  mOrderDealColumns,
+  mOcontentColumns
+} from '@/data/columns.js'
+export default {
+  data () {
+    return {
+      tableLoading: false,
+      detailsRows: '',
+      count: 0,
+      orderListLoading: false,
+      buyCommodityList: [],
+      mOcontentColumns: mOcontentColumns,
+      contentModalValue: false,
+      totalCount: null, // 订单数
+      totalAmount: 0, // 收入
+      profitAmount: 0, // 利润
+      orderIdKey: null, // 订单关键字
+      rtuNumber: null, // 机器编号
+      cargoNo: null, // 货道
+      totalCostAmount: null, // 总成本
+      open: false,
+      date: getNowFormatDate(new Date(), '-'), // 默认当前时间查找
+      // date: new Date(),
+      mOrderDealColumns: mOrderDealColumns,
+      orderData: [],
+      pageNo: 0, // 页码
+      pageSize: 5, // 页数
+      buyState: 0, // 购买状态
+      buyStateList: [{
+        id: 0,
+        label: '所有订单'
+      },
+      {
+        id: 1,
+        label: '购买成功'
+      },
+      {
+        id: 2,
+        label: '购买失败'
+      }
+      ],
+      orderStateList: [{ // 订单状态列表
+        id: 0,
+        label: '未支付'
+      },
+      {
+        id: 1,
+        label: '已支付'
+      },
+      {
+        id: 2,
+        label: '购买成功'
+      },
+      {
+        id: 3,
+        label: '购买失败'
+      },
+      {
+        id: 4,
+        label: '退款中'
+      },
+      {
+        id: 5,
+        label: '已退款'
+      },
+      {
+        id: 6,
+        label: '退款失败'
+      }
+      ]
+    }
+  },
+  watch: {
 
-		},
-		watch:{
-			
-		},
-		methods: {
-			queryOrderList() {//查询订单
-				this.pageNo = 0
-				this.getOrderListData()
-			},
-			refundTotal(refundTotalNum) {//退款
-				let newRefundTotalNum = refundTotalNum
-				this.$Modal.confirm({
-					title: '请确认退款金额',
-					render: (h) => {
-						return h('div', [h('Input', {
-								props: {
-									value: refundTotalNum,
-									autofocus: true,
-									placeholder: '请输入退款金额',
-									type: 'Number',
-								},
-								on: {
-									input: (val) => {
-										newRefundTotalNum = val;
-									},
-									// focus: (val) => {
-									// 	console.log(val)
-									// }
-									
-								}
-							}),
-							h('p', {
-								style: {
-									color: 'red'
-								}
-							}, '退款金额不能少于等于0或大于实际支付金额')
-						])
+  },
+  methods: {
+    redCount (row) {
+      if (this.count > 1) {
+        this.count--
+      }
+    },
+    addCount (row) {
+      if (this.count < row.buyCount - row.finishCount - row.refundedCount) {
+        this.count++
+      }
+    },
+    setCount (row) {
+      this.count = row.buyCount - row.finishCount - row.refundedCount
+    },
+    refundTotal (row) {
+      let refund1 = {
+        'orderId': this.detailsRows.orderId,
+        'refundCargoList': [{
+          'cargoNo': row.cargoNo,
+          'refundCount': this.count
+        }]
+      }
+      this.tableLoading = true
+      refund(refund1).then(res => {
+        const data = res.data
+        this.tableLoading = false
+        if (data.success == 1) {
+          row.refundedCount += this.count
+          this.$Message.success('退款成功')
+        } else {
+          this.$Message.error(data.errorMessage)
+        }
+      }).catch(error => {
+        this.tableLoading = false
+        alert(error)
+      })
+    },
+    queryOrderList () { // 查询订单
+      this.pageNo = 0
+      this.getOrderListData()
+    },
 
-					},
-					loading: true,
-					onOk: () => {
-						//console.log(this.refundTotalNum)
-						if (parseFloat(newRefundTotalNum) <= parseFloat(refundTotalNum)) {
-							refund(this.orderId, parseFloat(newRefundTotalNum)).then(res => {
-								this.$Modal.remove();
-								const data = res.data
-								if (data.success == 1) {
-									// this.detailsRows.refundTotalAmount = data.refundTotalAmount
-									// this.detailsRows.refundTotalAmount = data.refundedTotalAmount
-									this.refundTotalAmount = data.refundTotalAmount
-									//this.refundTotalBtn = false
-									this.refundedTotalAmount = data.refundedTotalAmount
-									this.$Message.success('退款成功')
-								} else {
-									this.$Message.error(data.errorMessage)
-								}
-							}).catch(error => {
-								this.$Modal.remove();
-								alert(error)
-							})
-						} else {
-							this.$Message.error('退款失败')
-							this.$Modal.remove();
-							
-						}
+    getOrderListData () { // 获取订单列表数据
+      if (this.rtuNumber == null || this.rtuNumber == '') {
+        this.$Message.warning('机器编号不能为空')
+        return
+      }
+      // const day = getNowFormatDate(this.date, '')
+      const day = this.date.split('-').join('')
+      const rtuNumber = parseInt(this.rtuNumber)
+      let cargoNo = null
+      if (this.cargoNo != null && this.cargoNo != '') {
+        cargoNo = parseInt(this.cargoNo)
+      }
+      this.orderListLoading = true
+      getOrderList(rtuNumber, this.orderIdKey, null, day, this.buyState, this.pageNo, this.pageSize).then(res => {
+        // console.log(res)
+        const data = res.data
+        this.orderListLoading = false
+        this.orderData = []
+        if (data.success == 1) {
+          this.totalCount = data.totalCount
+          this.totalAmount = data.totalAmount
+          this.profitAmount = data.profitAmount
+          const buyStateList = this.buyStateList
+          this.orderData = data.orderList.map(item => {
+            this.orderStateList.map(i => {
+              if (item.orderState == i.id) {
+                item.orderStateLabel = i.label
+                // if (item.refundTotalAmount > 0 && i.id == 5) {
+                // 	item.orderStateLabel = '部分退款'
+                // }
+              }
+            })
 
-					},
-				
-				});
-			},
-			getOrderListData() {//获取订单列表数据
-				if (this.rtuNumber == null || this.rtuNumber == '') {
-					this.$Message.warning('机器编号不能为空')
-					return
-				}
-				//const day = getNowFormatDate(this.date, '')
-				const day = this.date.split('-').join('')
-				const rtuNumber = parseInt(this.rtuNumber)
-				let cargoNo = null
-				if (this.cargoNo != null && this.cargoNo != '') {
-					cargoNo = parseInt(this.cargoNo)
-				}
-				this.orderListLoading = true
-				getOrderList(rtuNumber, this.orderIdKey, null, day, this.buyState, this.pageNo, this.pageSize).then(res => {
-					//console.log(res)
-					const data = res.data
-					this.orderListLoading = false
-					this.orderData = []
-					if (data.success == 1) {
-						this.totalCount = data.totalCount
-						this.totalAmount = data.totalAmount
-						this.profitAmount = data.profitAmount
-						const buyStateList = this.buyStateList
-						this.orderData = data.orderList.map(item => {
-							this.orderStateList.map(i => {
-								if (item.orderState == i.id) {
-									item.orderStateLabel = i.label
-									if(item.refundTotalAmount > 0 && i.id == 5){
-										item.orderStateLabel = '部分退款'
-									}
-								}
-								
-							})
-							
-							item.payTotalAmount = item.payTotalAmount.toFixed(2)
-							return item
-						})
-					} else {
-						this.$Message.error(data.errorMessage)
+            item.payTotalAmount = item.payTotalAmount.toFixed(2)
+            return item
+          })
+        } else {
+          this.$Message.error(data.errorMessage)
+        }
+      }).catch(error => {
+        this.orderListLoading = false
+        alert(error)
+      })
+    },
+    handleModal (row) { // 显示订单详情
+      // this.detailsRows = row
+      // console.log(row)
 
-					}
-				}).catch(error => {
-					this.orderListLoading = false
-					alert(error)
-				})
-			},
-			handleModal(row) {//显示订单详情
-				this.transaction_id = row.transaction_id
-				this.collAccount = row.collAccount
-				this.rowRtuNumber = row.rtuNumber
-				this.openId = row.openId
-				this.payTotalAmount = row.payTotalAmount
-				this.totalCostAmount = row.totalCostAmount.toFixed(2)
-				this.refundTotalAmount = row.refundTotalAmount.toFixed(2)
-				//this.refundTotalBtn = this.refundTotalAmount > 0
-				this.refundedTotalAmount = row.refundedTotalAmount.toFixed(2)
-				this.orderTime = timestampToTime(row.orderTime)
-				this.orderId = row.orderId
-				this.buyCommodityList = row.shoppingCart.buyCommodityList
-				this.orderStateLabel = row.orderStateLabel
+      row.orderTime = timestampToTime(row.orderTime)
+      this.detailsRows = row
 
-				this.contentModalValue = true
-			},
-			handleClick() {//打开日期选择器
-				this.open = !this.open;
-			},
-			handleChange(date) {//选择时间
-				this.open = false
-				this.date = date;
-			},
-			nextPage() {
-				if (this.orderData.length < this.pageSize) {
-					this.$Message.warning('这是最后一页');
-				} else {
-					this.pageNo++
-					this.getOrderListData()
-				}
+      this.contentModalValue = true
+    },
+    handleClick () { // 打开日期选择器
+      this.open = !this.open
+    },
+    handleChange (date) { // 选择时间
+      this.open = false
+      this.date = date
+    },
+    nextPage () {
+      if (this.orderData.length < this.pageSize) {
+        this.$Message.warning('这是最后一页')
+      } else {
+        this.pageNo++
+        this.getOrderListData()
+      }
+    },
+    prevPage () {
+      if (this.pageNo > 0) {
+        this.pageNo--
+        this.getOrderListData()
+      } else {
+        this.$Message.warning('这是第一页')
+      }
+    }
+  },
+  mounted () {
 
-			},
-			prevPage() {
-				if (this.pageNo > 0) {
-					this.pageNo--
-					this.getOrderListData()
-				} else {
-					this.$Message.warning('这是第一页');
-				}
-			},
-		},
-		mounted() {
+  }
 
-
-		}
-
-	}
+}
 </script>
 
 <style>
@@ -422,6 +390,19 @@
 		.contentModalStyle .ivu-list-item-extra {
 			padding: 0;
 			margin: 0;
+		}
+		.contentModalStyle .ivu-poptip-confirm .ivu-poptip-body .ivu-icon-ios-help-circle {
+			display: none;
+		}
+
+		.contentModalStyle .ivu-poptip-confirm .ivu-poptip-body-message {
+			padding-left: 0;
+		}
+
+		.contentModalStyle .ivu-poptip-confirm .ivu-poptip-body .ivu-icon {
+			font-size: 1.25rem;
+			position: relative;
+			cursor: pointer
 		}
 
 	}
