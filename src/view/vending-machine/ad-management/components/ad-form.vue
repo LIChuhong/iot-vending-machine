@@ -62,176 +62,169 @@
 </template>
 
 <script>
-	import {
-		addAdvertisement,
-		getAdvertisement,
-		updateAdvertisement
-	} from '@/api/ad'
-	import OrgTree from '@/view/mVending-machine/components/org-tree.vue'
-	export default {
-		name: 'ad_form',
-		components: {
-			OrgTree
-		},
-		props: ['adId'],
-		data() {
-			const validateAdName = (rule, value, callback) => {
-				if (!value || value.replace(/\s*/g, "") == "") {
-					return callback(new Error('广告名称不能为空'));
-				} else if (value.length >= 30) {
-					return callback(new Error('输入字符过长'));
+import {
+  addAdvertisement,
+  getAdvertisement,
+  updateAdvertisement
+} from '@/api/ad'
+import OrgTree from '@/view/mVending-machine/components/org-tree.vue'
+export default {
+  name: 'ad_form',
+  components: {
+    OrgTree
+  },
+  props: ['adId'],
+  data () {
+    const validateAdName = (rule, value, callback) => {
+      if (!value || value.replace(/\s*/g, '') == '') {
+        return callback(new Error('广告名称不能为空'))
+      } else if (value.length >= 30) {
+        return callback(new Error('输入字符过长'))
+      } else {
+        callback()
+      }
+    }
+    return {
+      disBeLong: false,
+      belongOrgTitle: '',
+      showBelongOrg: false,
+      belongOrgName: '',
+      belongOrgInfo: '',
+      ad: {
+        playInvTime: '',
+        adName: '',
+        adType: 0,
+        belongOrgId: '',
+        adResourcesList: [{
+          url: '',
+          jumpLink: ''
+        }]
+      },
+      adTypeList: [{
+        id: 0,
+        label: '图片'
+      }, {
+        id: 1,
+        label: '视频'
+      }],
+      adRule: {
+        adName: [{
+          required: true,
+          validator: validateAdName,
+          trigger: 'blur'
+        }],
+        belongOrgId: [{
+          required: true,
+          type: 'number',
+          message: '请选择用户所属组织',
+          trigger: 'change'
+        }],
+        adType: [{
+          required: true,
+          type: 'number',
+          message: '请选择用户角色',
+          trigger: 'change'
+        }]
+      }
 
-				} else {
-					callback();
-				}
-			};
-			return {
-				disBeLong: false,
-				belongOrgTitle: '',
-				showBelongOrg: false,
-				belongOrgName: '',
-				belongOrgInfo: '',
-				ad: {
-					playInvTime: '',
-					adName: '',
-					adType: 0,
-					belongOrgId: '',
-					adResourcesList: [{
-						url: '',
-						jumpLink: ''
-					}]
-				},
-				adTypeList: [{
-					id: 0,
-					label: '图片'
-				}, {
-					id: 1,
-					label: '视频'
-				}],
-				adRule: {
-					adName: [{
-						required: true,
-						validator: validateAdName,
-						trigger: 'blur'
-					}],
-					belongOrgId: [{
-						required: true,
-						type: 'number',
-						message: '请选择用户所属组织',
-						trigger: 'change'
-					}],
-					adType: [{
-						required: true,
-						type: 'number',
-						message: '请选择用户角色',
-						trigger: 'change'
-					}],
-				}
+    }
+  },
+  watch: {
+    // adId(val) {
+    // 	this.getAdInfo()
+    // }
+  },
+  methods: {
+    getAdInfo () {
+      if (this.adId != null && this.adId != '') {
+        this.disBeLong = true
+        getAdvertisement(this.adId).then(res => {
+          const data = res.data
+          console.log(data)
+          if (data.success == 1) {
+            const advertisement = data.advertisement
+            this.ad.adName = advertisement.adName
+            this.ad.adType = advertisement.adType
+            this.ad.belongOrgId = advertisement.belongOrgId
+            this.ad.adResourcesList = advertisement.adResourcesList
+            this.belongOrgName = advertisement.orgName
+            this.ad.playInvTime = advertisement.playInvTime
+          } else {
 
-			}
-		},
-		watch: {
-			// adId(val) {
-			// 	this.getAdInfo()
-			// }
-		},
-		methods: {
-			getAdInfo() {
-				if (this.adId != null && this.adId != '') {
-					this.disBeLong = true
-					getAdvertisement(this.adId).then(res => {
-						const data = res.data
-						console.log(data)
-						if (data.success == 1) {
-							const advertisement = data.advertisement
-							this.ad.adName = advertisement.adName
-							this.ad.adType = advertisement.adType
-							this.ad.belongOrgId = advertisement.belongOrgId
-							this.ad.adResourcesList = advertisement.adResourcesList
-							this.belongOrgName = advertisement.orgName
-							this.ad.playInvTime = advertisement.playInvTime
-						} else {
-
-						}
-
-					}).catch(error => {
-						alert(error)
-					})
-				}
-
-			},
-			showBelongOrgList() {
-				//alert(1)
-				this.belongOrgTitle = this.belongOrgName
-				this.showBelongOrg = true
-
-			},
-			showBelongOrgInfo(data) {
-				//console.log(JSON.stringify(data))
-				this.belongOrgInfo = data
-				this.belongOrgTitle = data[0].orgName
-				//this.belongOrgTitle = '当前选择: ' + val[0].orgName
-			},
-			belongOrgOk() {
-				//const selectedNodes = this.$refs.belongOrgTree.getSelectedNodes();
-				this.ad.belongOrgId = this.belongOrgInfo[0].id
-				this.belongOrgName = this.belongOrgInfo[0].orgName
-				this.showBelongOrg = false
-			},
-			handleSubmit(name) {
-				this.$refs[name].validate((valid) => {
-					if (valid) {
-						this.ad.playInvTime = this.ad.playInvTime == null || this.ad.playInvTime == '' ? null : parseInt(this.ad.playInvTime)
-						if (this.adId != null && this.adId != '') {
-							this.ad.id = this.adId
-							updateAdvertisement(this.ad).then(res => {
-								const data = res.data
-								if (data.success == 1) {
-									this.$Message.success('修改成功')
-								} else {
-									this.$Message.error(data.errorMessage)
-								}
-							}).catch(error => {
-								alert(error)
-							})
-
-						} else {
-							addAdvertisement(this.ad).then(res => {
-								const data = res.data
-								if (data.success == 1) {
-									this.$Message.success('添加成功')
-								} else {
-									this.$Message.error(data.errorMessage)
-								}
-							}).catch(error => {
-								alert(error)
-							})
-
-						}
-					} else {
-						//this.$Message.error('Fail!');
-					}
-				})
-
-			},
-			handleReset(name) {
-				this.$refs[name].resetFields();
-			},
-			handleAdd() {
-				this.ad.adResourcesList.push({
-					url: '',
-					jumpLink: ''
-				});
-			},
-			handleRemove(index) {
-				this.ad.adResourcesList.splice(index, 1);
-			}
-		},
-		mounted() {
-			//console.log(1)
-			this.getAdInfo()
-		},
-	}
+          }
+        }).catch(error => {
+          alert(error)
+        })
+      }
+    },
+    showBelongOrgList () {
+      // alert(1)
+      this.belongOrgTitle = this.belongOrgName
+      this.showBelongOrg = true
+    },
+    showBelongOrgInfo (data) {
+      // console.log(JSON.stringify(data))
+      this.belongOrgInfo = data
+      this.belongOrgTitle = data[0].orgName
+      // this.belongOrgTitle = '当前选择: ' + val[0].orgName
+    },
+    belongOrgOk () {
+      // const selectedNodes = this.$refs.belongOrgTree.getSelectedNodes();
+      this.ad.belongOrgId = this.belongOrgInfo[0].id
+      this.belongOrgName = this.belongOrgInfo[0].orgName
+      this.showBelongOrg = false
+    },
+    handleSubmit (name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          this.ad.playInvTime = this.ad.playInvTime == null || this.ad.playInvTime == '' ? null : parseInt(this.ad.playInvTime)
+          if (this.adId != null && this.adId != '') {
+            this.ad.id = this.adId
+            updateAdvertisement(this.ad).then(res => {
+              const data = res.data
+              if (data.success == 1) {
+                this.$Message.success('修改成功')
+              } else {
+                this.$Message.error(data.errorMessage)
+              }
+            }).catch(error => {
+              alert(error)
+            })
+          } else {
+            addAdvertisement(this.ad).then(res => {
+              const data = res.data
+              if (data.success == 1) {
+                this.$Message.success('添加成功')
+              } else {
+                this.$Message.error(data.errorMessage)
+              }
+            }).catch(error => {
+              alert(error)
+            })
+          }
+        } else {
+          // this.$Message.error('Fail!');
+        }
+      })
+    },
+    handleReset (name) {
+      this.$refs[name].resetFields()
+    },
+    handleAdd () {
+      this.ad.adResourcesList.push({
+        url: '',
+        jumpLink: ''
+      })
+    },
+    handleRemove (index) {
+      this.ad.adResourcesList.splice(index, 1)
+    }
+  },
+  mounted () {
+    // console.log(1)
+    this.getAdInfo()
+  }
+}
 </script>
 
 <style>

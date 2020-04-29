@@ -1,46 +1,46 @@
 import axios from '@/libs/api.request'
 
-//添加广告
+// 添加广告
 export const addAdvertisement = (advertisement) => {
-	//console.log(vmOrg)
+  // console.log(vmOrg)
   return axios.request({
   	url: '/api2.0/addAdvertisement',
-		data:advertisement,
+    data: advertisement,
   	method: 'post'
   })
 }
 
-//更新广告
+// 更新广告
 export const updateAdvertisement = (advertisement) => {
-	//console.log(vmOrg)
+  // console.log(vmOrg)
   return axios.request({
   	url: '/api2.0/updateAdvertisement',
-		data:advertisement,
+    data: advertisement,
   	method: 'post'
   })
 }
 
-//获取广告信息
+// 获取广告信息
 export const getAdvertisement = id => {
-	return axios.request({
-		url: '/api2.0/getAdvertisement',
-		params: {
-			'id':id
-		},
-		method: 'get'
-	})
+  return axios.request({
+    url: '/api2.0/getAdvertisement',
+    params: {
+      'id': id
+    },
+    method: 'get'
+  })
 }
 
-//获取广告列表
-export const getAdvertisementList = (adName,rtuTypeTag,maxId,pageSize) => {
-	return axios.request({
-		url: '/api2.0/getAdvertisementList',
-		params:{
-			'adName':adName,
-			'rtuTypeTag':rtuTypeTag,
-			'maxId':maxId,
-			'pageSize':pageSize
-		},
-		method: 'get'
-	})
+// 获取广告列表
+export const getAdvertisementList = (adName, rtuTypeTag, maxId, pageSize) => {
+  return axios.request({
+    url: '/api2.0/getAdvertisementList',
+    params: {
+      'adName': adName,
+      'rtuTypeTag': rtuTypeTag,
+      'maxId': maxId,
+      'pageSize': pageSize
+    },
+    method: 'get'
+  })
 }

@@ -24,96 +24,90 @@
 </template>
 
 <script>
-	import AdForm from '../components/ad-form.vue'
-	import {
-		adColumns
-	} from '@/data/columns1.js'
-	import {
-		getAdvertisementList
-	} from '@/api/ad'
-	export default {
-		name: 'ad_list',
-		components: {
-			AdForm
-		},
-		data() {
-			return {
-				adId: null,
-				tableLoading: false,
-				adName: '',
-				maxId: 0,
-				pageSize: 10,
-				showAdEditor: false,
-				adColumns: adColumns,
-				adList: [],
-				prevId: [0],
+import AdForm from '../components/ad-form.vue'
+import {
+  adColumns
+} from '@/data/columns1.js'
+import {
+  getAdvertisementList
+} from '@/api/ad'
+export default {
+  name: 'ad_list',
+  components: {
+    AdForm
+  },
+  data () {
+    return {
+      adId: null,
+      tableLoading: false,
+      adName: '',
+      maxId: 0,
+      pageSize: 10,
+      showAdEditor: false,
+      adColumns: adColumns,
+      adList: [],
+      prevId: [0]
 
-			}
-		},
-		methods: {
-			nextPage() {
-				if (this.adList.length < this.pageSize) {
-					this.$Message.warning('这是最后一页');
-				} else {
-					//console.log(this.maxId)
-					this.prevId.push(this.maxId)
-					this.getAdList()
-				}
+    }
+  },
+  methods: {
+    nextPage () {
+      if (this.adList.length < this.pageSize) {
+        this.$Message.warning('这是最后一页')
+      } else {
+        // console.log(this.maxId)
+        this.prevId.push(this.maxId)
+        this.getAdList()
+      }
+    },
+    prevPage () {
+      if (this.prevId.length > 1) {
+        this.prevId.pop()
+        this.maxId = this.prevId[this.prevId.length - 1]
+        this.getAdList()
+      } else {
+        this.$Message.warning('这是第一页')
+      }
+    },
+    getAdList () {
+      this.tableLoading = true
+      getAdvertisementList(this.adName, '', this.maxId, this.pageSize).then(res => {
+        const data = res.data
+        this.tableLoading = false
+        if (data.success == 1) {
+          // console.log(data)
+          this.adList = data.advertisementList.map(item => {
+            if (this.maxId < item.id) {
+              this.maxId = item.id
+            }
+            return item
+          })
+        } else {
+          this.$Message.error(data.errorMessage)
+        }
+      }).catch(error => {
+        this.tableLoading = false
+        alert(error)
+      })
+    },
+    findAdList (adName) {
+      this.adName = adName
+      this.maxId = 0
+      this.prevId = [0]
+      this.getAdList()
+    },
+    adEditor (row) {
+      this.adId = row.id
+      this.showAdEditor = true
+    }
 
-			},
-			prevPage() {
-				if (this.prevId.length > 1) {
-					this.prevId.pop()
-					this.maxId = this.prevId[this.prevId.length - 1]
-					this.getAdList()
-				} else {
-					this.$Message.warning('这是第一页');
-				}
+  },
+  created () {
+    this.$route.meta.keepAlive = true
+    this.getAdList()
+  }
 
-			},
-			getAdList() {
-				this.tableLoading = true
-				getAdvertisementList(this.adName,'',this.maxId, this.pageSize).then(res => {
-					const data = res.data
-					this.tableLoading = false
-					if (data.success == 1) {
-						//console.log(data)
-						this.adList = data.advertisementList.map(item => {
-							if (this.maxId < item.id) {
-								this.maxId = item.id
-							}
-							return item
-						})
-
-					} else {
-
-						this.$Message.error(data.errorMessage)
-					}
-				}).catch(error => {
-					this.tableLoading = false
-					alert(error)
-				})
-			},
-			findAdList(adName) {
-				this.adName = adName
-				this.maxId = 0
-				this.prevId = [0]
-				this.getAdList()
-
-			},
-			adEditor(row) {
-				this.adId = row.id
-				this.showAdEditor = true
-
-			}
-
-		},
-		created() {
-			this.$route.meta.keepAlive = true
-			this.getAdList()
-		}
-
-	}
+}
 </script>
 
 <style>
