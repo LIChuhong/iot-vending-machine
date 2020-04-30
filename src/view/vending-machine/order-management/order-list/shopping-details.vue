@@ -18,11 +18,11 @@
 			<template slot-scope="{ row, index }" slot="failureCount">
 				{{row.buyCount-row.finishCount}}
 			</template>
-			<template slot-scope="{ row, index }" slot="totalPrice">
-				<!-- {{(row.price*row.buyCount).toFixed(2)}} -->
+			<!-- <template slot-scope="{ row, index }" slot="totalPrice">
+
 				<div v-show="row.promotionPrice<=0">{{(row.price*row.buyCount).toFixed(2)}}</div>
 				<div v-show="row.promotionPrice>0">{{(row.promotionPrice*row.buyCount).toFixed(2)}}</div>
-			</template>
+			</template> -->
 			<template slot-scope="{ row, index }" slot="totalCostPrice">
 				{{(row.costPrice*row.finishCount).toFixed(2)}}
 			</template>
@@ -43,6 +43,12 @@
 			<div slot="footer" style="height: 36px;"></div>
 
 		</Table>
+		<div style="text-align: right;">
+			<span style="padding-left: 30px;">支付:<span class="shoppingColor">{{detailsRows.payTotalAmount}}</span></span>
+			<span style="padding-left: 30px;">实收:<span class="shoppingColor">{{detailsRows.totalAmount.toFixed(2)}}</span></span>
+			<span style="padding-left: 30px;">成本:<span class="shoppingColor">{{detailsRows.totalCostAmount.toFixed(2)}}</span></span>
+			<span style="padding-left: 30px;">已退款:<span class="shoppingColor">{{detailsRows.refundedTotalAmount.toFixed(2)}}</span></span>
+		</div>
 	</div>
 </template>
 
@@ -78,6 +84,7 @@ export default {
       this.count = row.buyCount - row.finishCount - row.refundedCount
     },
     refundTotal (row) {
+      // console.log(row._index)
       let refund1 = {
         'orderId': this.detailsRows.orderId,
         'refundCargoList': [{
@@ -90,7 +97,12 @@ export default {
         const data = res.data
         this.tableLoading = false
         if (data.success == 1) {
+		 this.detailsRows.shoppingCart.buyCommodityList[row._index].refundedCount += this.count
           row.refundedCount += this.count
+		  this.count--
+		  this.detailsRows.totalAmount = data.totalAmount
+		  this.detailsRows.totalCostAmount = data.totalCostAmount
+		  this.detailsRows.refundedTotalAmount = data.refundedTotalAmount
           this.$Message.success('退款成功')
         } else {
           this.$Message.error(data.errorMessage)

@@ -384,30 +384,30 @@ export const shoppingColumns = [{
   resizable: true
 
 },
-{
-  title: '总价',
-  slot: 'totalPrice',
-  align: 'center',
-  width: 100,
-  resizable: true
-
-},
-{
-  title: '总成本',
-  slot: 'totalCostPrice',
-  align: 'center',
-  width: 100,
-  resizable: true
-
-},
-// 	{
-// 		title: '应退金额',
-// 		slot: 'refund',
-// 		align: 'center',
-// 		width: 100,
-// 		resizable: true
+// {
+//   title: '总价',
+//   slot: 'totalPrice',
+//   align: 'center',
+//   width: 100,
+//   resizable: true
 //
-// 	},
+// },
+// {
+//   title: '总成本',
+//   slot: 'totalCostPrice',
+//   align: 'center',
+//   width: 100,
+//   resizable: true
+//
+// },
+{
+  title: '已退',
+  key: 'refundedCount',
+  align: 'center',
+  width: 100,
+  resizable: true
+
+},
 {
   title: '货道',
   key: 'cargoNo',
@@ -805,9 +805,15 @@ export const mOcontentColumns = [{
   align: 'center'
   // tooltip: true,
 },
+// {
+//   title: '总价',
+//   slot: 'totalPrice',
+//   align: 'center'
+//   // tooltip: true,
+// },
 {
-  title: '总价',
-  slot: 'totalPrice',
+  title: '已退',
+  key: 'refundedCount',
   align: 'center'
   // tooltip: true,
 },

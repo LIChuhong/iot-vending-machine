@@ -111,13 +111,42 @@
 						<span>用户ID:</span>
 						<p style="float: right;">{{detailsRows.openId}}</p>
 					</ListItem>
-					<ListItem style="overflow: hidden;">
-						<span>支付金额:</span>
+					<!-- <ListItem style="overflow: hidden;">
+
+						<span>总支付:</span>
 						<p style="float: right;">{{detailsRows.payTotalAmount}}</p>
+					</ListItem>
+					<ListItem style="overflow: hidden;">
+						<span>总实收:</span>
+						<p style="float: right;">{{detailsRows.totalAmount.toFixed(2)}}</p>
 					</ListItem>
 					<ListItem style="overflow: hidden;">
 						<span>总成本:</span>
 						<p style="float: right;">{{detailsRows.totalCostAmount.toFixed(2)}}</p>
+					</ListItem>
+					<ListItem style="overflow: hidden;">
+						<span>已退款:</span>
+						<p style="float: right;">{{detailsRows.refundedTotalAmount.toFixed(2)}}</p>
+					</ListItem> -->
+					<ListItem style="overflow: hidden;">
+						<Row style="text-align: center;">
+							<Col span="6">
+							<p>支付</p>
+							<p style="color: red;">{{detailsRows.payTotalAmount}}</p>
+							</Col>
+							<Col span="6">
+							<p>实收</p>
+							<p style="color: red;">{{detailsRows.totalAmount.toFixed(2)}}</p>
+							</Col>
+							<Col span="6">
+							<p>成本</p>
+							<p style="color: red;">{{detailsRows.totalCostAmount.toFixed(2)}}</p>
+							</Col>
+							<Col span="6">
+							<p>已退款</p>
+							<p style="color: red;">{{detailsRows.refundedTotalAmount.toFixed(2)}}</p>
+							</Col>
+						</Row>
 					</ListItem>
 
 				</List>
@@ -129,11 +158,10 @@
 						<div><span :class="{priceStyle:row.promotionPrice>0}">{{row.price.toFixed(2)}}</span></div>
 						<div v-show="row.promotionPrice>0">{{row.promotionPrice.toFixed(2)}}</div>
 					</template>
-					<template slot-scope="{ row, index }" slot="totalPrice">
-						<!-- {{(row.price*row.buyCount).toFixed(2)}} -->
+					<!-- <template slot-scope="{ row, index }" slot="totalPrice">
 						<div v-show="row.promotionPrice<=0">{{(row.price*row.buyCount).toFixed(2)}}</div>
 						<div v-show="row.promotionPrice>0">{{(row.promotionPrice*row.buyCount).toFixed(2)}}</div>
-					</template>
+					</template> -->
 					<template slot-scope="{ row, index }" slot="action">
 						<Poptip confirm @on-ok="refundTotal(row)" placement="left">
 							<template slot="title">
@@ -269,7 +297,12 @@ export default {
         const data = res.data
         this.tableLoading = false
         if (data.success == 1) {
-          row.refundedCount += this.count
+          this.detailsRows.shoppingCart.buyCommodityList[row._index].refundedCount += this.count
+						 row.refundedCount += this.count
+						 this.count--
+						 this.detailsRows.totalAmount = data.totalAmount
+						 this.detailsRows.totalCostAmount = data.totalCostAmount
+						 this.detailsRows.refundedTotalAmount = data.refundedTotalAmount
           this.$Message.success('退款成功')
         } else {
           this.$Message.error(data.errorMessage)
@@ -410,8 +443,9 @@ export default {
 			position: relative;
 			cursor: pointer
 		}
-		.priceStyle{
-			text-decoration:line-through;
+
+		.priceStyle {
+			text-decoration: line-through;
 		}
 
 	}

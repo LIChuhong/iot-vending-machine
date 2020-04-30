@@ -58,7 +58,7 @@ export const getVMRtuDayIncomeSummaryList = (startDay, endDay, rtuNumber) => {
 
 // 退款
 export const refund = (refund) => {
-  console.log(refund)
+  // console.log(refund)
   return axios.request({
     url: '/api2.0/refund',
     data: refund,
