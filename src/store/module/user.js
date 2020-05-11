@@ -98,14 +98,17 @@ export default {
 			commit
 		}, {
 			userName,
-			password
+			password,
+			verCode
 		}) {
 			setTagNavListInLocalstorage([])
 			userName = userName.trim()
 			return new Promise((resolve, reject) => {
 				login({
 					userName,
-					password
+					password,
+					verCode
+					
 				}).then(res => {
 					const data = res.data
 					commit('setToken', data.token)

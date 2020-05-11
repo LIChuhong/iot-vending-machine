@@ -7,7 +7,9 @@
 		<div class="login-con">
 			<Card icon="log-in" title="欢迎登录" :bordered="false">
 				<div class="form-con">
-					<login-form @on-success-valid="handleSubmit" @on-focus ="focus"></login-form>
+					<!-- <login-form @on-success-valid="handleSubmit" @on-focus ="focus"></login-form> -->
+					<login-form v-if="!showLoginForm1" @on-success-valid="handleSubmit"></login-form>
+					<login-form1 v-if="showLoginForm1" @on-success-valid="handleSubmit"></login-form1>
 				</div>
 				<p style="color: #FF0000;text-align: center;">{{tips}}</p>
 				<!-- <Spin fix>
@@ -21,18 +23,23 @@
 
 <script>
 	import data from '@/data/data'
+	// import LoginForm from '_c/login-form'
 	import LoginForm from '_c/login-form'
+	import LoginForm1 from '_c/login-form1'
 	import {
 		mapActions
 	} from 'vuex'
 	export default {
 		components: {
-			LoginForm
+			LoginForm,
+			LoginForm1
+			
 		},
 		data() {
 			return {
 				//msg: "哈哈"
-				tips: ''
+				tips: '',
+				showLoginForm1:false,
 			}
 		},
 		methods: {
@@ -45,13 +52,15 @@
 			},
 			handleSubmit({
 				userName,
-				password
+				password,
+				verCode
 			}) {
 				//alert(1)
 				this.tips = ''
 				this.handleLogin({
 					userName,
-					password
+					password,
+					verCode
 				}).then(res => {
 					//console.log()
 					const data1 = res.data
@@ -92,10 +101,30 @@
 					this.tips = error
 				})
 			},
+			handleSubmitFunction(userName, password) {
+				 // alert(userName+password)
+				 var verCode = ''
+				this.handleSubmit({userName,password,verCode})
+			}
 
 
 		},
 		mounted() {
+			//将要给原生调用的方法挂载到 window 上面
+			window.handleSubmitFunction = this.handleSubmitFunction
+			//this.handleSubmitFunction('superadmin',123,'')
+			var ua = navigator.userAgent.toLowerCase()
+			// /alert(1)
+			// console.log(this.showLoginForm1)
+			if (ua.indexOf('zrwlweb') > -1) {
+				// console.log(this.showLoginForm1)
+				this.showLoginForm1 = true
+				//将要给原生调用的方法挂载到 window 上面
+			}else{
+				// console.log(this.showLoginForm1 + 1)
+				 // this.showLoginForm1 = false
+				 this.showLoginForm1 = false
+			}
 
 			//window.updateTokenFunction = this.updateTokenFunction
 		}

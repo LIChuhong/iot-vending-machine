@@ -2,22 +2,41 @@ import axios from '@/libs/api.request'
 
 export const login = ({
 	userName,
-	password
+	password,
+	verCode
 }) => {
 	// const data = {
 	// 	userName,
 	// 	password
 	// }
 	//alert(userName + password)
-	const data = new URLSearchParams()
-	data.append('userName', userName)
-	data.append('password', password)
+	let data = new URLSearchParams()
+	let url = ''
+	if (verCode == '' || verCode == null) {
+		data.append('userName', userName)
+		data.append('password', password)
+		url = '/api2.0/mLogin'
+	} else {
+		data.append('userName', userName)
+		data.append('password', password)
+		data.append('verCode', verCode)
+		url = '/api2.0/login'
+	}
 	return axios.request({
-		url: '/api2.0/mLogin',
+		url: url,
 		data,
-		method: 'post'
+		method: 'post',
+		withCredentials: true
 	})
 }
+
+//获取验证码
+// export const verifyCode = () => {
+// return axios.request({
+// 		url: '/verifyCode',
+// 		method: 'get'
+// 	})
+// }
 
 export const getUserInfo = (token) => {
 	return axios.request({
