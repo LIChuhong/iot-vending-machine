@@ -17,8 +17,8 @@ export default {
    * @description api请求基础路径
    */
   baseUrl: {
-    dev: 'http://vmbe.zrwl-iot.com',
-    pro: 'http://vmbe.zrwl-iot.com'
+    dev: 'https://vmbe.zrwl-iot.com:8443',
+    pro: 'https://vmbe.zrwl-iot.com:8443'
   },
   /**
    * @description 默认打开的首页的路由name值，默认为home
