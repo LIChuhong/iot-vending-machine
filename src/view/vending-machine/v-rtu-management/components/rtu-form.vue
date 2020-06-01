@@ -158,7 +158,7 @@ export default {
       disEditor: false,
       showSpin: false,
       showPayId: false,
-      userBelongOrgId: this.$store.state.user.userBelongOrgId,
+      userBelongOrgId: this.$store.state.user.userInfo.orgId,
       belongOrgTitle: '',
       showBelongOrg: false,
       belongOrgName: '',

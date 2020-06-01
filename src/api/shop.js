@@ -49,7 +49,7 @@ export const getVMOrgShopTypeList = (belongOrgId) => {
 	return axios.request({
 		url: '/api2.0/getVMOrgShopTypeList',
 		params: {
-			'belongOrgId': belongOrgId,
+			'orgId': belongOrgId,
 			
 		},
 		method: 'get'
