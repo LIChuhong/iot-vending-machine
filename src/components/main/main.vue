@@ -211,6 +211,7 @@
 				return list
 			},
 			menuList() {
+				
 				return this.$store.getters.menuList
 			},
 			local() {
@@ -222,6 +223,7 @@
 			unreadCount() {
 				return this.$store.state.user.unreadCount
 			}
+			
 		},
 		methods: {
 			...mapMutations([

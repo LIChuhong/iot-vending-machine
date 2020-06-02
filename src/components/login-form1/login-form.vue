@@ -59,8 +59,8 @@ export default {
     return {
 			//verCodeSrc:this.$config.baseUrl.dev+'/verifycode?from=3',
       form: {
-        userName: 'zrwladmin',
-        password: '123',
+        userName: '',
+        password: '',
 				verCode:''
       }
     }

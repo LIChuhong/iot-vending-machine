@@ -72,8 +72,8 @@
 				verCodeSrc: this.$config.baseUrl.dev + '/verifyCode?from=3',
 				// verCodeSrc:'',
 				form: {
-					 userName: 'zrwladmin',
-					password: '123',
+					 userName: '',
+					password: '',
 					verCode: ''
 				}
 			}
