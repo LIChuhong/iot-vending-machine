@@ -142,7 +142,7 @@
 				replenishment: true,
 				collapsed: false,
 				minLogo,
-				maxLogo,
+				maxLogo:this.$store.state.user.userInfo.orgLogoUrl,
 				isFullscreen: false,
 				show: 'pc',
 				drawerValue: false,

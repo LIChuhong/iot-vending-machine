@@ -11,6 +11,19 @@
 					<Radio :disabled="disParentOrgId" v-for="item in orgTypeList" :key="item.id" :label="item.id">{{item.orgTypeName}}</Radio>
 				</RadioGroup>
 			</FormItem>
+			<FormItem v-show="uploadHeaders.From == 0" label="组织Logo" prop="orgLogoUrl">
+			
+				<Upload type="drag" ref="upload" :show-upload-list="false" :on-success="handleSuccess" :format="['jpg','jpeg','png']"
+				 :max-size="50" :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :action="uploadAction" style="display: inline-block;width:312px;float: left;"
+				 :headers="uploadHeaders" :on-error="handleError">
+					<div style="width: 312px;height:85px;line-height: 85px;">
+						<Icon type="ios-camera" size="20"></Icon>
+						<img :src="vmOrg.orgLogoUrl" style="height: 100%;position: absolute;top:0;left: 0;" />
+					</div>
+				</Upload>
+				<p style="text-align:left;color: red;font-size: 12px;">建议上传图片大小为312px*85px，图片大小不超过50k的图片</p>
+			
+			</FormItem>
 			<FormItem prop="parentOrgId" label="所属组织">
 				<!-- {{belongOrgName}} -->
 				<Input :disabled="disParentOrgId" readonly v-model="belongOrgName" search enter-button="选择" placeholder="请选择所属组织"
@@ -70,6 +83,7 @@
 		getVMOrg,
 		updateVMOrg
 	} from '@/api/org'
+	import data from '@/data/data'
 	import OrgTree from '@/view/mVending-machine/components/org-tree.vue'
 	export default {
 		name: 'cooper_form',
@@ -132,6 +146,12 @@
 					orgDesc: '', //组织描述
 					orgLogoUrl: '/uploadFile/defaultImages/orgLogo.png' //默认组织Logo
 				},
+				uploadAction: this.$config.baseUrl.dev + '/api2.0/uploadFiles',
+				uploadHeaders: {
+					From: data.interface,
+					Token: this.$store.state.user.token,
+					Dir: '/uploadFile/orgLogoImages/'
+				},
 				vmOrgRules: {
 					orgName: [{
 						required: true,
@@ -180,6 +200,23 @@
 			}
 		},
 		methods: {
+			handleSuccess(response) {
+				//console.log(response)
+				if (response.success == 1) {
+					this.vmOrg.orgLogoUrl = response.srcList.toString()
+				} else {
+					this.$Message.error(response.errorMessage);
+				}
+			},
+			handleError(error) {
+				this.$Message.error(error);
+			},
+			handleFormatError(file) {
+				this.$Message.warning('上传格式错误，请选择jpg/jpeg/png图片');
+			},
+			handleMaxSize(file) {
+				this.$Message.warning('上传图片过大，请选择少于50kb的图片上传');
+			},
 			getVMOrgInfo() { //获取组织信息
 				if (this.orgId != null && this.orgId != '') {
 					this.disParentOrgId = true

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div style="overflow: hidden;padding:0.625rem 0.625rem;">
-			<Input search enter-button placeholder="请输入组织名称关键字" @on-search="findOrgList" style="width: 60%;float: left;" />
+			<Input search enter-button placeholder="请输入组织名称关键字" @on-search="findOrgList" style="width:18.75rem;float: left;" />
 		</div>
 		<Table :loading="tableLoading" border :columns="coopListColumns" :data="coopListData" size="small" class="mCooperListTableStyle">
 
