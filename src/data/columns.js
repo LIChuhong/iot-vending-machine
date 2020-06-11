@@ -914,6 +914,12 @@ export const coopListColumns = [{
   // tooltip: true,
 },
 {
+  title: '组织Logo',
+  slot: 'orgLogoUrl',
+  align: 'center'
+  // tooltip: true,
+},
+{
   title: '类型',
   key: 'orgTypeName',
   align: 'center'

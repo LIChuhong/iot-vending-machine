@@ -4,7 +4,10 @@
 			<Input search enter-button placeholder="请输入组织名称关键字" @on-search="findOrgList" style="width:18.75rem;float: left;" />
 		</div>
 		<Table :loading="tableLoading" border :columns="coopListColumns" :data="coopListData" size="small" class="mCooperListTableStyle">
+			<template slot-scope="{ row, index }" slot="orgLogoUrl">
+				<img :src="row.orgLogoUrl" style="width: 100%;" />
 
+			</template>
 			<template slot-scope="{ row, index }" slot="action">
 				<Button type="primary" size="small" icon="md-create" @click="orgEditor(row)" style="margin-right:0.3125rem"></Button>
 				<i-switch :disabled="row.disabled" :loading="row.switchLoading" v-model="row.isEnable" @on-change="changeSwitch(row)" />
