@@ -142,9 +142,10 @@
 		}
 
 		.login-con {
-			/* width: 200px; */
-			right: 5%;
-			margin: 0 5% 0 5%;
+			width: 80%;
+			top:50%;
+			right: 10%;
+			/* margin: 0 5% 0 5%; */
 		}
 	}
 </style>
