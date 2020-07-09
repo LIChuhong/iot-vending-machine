@@ -327,6 +327,7 @@ export default {
               this.vmRtu.date = rtuSerialNumber[3]
               this.vmRtu.rtuTypeId = vmRtu.rtuTypeId
               this.vmRtu.adId = vmRtu.adId
+							this.vmRtu.rtuDesc = vmRtu.rtuDesc.toString()
               // if(vmRtu.adName){
               this.adName = vmRtu.adName
               // }

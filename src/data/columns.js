@@ -738,7 +738,7 @@ export const mOrderDealColumns = [{
 // 手机端收益明细列表
 export const mEdetailColumns = [{
   title: '编号',
-  key: 'rtuNumber',
+  slot: 'rtuNumber',
   align: 'center'
   // tooltip: true,
 },

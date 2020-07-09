@@ -80,6 +80,10 @@
 		<!-- <Button type="primary" @click="modal1 = true">Display dialog box</Button> -->
 		<Modal v-model="modalValue" fullscreen footer-hide :title="modalTitle" class="mEdetailModalStyle">
 			<Table :loading="tableLoading" border :columns="mEdetailColumns" :data="mEdetailData" size="small">
+				<template slot-scope="{ row, index }" slot="rtuNumber">
+					<!-- {{row.vmRtuDayIncomeSummary.jdBillSplit.totalBillSplitAmount.toFixed(2)}} -->
+					<Badge :status="row.rtuNetWorkState == 1 ? 'success':'error'" :text="row.rtuNumber" />
+				</template>
 				<template slot-scope="{ row, index }" slot="totalBillSplitAmount">
 					{{row.vmRtuDayIncomeSummary.jdBillSplit.totalBillSplitAmount.toFixed(2)}}
 				</template>
@@ -355,6 +359,9 @@
 		.mEdetailModalStyle .ivu-table-cell {
 			padding: 0;
 			margin: 0;
+		}
+		.mEdetailModalStyle .ivu-badge-status-text {
+			margin-left: 0;
 		}
 	}
 </style>
