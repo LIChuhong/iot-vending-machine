@@ -33,13 +33,13 @@
 		components: {
 			LoginForm,
 			LoginForm1
-			
+
 		},
 		data() {
 			return {
 				//msg: "哈哈"
 				tips: '',
-				showLoginForm1:false,
+				showLoginForm1: false,
 			}
 		},
 		methods: {
@@ -47,7 +47,7 @@
 				'handleLogin',
 				'getUserInfo'
 			]),
-			focus(val){
+			focus(val) {
 				this.tips = ''
 			},
 			handleSubmit({
@@ -74,8 +74,9 @@
 								//alert(e)
 							}
 						}
+						
 						this.getUserInfo().then(res => {
-							if(res.success == 1){
+							if (res.success == 1) {
 								if (data.interface == 1 || data.interface == 2) {
 									this.$router.push({
 										name: this.$config.mHomeName
@@ -85,11 +86,11 @@
 										name: this.$config.homeName
 									})
 								}
-							}else{
+							} else {
 								this.tips = res.errorMessage
 							}
-							
-						}).catch(error=>{
+
+						}).catch(error => {
 							this.tips = error
 						})
 					} else {
@@ -97,14 +98,18 @@
 						this.tips = data1.errorMessage
 					}
 
-				}).catch(error=>{
+				}).catch(error => {
 					this.tips = error
 				})
 			},
 			handleSubmitFunction(userName, password) {
-				 // alert(userName+password)
-				 var verCode = ''
-				this.handleSubmit({userName,password,verCode})
+				// alert(userName+password)
+				var verCode = ''
+				this.handleSubmit({
+					userName,
+					password,
+					verCode
+				})
 			}
 
 
@@ -120,10 +125,10 @@
 				// console.log(this.showLoginForm1)
 				this.showLoginForm1 = true
 				//将要给原生调用的方法挂载到 window 上面
-			}else{
+			} else {
 				// console.log(this.showLoginForm1 + 1)
-				 // this.showLoginForm1 = false
-				 this.showLoginForm1 = false
+				// this.showLoginForm1 = false
+				this.showLoginForm1 = false
 			}
 
 			//window.updateTokenFunction = this.updateTokenFunction
@@ -143,7 +148,7 @@
 
 		.login-con {
 			width: 80%;
-			top:50%;
+			top: 50%;
 			right: 10%;
 			/* margin: 0 5% 0 5%; */
 		}

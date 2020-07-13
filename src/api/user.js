@@ -22,6 +22,7 @@ export const login = ({
 		data.append('verCode', verCode)
 		url = '/api2.0/login'
 	}
+	// console.log(typeof(data))
 	return axios.request({
 		url: url,
 		data,
