@@ -47,6 +47,7 @@
 			goodsTypeInfo(val){
 				if(val.id){
 					this.goodsType.commodityTypeName = val.commodityTypeName
+					this.goodsType.id =  val.id
 				}
 			}
 		},
@@ -56,8 +57,10 @@
 				this.$refs[name].validate((valid) => {
 					if (valid) {
 						// if (this.rtuNumber) {
-						this.showSpin = true
-						if(this.goodsTypeInfo.id){
+						// this.showSpin = true
+						// alert(1)
+						if(this.goodsType.id != null && this.goodsType.id != ''){
+							// alert(2)
 							this.goodsType.id = this.goodsTypeInfo.id
 							updateCommodityType(this.goodsType).then(res => {
 								const data = res.data
@@ -72,6 +75,7 @@
 								alert(error)
 							})
 						}else{
+							// alert(3)
 							addCommodityType(this.goodsType).then(res => {
 								const data = res.data
 								this.showSpin = false
@@ -100,4 +104,21 @@
 </script>
 
 <style>
+	.demo-spin-icon-load {
+		animation: ani-demo-spin 1s linear infinite;
+	}
+	
+	@keyframes ani-demo-spin {
+		from {
+			transform: rotate(0deg);
+		}
+	
+		50% {
+			transform: rotate(180deg);
+		}
+	
+		to {
+			transform: rotate(360deg);
+		}
+	}
 </style>
