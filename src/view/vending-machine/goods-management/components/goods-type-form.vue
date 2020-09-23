@@ -56,12 +56,9 @@
 
 				this.$refs[name].validate((valid) => {
 					if (valid) {
-						// if (this.rtuNumber) {
-						// this.showSpin = true
-						// alert(1)
 						if(this.goodsType.id != null && this.goodsType.id != ''){
-							// alert(2)
-							this.goodsType.id = this.goodsTypeInfo.id
+							 this.showSpin = true
+							// this.goodsType.id = this.goodsTypeInfo.id
 							updateCommodityType(this.goodsType).then(res => {
 								const data = res.data
 								this.showSpin = false
@@ -75,7 +72,7 @@
 								alert(error)
 							})
 						}else{
-							// alert(3)
+							 this.showSpin = true
 							addCommodityType(this.goodsType).then(res => {
 								const data = res.data
 								this.showSpin = false
