@@ -23,7 +23,7 @@
 			</List>
 		</div>
 		<div class="checkboxGroupStyle">
-			<CheckboxGroup v-model="checkAllGroup" @on-change="checkGroupAllChange">
+			<CheckboxGroup v-model="checkAllGroup" @on-change="checkAllGroupChange">
 				<div v-for="item in rowsList" :key="item.id" style="padding-bottom: 0.3125rem;overflow: auto;">
 					<Checkbox style="float: left;" :value="item.checkAll" :indeterminate="item.indeterminate" size="small" :label="item.id"
 					 @click.prevent.native="handleCheckAll(item)"></Checkbox>
@@ -91,20 +91,37 @@
 		},
 		watch: {},
 		methods: {
+			resetRowsListColor() {
+				var list = this.rowsList
+				for (var i = 0; i < list.length; i++) {
+					var rowContentList = list[i].rowContentList
+					for (var j = 0; j < rowContentList.length; j++) {
+						this.rowsList[i].rowContentList[j].color = 'white'
+					}
+				}
+			},
 			shipment() {
 				if (this.rtuNumber != null && this.rtuNumber != '') {
 					if (this.shipmentText == '出货') {
 						this.index = 0
 						var list = this.rowsList
 						this.allCheck = []
+						console.log(list)
 						for (var i = 0; i < list.length; i++) {
 							var checkAllGroup = list[i].checkAllGroup
-							for (var j = 0; j < checkAllGroup.length; j++) {
+							var rowContentList = list[i].rowContentList
+							for (var j = 0; j < rowContentList.length; j++) {
 								this.rowsList[i].rowContentList[j].color = 'white'
-								this.allCheck.push({
-									rowsListIndex: i,
-									checkAllGroupIndex: j
-								})
+								for(var k = 0; k < checkAllGroup.length; k++){
+									if(checkAllGroup[k].cargoNo == rowContentList[j].cargoNo){
+										this.allCheck.push({
+											rowsListIndex: i,
+											checkAllGroupIndex: j,
+											cargoNo:checkAllGroup[k].cargoNo
+										})
+									}
+								}
+								console.log(this.allCheck)
 
 							}
 						}
@@ -144,7 +161,7 @@
 						parameterDataList: [{
 							parameterIndex: 1,
 							dataLength: 2,
-							value: parseInt(this.rowsList[rIndex].rowContentList[cIndex].cargoNo)
+							value: parseInt(this.allCheck[this.index].cargoNo)
 						}, {
 							parameterIndex: 2,
 							dataLength: 1,
@@ -161,7 +178,7 @@
 							} else {
 								this.rowsList[rIndex].rowContentList[cIndex].color = 'red'
 							}
-							
+
 						} else {
 							this.rowsList[rIndex].rowContentList[cIndex].color = 'white'
 							if (data.errorCode == "F30000003") {
@@ -208,6 +225,7 @@
 				}
 			},
 			handleAllCheck() {
+				this.resetRowsListColor()
 
 				if (this.indeterminate) {
 					this.checkAll = false;
@@ -239,6 +257,7 @@
 			},
 			checkAllGroupChange(data) {
 				//console.log(data)
+				this.resetRowsListColor()
 				let row = ''
 				let rowList = this.rowsList
 				for (let i = 0; i < rowList.length; i++) {
@@ -261,6 +280,7 @@
 			},
 			handleCheckAll(item) {
 				//console.log(item)
+				this.resetRowsListColor()
 				if (item.indeterminate) {
 					item.checkAll = false;
 				} else {
