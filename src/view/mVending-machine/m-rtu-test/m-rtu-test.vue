@@ -91,6 +91,20 @@
 		},
 		watch: {},
 		methods: {
+// 			showConfirm() {
+// 				this.$Modal.confirm({
+// 
+// 					title: 'Title',
+// 					content: '<p>Content of dialog</p><p>Content of dialog</p>',
+// 					// style:'top:'100px'',
+// 					onOk: () => {
+// 						this.$Message.info('Clicked ok');
+// 					},
+// 					onCancel: () => {
+// 						this.$Message.info('Clicked cancel');
+// 					}
+// 				});
+// 			},
 			resetRowsListColor() {
 				var list = this.rowsList
 				for (var i = 0; i < list.length; i++) {
@@ -106,18 +120,18 @@
 						this.index = 0
 						var list = this.rowsList
 						this.allCheck = []
-						console.log(list)
+						// console.log(list)
 						for (var i = 0; i < list.length; i++) {
 							var checkAllGroup = list[i].checkAllGroup
 							var rowContentList = list[i].rowContentList
 							for (var j = 0; j < rowContentList.length; j++) {
 								this.rowsList[i].rowContentList[j].color = 'white'
-								for(var k = 0; k < checkAllGroup.length; k++){
-									if(checkAllGroup[k].cargoNo == rowContentList[j].cargoNo){
+								for (var k = 0; k < checkAllGroup.length; k++) {
+									if (checkAllGroup[k].cargoNo == rowContentList[j].cargoNo) {
 										this.allCheck.push({
 											rowsListIndex: i,
 											checkAllGroupIndex: j,
-											cargoNo:checkAllGroup[k].cargoNo
+											cargoNo: checkAllGroup[k].cargoNo
 										})
 									}
 								}
